@@ -1,0 +1,54 @@
+﻿<Window x:Class="CN.CRM.Windows.CrmWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CN.CRM.Windows"
+          xmlns:convs ="clr-namespace:CN.CRM.Convertors"
+        mc:Ignorable="d"
+        Title="CrmWindow" Height="600" Width="900" ResizeMode="NoResize">
+    <Window.Resources>
+        <convs:SelectClientButtonConvertor x:Key="selectClientButtonConvertor" />
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition ></RowDefinition>
+            <RowDefinition ></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition ></RowDefinition>
+            <RowDefinition ></RowDefinition>
+            <RowDefinition ></RowDefinition>
+            <RowDefinition ></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.25*"></ColumnDefinition>
+            <ColumnDefinition Width="0.2*"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBlock  Grid.Row="0" Margin="0,-15,0,0" Grid.ColumnSpan="3" Text="CRM Main Window" FontSize="32" TextAlignment="Center" VerticalAlignment="Center"></TextBlock>
+
+        <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" FontSize="26" Height="30" Background="#FF3F8383" Text="Search: " Foreground="White" ></TextBlock>
+        <TextBox x:Name="searchInputTbx" Grid.Row="0" Grid.Column="2" Text="{Binding SearchInput,Mode=TwoWay}" VerticalAlignment="Bottom" FontSize="20" Height="30"  Foreground="White" Background="#FF3F8383" TextChanged="searchInputTbx_TextChanged" ></TextBox>
+        <ListView Grid.Row="1" Grid.RowSpan="6" Grid.Column="1" Grid.ColumnSpan="2" Name="itemsLV" ItemsSource="{Binding Clients}" SelectedItem="{Binding selectedClient}" >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ID" Width="80" DisplayMemberBinding="{Binding ID}" />
+                    <GridViewColumn Header="First Name" Width="120" DisplayMemberBinding="{Binding FirstName}" />
+                    <GridViewColumn Header="Last Name" Width="120" DisplayMemberBinding="{Binding LastName}" />
+                    <GridViewColumn Header="Client Type" Width="120" DisplayMemberBinding="{Binding ClientType}" />
+                    <GridViewColumn Header="Address" Width="120" DisplayMemberBinding="{Binding Address}" />
+                    <GridViewColumn Header="Contact Number" Width="80" DisplayMemberBinding="{Binding ContactNumber}" />
+                 
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="20,0,0,0" Grid.ColumnSpan="2" FontSize="22" Text="{Binding MyDetails}" FontWeight="Bold"></TextBlock>
+
+        <Button x:Name="newItemBtn" Grid.Row="1" Grid.Column="0" Content="New Client" FontSize="24"  Width="150"  Command="{Binding newClientCommand}"></Button>
+
+        <Button x:Name="editDeleteBtn" Grid.Row="2" Grid.Column="0" Content="Edit\ Delete Client" FontSize="24" IsEnabled="{Binding selectedClient, Converter= {StaticResource selectClientButtonConvertor},Mode=TwoWay}"  Width="150" Command="{Binding editDeleteCommand}"></Button>
+
+        <Button x:Name="logoutBtn" Grid.Row="0" VerticalAlignment="Top" Grid.Column="3" HorizontalAlignment="Right" Content="Logout" FontSize="24" Height="50" Width="100"  Command="{Binding logoutCommand}" Background="#FFFFA3A3"></Button>
+
+    </Grid>
+</Window>

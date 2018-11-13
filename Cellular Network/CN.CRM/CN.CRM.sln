@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2016
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CN.CRM", "CN.CRM\CN.CRM.csproj", "{D29145AF-1BE5-4145-B365-100D2EC48542}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CN.Common", "..\CN.Common\CN.Common\CN.Common.csproj", "{19D5C0D0-AD99-4075-B776-5EE1BBF1E2DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CN.BL", "CN.BL\CN.BL.csproj", "{D6F79165-C347-48C3-8A71-DDD2590C06CE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D29145AF-1BE5-4145-B365-100D2EC48542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D29145AF-1BE5-4145-B365-100D2EC48542}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D29145AF-1BE5-4145-B365-100D2EC48542}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D29145AF-1BE5-4145-B365-100D2EC48542}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19D5C0D0-AD99-4075-B776-5EE1BBF1E2DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19D5C0D0-AD99-4075-B776-5EE1BBF1E2DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19D5C0D0-AD99-4075-B776-5EE1BBF1E2DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19D5C0D0-AD99-4075-B776-5EE1BBF1E2DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6F79165-C347-48C3-8A71-DDD2590C06CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6F79165-C347-48C3-8A71-DDD2590C06CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6F79165-C347-48C3-8A71-DDD2590C06CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6F79165-C347-48C3-8A71-DDD2590C06CE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {509B9E54-8249-4372-9713-23FED77FF416}
+	EndGlobalSection
+EndGlobal
