@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CN.CRM", "..\CN.CRM\CN.CRM\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CN.BL", "..\CN.CRM\CN.BL\CN.BL.csproj", "{D6F79165-C347-48C3-8A71-DDD2590C06CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "..\CN.Simulator\CallsSimuator\WpfApp1\WpfApp1.csproj", "{2A26F87F-F3B0-4A5F-8CBB-3F5CD2FCBDDC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{D6F79165-C347-48C3-8A71-DDD2590C06CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6F79165-C347-48C3-8A71-DDD2590C06CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6F79165-C347-48C3-8A71-DDD2590C06CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A26F87F-F3B0-4A5F-8CBB-3F5CD2FCBDDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A26F87F-F3B0-4A5F-8CBB-3F5CD2FCBDDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A26F87F-F3B0-4A5F-8CBB-3F5CD2FCBDDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A26F87F-F3B0-4A5F-8CBB-3F5CD2FCBDDC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
