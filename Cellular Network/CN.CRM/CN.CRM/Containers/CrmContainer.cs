@@ -1,8 +1,9 @@
-﻿using CN.BL.Services;
+﻿
 using CN.Common.Contracts;
 using CN.Common.Contracts.IServices;
 using CN.Common.Contracts.IViewModels;
 using CN.Common.LoggersAndPoppers;
+using CN.Common.Services;
 using CN.CRM.Signalr;
 using CN.CRM.ViewModels;
 using SimpleInjector;
