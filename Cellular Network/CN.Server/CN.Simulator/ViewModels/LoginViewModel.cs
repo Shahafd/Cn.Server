@@ -5,6 +5,7 @@ using CN.Common.Contracts.IViewModels;
 using CN.Common.Infrastructures;
 using CN.Common.Models;
 using CN.Common.Models.TempModels;
+using CN.Simulator.Windows;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -47,8 +48,8 @@ namespace CN.Simulator.ViewModels
                 if (loggedIn != null)
                 {
                     logger.Print($"Welcome Back {loggedIn.Username}!");
-                    
-                   
+                    SimulatorWindow simulatorWindow = new SimulatorWindow(loggedIn);
+                    simulatorWindow.Show();
                     CloseThisWindow();
                 }
 
