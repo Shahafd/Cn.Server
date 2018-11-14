@@ -1,4 +1,5 @@
 ﻿using CN.Common.Contracts.IViewModels;
+using CN.Common.Models;
 using CN.Simulator.Containers;
 using System;
 using System.Collections.Generic;
@@ -12,21 +13,20 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CN.Simulator
+namespace CN.Simulator.Windows
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for SimulatorWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class SimulatorWindow : Window
     {
-        public ILoginViewModel viewModel { get; set; }
-        public MainWindow()
+        public ISimulatorViewModel viewModel { get; set; }
+        public SimulatorWindow(User user)
         {
             InitializeComponent();
-            viewModel = SimulatorContainer.container.GetInstance<ILoginViewModel>();
+            viewModel = SimulatorContainer.container.GetInstance<ISimulatorViewModel>();
             DataContext = viewModel;
         }
     }

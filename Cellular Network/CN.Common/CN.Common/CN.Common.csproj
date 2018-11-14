@@ -107,6 +107,7 @@
     <Compile Include="Contracts\IServices\ILogger.cs" />
     <Compile Include="Contracts\IRepositories\IAccountsRepository.cs" />
     <Compile Include="Contracts\IViewModels\ICrmViewModel.cs" />
+    <Compile Include="Contracts\IViewModels\ISimulatorViewModel.cs" />
     <Compile Include="Contracts\Signalr\ISignalrClient.cs" />
     <Compile Include="Contracts\IViewModels\ILoginViewModel.cs" />
     <Compile Include="Contracts\Signalr\ISignalrHub.cs" />
