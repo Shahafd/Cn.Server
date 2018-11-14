@@ -261,10 +261,6 @@
       <Project>{19D5C0D0-AD99-4075-B776-5EE1BBF1E2DC}</Project>
       <Name>CN.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CN.BL\CN.BL.csproj">
-      <Project>{D6F79165-C347-48C3-8A71-DDD2590C06CE}</Project>
-      <Name>CN.BL</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
