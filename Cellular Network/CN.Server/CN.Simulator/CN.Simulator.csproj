@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{625B8032-F6C3-4FED-9997-C3AAA1C969FD}</ProjectGuid>
+    <ProjectGuid>{147A5FF8-5413-4F2F-A86A-524FAB3F0DC8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>CN.Simulator</RootNamespace>
     <AssemblyName>CN.Simulator</AssemblyName>
@@ -53,6 +53,7 @@
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
