@@ -24,11 +24,13 @@ namespace CN.Simulator.ViewModels
         public string Password { get; set; }
         public ICommand loginCommand { get; set; }
         ILogger logger { get; set; }
+        IInputsValidator inputsValidator { get; set; }
         IHttpClient httpClient { get; set; }
 
-        public LoginViewModel(ILogger logger, IHttpClient httpClient)
+        public LoginViewModel(ILogger logger, IHttpClient httpClient,IInputsValidator inputsValidator)
         {
             this.logger = logger;
+            this.inputsValidator = inputsValidator;
             this.httpClient = httpClient;
             loginCommand = new ActionCommand<object>(TryLogin);
             Username = "Shahaf";

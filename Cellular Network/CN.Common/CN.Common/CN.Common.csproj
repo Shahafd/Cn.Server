@@ -101,9 +101,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configs\ApiConfigs.cs" />
+    <Compile Include="Configs\InputsConfigs.cs" />
     <Compile Include="Configs\MainConfigs.cs" />
     <Compile Include="Configs\PricesConfigs.cs" />
     <Compile Include="Contracts\IServices\IHttpClient.cs" />
+    <Compile Include="Contracts\IServices\IInputsValidator.cs" />
     <Compile Include="Contracts\IServices\ILogger.cs" />
     <Compile Include="Contracts\IRepositories\IAccountsRepository.cs" />
     <Compile Include="Contracts\IViewModels\ICrmViewModel.cs" />
@@ -128,6 +130,7 @@
     <Compile Include="Models\SMS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\HttpClientSender.cs" />
+    <Compile Include="Services\InputsValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
