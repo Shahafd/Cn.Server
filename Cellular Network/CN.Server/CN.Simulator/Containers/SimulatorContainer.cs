@@ -31,8 +31,8 @@ namespace CN.Simulator.Containers
                 //Services
                 container.Register<ILogger, MessageBoxPopper>(Lifestyle.Singleton);
                 container.Register<IHttpClient, HttpClientSender>(Lifestyle.Singleton);
-
-                container.Verify();
+                container.Register<IInputsValidator, InputsValidator>(Lifestyle.Singleton);
+           
             }
         }
     }

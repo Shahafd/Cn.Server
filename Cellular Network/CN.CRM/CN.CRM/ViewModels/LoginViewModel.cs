@@ -3,6 +3,7 @@ using CN.Common.Configs;
 using CN.Common.Contracts;
 using CN.Common.Contracts.IServices;
 using CN.Common.Contracts.IViewModels;
+using CN.Common.Enums;
 using CN.Common.Infrastructures;
 using CN.Common.Models;
 using CN.Common.Models.TempModels;
@@ -45,11 +46,11 @@ namespace CN.CRM.ViewModels
                 UserLogin userLogin = new UserLogin(Username, Password);
                 JObject j = new JObject();
                 j = (JObject)httpClient.PostRequest(ApiConfigs.LoginRoute, userLogin);
-                User loggedIn = j.ToObject<User>();
-                if (loggedIn != null)
+                Tuple<User, RequestStatusEnum> userTuple = j.ToObject<Tuple<User, RequestStatusEnum>>();
+                if (userTuple.Item2==RequestStatusEnum.Success)
                 {
-                    logger.Print($"Welcome Back {loggedIn.Username}!");
-                    CrmWindow crmWindow = new CrmWindow(loggedIn);
+                    logger.Print($"Welcome Back {userTuple.Item1.Username}!");
+                    CrmWindow crmWindow = new CrmWindow(userTuple.Item1);
                     crmWindow.Show();
                     CloseThisWindow();
                 }

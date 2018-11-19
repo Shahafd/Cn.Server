@@ -10,6 +10,6 @@ namespace CN.Common.Contracts
 {
     public interface IAccountsRepository
     {
-        User TryLogin(UserLogin userLogin);
+        User GetUserByUsername(string username);
     }
 }

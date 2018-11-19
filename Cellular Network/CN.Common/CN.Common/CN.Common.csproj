@@ -104,6 +104,7 @@
     <Compile Include="Configs\InputsConfigs.cs" />
     <Compile Include="Configs\MainConfigs.cs" />
     <Compile Include="Configs\PricesConfigs.cs" />
+    <Compile Include="Contracts\IManagers\IAccountsManager.cs" />
     <Compile Include="Contracts\IServices\IHttpClient.cs" />
     <Compile Include="Contracts\IServices\IInputsValidator.cs" />
     <Compile Include="Contracts\IServices\ILogger.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Contracts\Signalr\ISignalrHub.cs" />
     <Compile Include="Enums\AccountTypeEnum.cs" />
     <Compile Include="Enums\LineStatusEnum.cs" />
+    <Compile Include="Enums\RequestStatusEnum.cs" />
     <Compile Include="Infrastructures\ActionCommand.cs" />
     <Compile Include="LoggersAndPoppers\MessageBoxPopper.cs" />
     <Compile Include="Models\TempModels\UserLogin.cs" />

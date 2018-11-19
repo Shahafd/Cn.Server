@@ -42,21 +42,12 @@ namespace CN.DAL.Repositories
             return Users.Exists(u => u.Username.ToLower() == userName.ToLower());
         }
 
-        public User TryLogin(UserLogin userLogin)
+      
+
+        public User GetUserByUsername(string username)
         {
-            //returns the user if the fields are valid,returns null if not
-            User user = Users.FirstOrDefault(u => u.Username.ToLower() == userLogin.Username.ToLower());
-            Console.WriteLine(user.Username);
-            if (user != null)
-            {
-                if (user.Password == userLogin.Password)
-                {
-                    return user;
-                }
-            }
-            return null;
-
-
+            //returns the user that matches this username
+            return Users.FirstOrDefault(u => u.Username.ToLower() == username.ToLower());
         }
     }
 }
