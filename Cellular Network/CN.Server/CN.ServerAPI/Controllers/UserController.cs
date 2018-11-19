@@ -26,7 +26,22 @@ namespace CN.ServerAPI.Controllers
         [Route(ApiConfigs.LoginRoute)]
         public User TryLogin([FromBody]UserLogin userLogin)
         {
+            //a login on the clients
             return accountsManager.UserLogin(userLogin).Item1;
+        }
+        [HttpPost]
+        [Route(ApiConfigs.UpdateExistingClientRoute)]
+        public RequestStatusEnum UpdateClient([FromBody]Client client)
+        {
+            //updates an exisitng client's details
+            return accountsManager.UpdateExisitngClient(client);
+        }
+        [HttpPost]
+        [Route(ApiConfigs.AddClientRoute)]
+        public string AddClient([FromBody]Client client)
+        {
+            //updates an exisitng client's details
+            return accountsManager.AddNewClient(client);
         }
 
     }

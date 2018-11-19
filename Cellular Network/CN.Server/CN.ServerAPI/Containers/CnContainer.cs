@@ -28,8 +28,8 @@ namespace CN.Terminal.Containers
 
 
                 //managers
-                container.Register<IAccountsManager, AccountsManager>();
-
+                container.Register<IAccountsManager, AccountsManager>(Lifestyle.Singleton);
+                container.Register<ISimulatorManager, SimulatorManager>(Lifestyle.Singleton);
                 container.Verify();
             }
         }

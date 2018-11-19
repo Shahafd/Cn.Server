@@ -40,5 +40,27 @@ namespace CN.BL.Managers
                 return new Tuple<User, RequestStatusEnum>(null, RequestStatusEnum.Unvalid);
             }
         }
+
+        public RequestStatusEnum UpdateExisitngClient(Client client)
+        {
+            //updates the details of an exisitng client
+            return networkRepository.UpdateClientDetails(client);
+
+        }
+
+        public string AddNewClient(Client client)
+        {
+            //adds a new client
+            string error = "";
+            if (networkRepository.IsClientIdExisits(client.ID))
+            {
+              error=("Client ID already exisits");
+            }
+            else
+            {
+                networkRepository.AddNewClient(client);
+            }
+            return error;
+        }
     }
 }

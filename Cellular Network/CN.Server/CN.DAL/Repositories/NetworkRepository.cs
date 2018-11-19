@@ -1,4 +1,5 @@
 ﻿using CN.Common.Contracts.IRepositories;
+using CN.Common.Enums;
 using CN.Common.Models;
 using CN.DAL.Databases;
 using System;
@@ -70,6 +71,54 @@ namespace CN.DAL.Repositories
         {
             //returns the user that matches this username
             return Users.FirstOrDefault(u => u.Username.ToLower() == username.ToLower());
+        }
+
+        public Client GetClientByID(string iD)
+        {
+            //returns the client that matches this id
+            return Clients.FirstOrDefault(c => c.ID == iD);
+        }
+
+        public RequestStatusEnum UpdateClientDetails(Client client)
+        {
+            //updates the details of an exisiting client
+            Client toUpdate = GetClientByID(client.ID);
+            toUpdate.FirstName = client.FirstName;
+            toUpdate.LastName = client.LastName;
+            toUpdate.Address = client.Address;
+            toUpdate.BirthDate = client.BirthDate;
+            toUpdate.ClientType = client.ClientType;
+            toUpdate.ContactNumber = client.ContactNumber;
+            using (CnContext context = new CnContext())
+            {
+                Client dbClient = context.Clients.FirstOrDefault(c => c.ID == client.ID);
+                dbClient.FirstName = client.FirstName;
+                dbClient.LastName = client.LastName;
+                dbClient.Address = client.Address;
+                dbClient.BirthDate = client.BirthDate;
+                dbClient.ClientType = client.ClientType;
+                dbClient.ContactNumber = client.ContactNumber;
+                context.SaveChanges();
+                return RequestStatusEnum.Success;
+            }
+        }
+
+        public RequestStatusEnum AddNewClient(Client client)
+        {
+            //adds a new Client
+            Clients.Add(client);
+            using(CnContext context = new CnContext())
+            {
+                context.Clients.Add(client);
+                context.SaveChanges();
+                return RequestStatusEnum.Success;
+            }
+        }
+
+        public bool IsClientIdExisits(string iD)
+        {
+            //checks if the Id already exisits
+            return Clients.Exists(c => c.ID == iD);
         }
     }
 }

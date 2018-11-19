@@ -40,6 +40,22 @@ namespace CN.Common.Services
             }
             return returnStr;
         }
+        public string ValidateIDInput(string fieldName, string input)
+        {
+            //validates an input, returns an empty string if the input has been approved
+            string returnStr = "";
+            int outNum;
+            if (!int.TryParse(input, out outNum))
+            {
+                returnStr = $"{fieldName} length must be between {InputsConfigs.MinIdLength} and {InputsConfigs.MaxIdLength} digits only";
+            }
+
+            else if (input.Length < InputsConfigs.MinIdLength || input.Length > InputsConfigs.MaxIdLength)
+            {
+                returnStr = $"{fieldName} length must be between {InputsConfigs.MinIdLength} and {InputsConfigs.MaxIdLength} digits only";
+            }
+            return returnStr;
+        }
         public string ValidateDoubleInput(string fieldName, string input, int minValue, int maxValue)
         {
             //validates an input, returns an empty string if the input has been approved
@@ -76,7 +92,7 @@ namespace CN.Common.Services
             //DOESNOT CHECK IF THE PHONE EXISTS
             string returnStr = "";
             int numCheck;
-            if (string.IsNullOrEmpty(ValidateStrInput("phone number", input, InputsConfigs.PhoneLength, InputsConfigs.PhoneLength)) && int.TryParse(input, out numCheck))
+            if (string.IsNullOrEmpty(ValidateStrInput("Phone number", input, InputsConfigs.PhoneLength, InputsConfigs.PhoneLength)) && int.TryParse(input, out numCheck))
             {
             }
             else
@@ -85,6 +101,6 @@ namespace CN.Common.Services
             }
             return returnStr;
         }
-        
+
     }
 }

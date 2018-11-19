@@ -13,7 +13,7 @@ namespace CN.Common.Models
         {
 
         }
-        public Client(int ID, string FirstName, string LastName, int ClientType, string Address, string ContactNumber, int CallsToCenter,DateTime BirthDate)
+        public Client(string ID, string FirstName, string LastName, int ClientType, string Address, string ContactNumber, DateTime BirthDate)
         {
             this.ID = ID;
             this.FirstName = FirstName;
@@ -21,16 +21,15 @@ namespace CN.Common.Models
             this.ClientType = ClientType;
             this.Address = Address;
             this.ContactNumber = ContactNumber;
-            this.CallsToCenter = CallsToCenter;
             this.BirthDate = BirthDate;
         }
-        public int ID { get; set; }
+        public string ID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int ClientType { get; set; }
         public string Address { get; set; }
         public string ContactNumber { get; set; }
         public int CallsToCenter { get; set; }
-        public DateTime  BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
     }
 }

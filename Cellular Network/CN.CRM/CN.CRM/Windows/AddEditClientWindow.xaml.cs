@@ -28,6 +28,10 @@ namespace CN.CRM.Windows
             InitializeComponent();
             viewModel = CrmContianer.container.GetInstance<IAddEditClientViewModel>();
             DataContext = viewModel;
+            if (client != null)
+            {
+                viewModel.UpdateExisiting();
+            }
         }
     }
 }

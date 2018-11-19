@@ -12,5 +12,7 @@ namespace CN.Common.Contracts.IManagers
     public interface IAccountsManager
     {
         Tuple<User, RequestStatusEnum> UserLogin(UserLogin userLogin);
+       RequestStatusEnum UpdateExisitngClient(Client client);
+       string AddNewClient(Client client);
     }
 }

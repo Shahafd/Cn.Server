@@ -12,5 +12,7 @@ namespace CN.Common.Contracts.IServices
         string ValidateIntInput(string fieldName, string input, int minValue, int maxValue);
         string ValidateDoubleInput(string fieldName, string input, int minValue, int maxValue);
         string ValidateDateInput(string fieldName, DateTime input);
+        string ValidateIDInput(string fieldName, string input);
+        string ValidatePhoneInput(string input);
     }
 }

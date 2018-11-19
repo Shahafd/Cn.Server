@@ -61,20 +61,26 @@ namespace CN.Simulator.ViewModels
         public bool ValidateFields()
         {
             //validates the fields
-            List<string> validationInfo = new List<string>();
-            bool valid = true;
-            if (string.IsNullOrWhiteSpace(Username))
+            List<string> validations = new List<string>();
+            validations.Add(inputsValidator.ValidateStrInput("Username", Username, 2, 10));
+            validations.Add(inputsValidator.ValidateStrInput("Password", Password, 2, 10));
+            List<string> errors = new List<string>();
+            foreach (var item in validations)
             {
-                validationInfo.Add("Please insert a username");
-                valid = false;
+                if (!string.IsNullOrEmpty(item))
+                {
+                    errors.Add(item);
+                }
             }
-            if (string.IsNullOrWhiteSpace(Password))
+            if (errors.Count == 0)
             {
-                validationInfo.Add("Please insert a password");
-                valid = false;
+                return true;
             }
-            logger.PrintList(validationInfo);
-            return valid;
+            else
+            {
+                logger.PrintList(errors);
+                return false;
+            }
         }
 
         private void CloseOtherWindows()

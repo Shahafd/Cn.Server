@@ -8,5 +8,6 @@ namespace CN.Common.Contracts.IViewModels
 {
     public interface IAddEditClientViewModel
     {
+        void UpdateExisiting();
     }
 }

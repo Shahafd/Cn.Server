@@ -12,7 +12,7 @@
         <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
                             ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="enums:AccountTypeEnum"/>
+                <x:Type TypeName="enums:ClientTypeEnum"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </Window.Resources>
@@ -36,7 +36,7 @@
 
         <TextBlock Margin="15,0,0,0" Grid.Row="1" Grid.Column="0" FontSize="28" Text="ID:" VerticalAlignment="Center" ></TextBlock>
         <TextBox Grid.Row="1" Grid.Column="1" FontSize="28" Text="{Binding ID}" VerticalAlignment="Center" ></TextBox>
-
+        
         <TextBlock Margin="15,0,0,0" Grid.Row="2" Grid.Column="0" FontSize="28" Text="First Name:" VerticalAlignment="Center" ></TextBlock>
         <TextBox Grid.Row="2" Grid.Column="1" FontSize="28" Text="{Binding FirstName}" VerticalAlignment="Center" ></TextBox>
 
@@ -48,7 +48,7 @@
 
         <TextBlock Margin="15,0,0,0" Grid.Row="5" Grid.Column="0" FontSize="28" Text="Client Type:" VerticalAlignment="Center" ></TextBlock>
         <ComboBox Grid.Row="5" Grid.Column="1" FontSize="28" ItemsSource="{Binding Source={StaticResource dataFromEnum}}"
-                  SelectedItem="{Binding Path=clientType}" />
+                  SelectedItem="{Binding Path=ClientType}" />
         <TextBlock Margin="15,0,0,0" Grid.Row="6" Grid.Column="0" FontSize="28" Text="Birth Date:" VerticalAlignment="Center" ></TextBlock>
         <DatePicker Grid.Row="6" Grid.Column="1" DisplayDate="{Binding BirthDate}" FontSize="28"  VerticalAlignment="Center" ></DatePicker>
         <TextBlock Margin="15,0,0,0" Grid.Row="7" Grid.Column="0" FontSize="28" Text="Contact Number:" VerticalAlignment="Center" ></TextBlock>

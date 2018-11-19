@@ -36,7 +36,8 @@ namespace CN.CRM.Containers
                 //Services
                 container.Register<ILogger, MessageBoxPopper>(Lifestyle.Singleton);
                 container.Register<IHttpClient, HttpClientSender>(Lifestyle.Singleton);
-                container.Register<ISerializer<Tuple<User,RequestStatusEnum>>, JsonSerializer<Tuple<User, RequestStatusEnum>>>(Lifestyle.Singleton);
+                container.Register<IInputsValidator, InputsValidator>(Lifestyle.Singleton);
+
 
                 container.Verify();
             }

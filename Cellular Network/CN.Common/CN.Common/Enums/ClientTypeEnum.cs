@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace CN.Common.Enums
 {
-    public enum AccountTypeEnum
+    public enum ClientTypeEnum
     {
-        Admin,
-        Worker
+      Private,
+      Business,
+      VIP
     }
 }
