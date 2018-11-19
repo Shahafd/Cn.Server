@@ -1,5 +1,6 @@
 ﻿using CN.Common.Contracts;
 using CN.Common.Contracts.IManagers;
+using CN.Common.Contracts.IRepositories;
 using CN.Common.Enums;
 using CN.Common.Models;
 using CN.Common.Models.TempModels;
@@ -13,16 +14,16 @@ namespace CN.BL.Managers
 {
     public class AccountsManager : IAccountsManager
     {
-        public IAccountsRepository accountsRepository { get; set; }
-        public AccountsManager(IAccountsRepository accountsRepository)
+        public INetworkRepository networkRepository { get; set; }
+        public AccountsManager(INetworkRepository networkRepository)
         {
-            this.accountsRepository = accountsRepository;
+            this.networkRepository = networkRepository;
         }
 
 
         public Tuple<User, RequestStatusEnum> UserLogin(UserLogin userLogin)
         {
-            User user = accountsRepository.GetUserByUsername(userLogin.Username);
+            User user = networkRepository.GetUserByUsername(userLogin.Username);
             if (user != null)
             {
                 if (user.Password == userLogin.Password)

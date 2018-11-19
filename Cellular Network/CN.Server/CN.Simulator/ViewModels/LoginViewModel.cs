@@ -28,7 +28,7 @@ namespace CN.Simulator.ViewModels
         IInputsValidator inputsValidator { get; set; }
         IHttpClient httpClient { get; set; }
 
-        public LoginViewModel(ILogger logger, IHttpClient httpClient,IInputsValidator inputsValidator)
+        public LoginViewModel(ILogger logger, IHttpClient httpClient, IInputsValidator inputsValidator)
         {
             this.logger = logger;
             this.inputsValidator = inputsValidator;
@@ -47,11 +47,11 @@ namespace CN.Simulator.ViewModels
                 UserLogin userLogin = new UserLogin(Username, Password);
                 JObject j = new JObject();
                 j = (JObject)httpClient.PostRequest(ApiConfigs.LoginRoute, userLogin);
-                Tuple<User, RequestStatusEnum> userTuple = j.ToObject<Tuple<User, RequestStatusEnum>>();
-                if (userTuple.Item2 == RequestStatusEnum.Success)
+                User user = j.ToObject<User>();
+                if (user != null)
                 {
-                    logger.Print($"Welcome Back {userTuple.Item1.Username}!");
-                    SimulatorWindow simulatorWindow = new SimulatorWindow(userTuple.Item1);
+                    logger.Print($"Welcome Back {user.Username}!");
+                    SimulatorWindow simulatorWindow = new SimulatorWindow(user);
                     simulatorWindow.Show();
                     CloseThisWindow();
                 }

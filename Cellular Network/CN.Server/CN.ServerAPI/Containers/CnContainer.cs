@@ -1,4 +1,7 @@
-﻿using CN.Common.Contracts;
+﻿using CN.BL.Managers;
+using CN.Common.Contracts;
+using CN.Common.Contracts.IManagers;
+using CN.Common.Contracts.IRepositories;
 using CN.Common.Contracts.Signalr;
 using CN.DAL.Repositories;
 
@@ -21,7 +24,11 @@ namespace CN.Terminal.Containers
             {
                 container = new Container();
                 container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
-                container.Register<IAccountsRepository, AccountsRepository>(Lifestyle.Singleton);
+                container.Register<INetworkRepository, NetworkRepository>(Lifestyle.Singleton);
+
+
+                //managers
+                container.Register<IAccountsManager, AccountsManager>();
 
                 container.Verify();
             }

@@ -1,0 +1,59 @@
+﻿<Window x:Class="CN.CRM.Windows.AddEditClientWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:enums="clr-namespace:CN.Common.Enums;assembly=CN.Common"
+        xmlns:local="clr-namespace:CN.CRM.Windows"
+        mc:Ignorable="d"
+        Title="AddEditClientWindow" Height="600" Width="800" ResizeMode="NoResize">
+    <Window.Resources>
+        <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="enums:AccountTypeEnum"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0.7*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock  Grid.Row="0" Grid.ColumnSpan="3" Text="Client Details Window" FontSize="32" TextAlignment="Center" VerticalAlignment="Center"></TextBlock>
+
+        <TextBlock Margin="15,0,0,0" Grid.Row="1" Grid.Column="0" FontSize="28" Text="ID:" VerticalAlignment="Center" ></TextBlock>
+        <TextBox Grid.Row="1" Grid.Column="1" FontSize="28" Text="{Binding ID}" VerticalAlignment="Center" ></TextBox>
+
+        <TextBlock Margin="15,0,0,0" Grid.Row="2" Grid.Column="0" FontSize="28" Text="First Name:" VerticalAlignment="Center" ></TextBlock>
+        <TextBox Grid.Row="2" Grid.Column="1" FontSize="28" Text="{Binding FirstName}" VerticalAlignment="Center" ></TextBox>
+
+        <TextBlock Margin="15,0,0,0" Grid.Row="3" Grid.Column="0" FontSize="28" Text="Last Name:" VerticalAlignment="Center" ></TextBlock>
+        <TextBox Grid.Row="3" Grid.Column="1" FontSize="28" Text="{Binding LastName}" VerticalAlignment="Center" ></TextBox>
+
+        <TextBlock Margin="15,0,0,0" Grid.Row="4" Grid.Column="0" FontSize="28" Text="Address:" VerticalAlignment="Center" ></TextBlock>
+        <TextBox Grid.Row="4" Grid.Column="1" FontSize="28" Text="{Binding Address}" VerticalAlignment="Center" ></TextBox>
+
+        <TextBlock Margin="15,0,0,0" Grid.Row="5" Grid.Column="0" FontSize="28" Text="Client Type:" VerticalAlignment="Center" ></TextBlock>
+        <ComboBox Grid.Row="5" Grid.Column="1" FontSize="28" ItemsSource="{Binding Source={StaticResource dataFromEnum}}"
+                  SelectedItem="{Binding Path=clientType}" />
+        <TextBlock Margin="15,0,0,0" Grid.Row="6" Grid.Column="0" FontSize="28" Text="Birth Date:" VerticalAlignment="Center" ></TextBlock>
+        <DatePicker Grid.Row="6" Grid.Column="1" DisplayDate="{Binding BirthDate}" FontSize="28"  VerticalAlignment="Center" ></DatePicker>
+        <TextBlock Margin="15,0,0,0" Grid.Row="7" Grid.Column="0" FontSize="28" Text="Contact Number:" VerticalAlignment="Center" ></TextBlock>
+        <TextBox Grid.Row="7" Grid.Column="1" FontSize="28" Text="{Binding ContactNumber}" VerticalAlignment="Center" ></TextBox>
+
+        <Button x:Name="sendBtn" Grid.Row="6" Grid.Column="2" Grid.RowSpan="2" Content="Send" FontSize="30" Height="100" Width="150" Command="{Binding submitCommand}"></Button>
+    </Grid>
+</Window>

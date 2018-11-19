@@ -2,7 +2,9 @@
 using CN.Common.Contracts;
 using CN.Common.Contracts.IServices;
 using CN.Common.Contracts.IViewModels;
+using CN.Common.Enums;
 using CN.Common.LoggersAndPoppers;
+using CN.Common.Models;
 using CN.Common.Services;
 using CN.CRM.Signalr;
 using CN.CRM.ViewModels;
@@ -29,10 +31,12 @@ namespace CN.CRM.Containers
                 //ViewModels
                 container.Register<ILoginViewModel, LoginViewModel>();
                 container.Register<ICrmViewModel, CrmViewModel>();
+                container.Register<IAddEditClientViewModel, AddEditClientViewModel>();
 
                 //Services
                 container.Register<ILogger, MessageBoxPopper>(Lifestyle.Singleton);
                 container.Register<IHttpClient, HttpClientSender>(Lifestyle.Singleton);
+                container.Register<ISerializer<Tuple<User,RequestStatusEnum>>, JsonSerializer<Tuple<User, RequestStatusEnum>>>(Lifestyle.Singleton);
 
                 container.Verify();
             }

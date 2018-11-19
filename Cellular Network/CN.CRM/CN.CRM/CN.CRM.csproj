@@ -135,7 +135,7 @@
       <HintPath>..\packages\Microsoft.Owin.Security.2.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\CN.Server\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -207,8 +207,12 @@
     <Compile Include="Containers\CrmContainer.cs" />
     <Compile Include="Convertors\SelectClientButtonConvertor.cs" />
     <Compile Include="Signalr\SignalrClient.cs" />
+    <Compile Include="ViewModels\AddEditClientViewModel.cs" />
     <Compile Include="ViewModels\CrmViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="Windows\AddEditClientWindow.xaml.cs">
+      <DependentUpon>AddEditClientWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\CrmWindow.xaml.cs">
       <DependentUpon>CrmWindow.xaml</DependentUpon>
     </Compile>
@@ -224,6 +228,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Windows\AddEditClientWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\CrmWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

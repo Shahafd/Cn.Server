@@ -25,7 +25,8 @@
         <TextBlock  TextAlignment="Center" Text="Simulator Window" Grid.ColumnSpan="2" FontSize="24" Grid.Row="0"/>
 
         <TextBlock Grid.Row="1" Text="Client Name:" FontSize="30" Grid.Column="0"></TextBlock>
-        <TextBox Text="{Binding clientName}" Grid.Row="1"  Grid.Column="1" FontSize="30" ></TextBox>
+        <TextBox Text="{Binding clientId}" Grid.Row="1"  Grid.Column="1" FontSize="30" />
+        <Button Grid.Column="1" Margin="331.667,83,0.333,69" Grid.RowSpan="3" Content="Search" Command="{Binding searchUserCommand}"/>
 
         <TextBlock Grid.Row="2" Text="Client Line:" FontSize="30" Grid.Column="0"></TextBlock>
         <ComboBox x:Name="LinesCombo"  ItemsSource="{Binding Lines}" 

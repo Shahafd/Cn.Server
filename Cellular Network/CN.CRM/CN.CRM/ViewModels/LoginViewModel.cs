@@ -32,6 +32,7 @@ namespace CN.CRM.ViewModels
         {
             this.logger = logger;
             this.httpClient = httpClient;
+          
             loginCommand = new ActionCommand<object>(TryLogin);
             Username = "Shahaf";
         }
@@ -46,11 +47,12 @@ namespace CN.CRM.ViewModels
                 UserLogin userLogin = new UserLogin(Username, Password);
                 JObject j = new JObject();
                 j = (JObject)httpClient.PostRequest(ApiConfigs.LoginRoute, userLogin);
-                Tuple<User, RequestStatusEnum> userTuple = j.ToObject<Tuple<User, RequestStatusEnum>>();
-                if (userTuple.Item2==RequestStatusEnum.Success)
+                User user = j.ToObject<User>();
+
+                if (user!=null)
                 {
-                    logger.Print($"Welcome Back {userTuple.Item1.Username}!");
-                    CrmWindow crmWindow = new CrmWindow(userTuple.Item1);
+                    logger.Print($"Welcome Back {user.Username}!");
+                    CrmWindow crmWindow = new CrmWindow(user);
                     crmWindow.Show();
                     CloseThisWindow();
                 }

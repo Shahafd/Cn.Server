@@ -52,8 +52,8 @@
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.1-beta1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SimpleInjector, Version=4.4.0.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
       <HintPath>..\packages\SimpleInjector.4.4.0\lib\net45\SimpleInjector.dll</HintPath>
@@ -290,6 +290,10 @@
     <ProjectReference Include="..\..\CN.Common\CN.Common\CN.Common.csproj">
       <Project>{19D5C0D0-AD99-4075-B776-5EE1BBF1E2DC}</Project>
       <Name>CN.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CN.BL\CN.BL.csproj">
+      <Project>{F7440E71-FD46-4DF2-BAB5-2D62EDC9472C}</Project>
+      <Name>CN.BL</Name>
     </ProjectReference>
     <ProjectReference Include="..\CN.DAL\CN.DAL.csproj">
       <Project>{28E78DD6-1FBE-4174-B07B-E3D4AFC02044}</Project>
