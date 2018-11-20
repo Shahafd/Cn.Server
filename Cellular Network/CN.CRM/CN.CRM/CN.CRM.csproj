@@ -205,6 +205,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Containers\CrmContainer.cs" />
+    <Compile Include="Convertors\BoolSwitchConvertor.cs" />
     <Compile Include="Convertors\SelectClientButtonConvertor.cs" />
     <Compile Include="Signalr\SignalrClient.cs" />
     <Compile Include="ViewModels\AddEditClientViewModel.cs" />

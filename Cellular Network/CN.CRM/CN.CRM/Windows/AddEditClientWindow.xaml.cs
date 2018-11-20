@@ -30,7 +30,7 @@ namespace CN.CRM.Windows
             DataContext = viewModel;
             if (client != null)
             {
-                viewModel.UpdateExisiting();
+                viewModel.UpdateExisiting(client);
             }
         }
     }

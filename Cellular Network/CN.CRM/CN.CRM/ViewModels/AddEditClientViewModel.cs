@@ -9,6 +9,7 @@ using CN.Common.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ using System.Windows.Input;
 
 namespace CN.CRM.ViewModels
 {
-    public class AddEditClientViewModel : IAddEditClientViewModel
+    public class AddEditClientViewModel : IAddEditClientViewModel, INotifyPropertyChanged
     {
         public string ID { get; set; }
         public string FirstName { get; set; }
@@ -25,7 +26,14 @@ namespace CN.CRM.ViewModels
         public ClientTypeEnum ClientType { get; set; }
         public DateTime BirthDate { get; set; }
         public string ContactNumber { get; set; }
-        public bool ExisitngClient { get; set; }
+        private bool _ExisitngClient;
+
+        public bool ExisitngClient
+        {
+            get { return _ExisitngClient; }
+            set { _ExisitngClient = value; Notify(nameof(ExisitngClient)); }
+        }
+
 
         public ICommand submitCommand { get; set; }
         public IInputsValidator inputsValidator { get; set; }
@@ -39,10 +47,18 @@ namespace CN.CRM.ViewModels
             this.logger = logger;
             submitCommand = new ActionCommand(SendClient);
         }
-        public void UpdateExisiting()
+        public void UpdateExisiting(Client client)
         {
-            //updates the viewmodel that the client is elready exists
+            //updates the viewmodel that the client is elready exists and fills the fields with his details
             ExisitngClient = true;
+            ID = client.ID;
+            FirstName = client.FirstName;
+            LastName = client.LastName;
+            Address = client.Address;
+            ClientType = client.ClientType;
+            BirthDate = client.BirthDate;
+            ContactNumber = client.ContactNumber;
+
         }
         private void SendClient()
         {
@@ -50,7 +66,7 @@ namespace CN.CRM.ViewModels
             if (VerifyFields())
             {
                 JObject j = new JObject();
-                Client client = new Client(ID, FirstName, LastName, (int)ClientType, Address, ContactNumber, BirthDate);
+                Client client = new Client(ID, FirstName, LastName, ClientType, Address, ContactNumber, BirthDate);
                 if (ExisitngClient)
                 {
                     //lock id textbox
@@ -64,8 +80,8 @@ namespace CN.CRM.ViewModels
                 }
                 else
                 {
-                string error= httpClient.PostRequest(ApiConfigs.AddClientRoute, client).ToString();
-                   
+                    string error = httpClient.PostRequest(ApiConfigs.AddClientRoute, client).ToString();
+
                     if (string.IsNullOrEmpty(error))
                     {
                         logger.Print("Client Added successfuly!");
@@ -76,7 +92,6 @@ namespace CN.CRM.ViewModels
                         logger.Print(error);
                     }
                 }
-
             }
         }
 
@@ -106,6 +121,11 @@ namespace CN.CRM.ViewModels
                 logger.PrintList(errors);
                 return false;
             }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void Notify(string prop)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
     }
 }

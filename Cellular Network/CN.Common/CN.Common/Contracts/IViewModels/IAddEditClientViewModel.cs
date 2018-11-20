@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CN.Common.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace CN.Common.Contracts.IViewModels
 {
     public interface IAddEditClientViewModel
     {
-        void UpdateExisiting();
+        void UpdateExisiting(Client client);
     }
 }

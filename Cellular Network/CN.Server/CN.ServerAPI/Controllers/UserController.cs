@@ -20,6 +20,7 @@ namespace CN.ServerAPI.Controllers
         public UserController()
         {
             accountsManager = CnContainer.container.GetInstance<IAccountsManager>();
+            
         }
       
         [HttpPost]
@@ -42,6 +43,13 @@ namespace CN.ServerAPI.Controllers
         {
             //updates an exisitng client's details
             return accountsManager.AddNewClient(client);
+        }
+        [HttpGet]
+        [Route(ApiConfigs.GetAllClientsRoute)]
+        public List<Client> GetClients()
+        {
+            //updates an exisitng client's details
+            return accountsManager.GetAllClients();
         }
 
     }

@@ -5,10 +5,12 @@
          xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
           xmlns:enums="clr-namespace:CN.Common.Enums;assembly=CN.Common"
+          xmlns:convs ="clr-namespace:CN.CRM.Convertors"
         xmlns:local="clr-namespace:CN.CRM.Windows"
         mc:Ignorable="d"
         Title="AddEditClientWindow" Height="600" Width="800" ResizeMode="NoResize">
     <Window.Resources>
+        <convs:BoolSwitchConvertor x:Key="boolSwitchConvertor" />
         <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
                             ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>
@@ -35,8 +37,8 @@
         <TextBlock  Grid.Row="0" Grid.ColumnSpan="3" Text="Client Details Window" FontSize="32" TextAlignment="Center" VerticalAlignment="Center"></TextBlock>
 
         <TextBlock Margin="15,0,0,0" Grid.Row="1" Grid.Column="0" FontSize="28" Text="ID:" VerticalAlignment="Center" ></TextBlock>
-        <TextBox Grid.Row="1" Grid.Column="1" FontSize="28" Text="{Binding ID}" VerticalAlignment="Center" ></TextBox>
-        
+        <TextBox Grid.Row="1" Grid.Column="1" FontSize="28" Text="{Binding ID}" IsEnabled="{Binding ExisitngClient, Converter= {StaticResource boolSwitchConvertor},Mode=TwoWay}" VerticalAlignment="Center" ></TextBox>
+
         <TextBlock Margin="15,0,0,0" Grid.Row="2" Grid.Column="0" FontSize="28" Text="First Name:" VerticalAlignment="Center" ></TextBlock>
         <TextBox Grid.Row="2" Grid.Column="1" FontSize="28" Text="{Binding FirstName}" VerticalAlignment="Center" ></TextBox>
 

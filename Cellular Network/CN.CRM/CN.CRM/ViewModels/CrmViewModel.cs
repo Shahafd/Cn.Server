@@ -1,6 +1,7 @@
 ﻿using CN.Common.Contracts;
 using CN.Common.Contracts.IServices;
 using CN.Common.Contracts.IViewModels;
+using CN.Common.Enums;
 using CN.Common.Infrastructures;
 using CN.Common.Models;
 using CN.CRM.Windows;
@@ -55,13 +56,13 @@ namespace CN.CRM.ViewModels
         private void InitCommands()
         {
             //inits the commands
-            newClientCommand = new ActionCommand(OpenNewClientWindow);
+            newClientCommand = new ActionCommand(OpenClientDetailsWindow);
         }
 
-        private void OpenNewClientWindow()
+        private void OpenClientDetailsWindow()
         {
             //opens the new client window
-            AddEditClientWindow addEditClientWindow = new AddEditClientWindow(null);
+            AddEditClientWindow addEditClientWindow = new AddEditClientWindow(selectedClient);
             addEditClientWindow.Show();
         }
 
@@ -69,10 +70,7 @@ namespace CN.CRM.ViewModels
         {
             //inits the collections
             Clients = new ObservableCollection<Client>();
-            for (int i = 0; i < 10; i++)
-            {
-                Clients.Add(new Client { ID = (31214989 + i).ToString(), Address = $"Tishbi {i}", CallsToCenter = i, ClientType = i, FirstName = $"Shahaf {i}", LastName = $"Dahan {i}", ContactNumber = $"052397447{i}" });
-            }
+           
         }
 
         public void UpdateUser(User user)

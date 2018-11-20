@@ -1,4 +1,5 @@
 ﻿
+using CN.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace CN.Common.Models
         {
 
         }
-        public Client(string ID, string FirstName, string LastName, int ClientType, string Address, string ContactNumber, DateTime BirthDate)
+        public Client(string ID, string FirstName, string LastName, ClientTypeEnum ClientType, string Address, string ContactNumber, DateTime BirthDate)
         {
             this.ID = ID;
             this.FirstName = FirstName;
@@ -26,7 +27,7 @@ namespace CN.Common.Models
         public string ID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int ClientType { get; set; }
+        public ClientTypeEnum ClientType { get; set; }
         public string Address { get; set; }
         public string ContactNumber { get; set; }
         public int CallsToCenter { get; set; }
