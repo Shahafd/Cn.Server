@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -45,17 +46,28 @@ namespace CN.Simulator.ViewModels
             if (ValidateFields())
             {
                 UserLogin userLogin = new UserLogin(Username, Password);
-                JObject j = new JObject();
-                j = (JObject)httpClient.PostRequest(ApiConfigs.LoginRoute, userLogin);
-                User user = j.ToObject<User>();
-                if (user != null)
-                {
-                    logger.Print($"Welcome Back {user.Username}!");
-                    SimulatorWindow simulatorWindow = new SimulatorWindow(user);
-                    simulatorWindow.Show();
-                    CloseThisWindow();
-                }
 
+                Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.LoginRoute, userLogin);
+                JObject jobj = (JObject)returnTuple.Item1;
+                User loggedIn = jobj.ToObject<User>();
+
+                switch (returnTuple.Item2)
+                {
+                    case HttpStatusCode.OK:
+                        logger.Print($"Welcome Back {loggedIn.Username}!");
+                        SimulatorWindow simulatorWindow = new SimulatorWindow(loggedIn);
+                        simulatorWindow.Show();
+                        CloseThisWindow();
+                        break;
+
+                    case HttpStatusCode.Conflict:
+                        logger.Print("Username or password are unvalid.");
+                        break;
+
+                    default:
+                        logger.Print($"{returnTuple.Item2.ToString()} Error.");
+                        break;
+                }
             }
         }
         public bool ValidateFields()

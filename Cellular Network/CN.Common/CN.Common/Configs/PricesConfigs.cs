@@ -14,5 +14,14 @@ namespace CN.Common.Configs
         public const double VipDiscountPrecentage = 15;
         public const double BussinessDiscountPrecentage = 10;
 
+        public const int MaxMinutesInPackage = 1000;
+        public const int MaxSMSInPackage = 2000;
+        public const int MaxMinutePrice = 5;
+        public const int MaxSMSPrice = 2;
+        public const int MaxDiscountPrecentage = 40;
+
+        public const int MinPackagePrice = 20;
+        public const int MaxPackagePrice = 200;
+
     }
 }

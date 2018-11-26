@@ -6,6 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using CN.Common.Contracts.IManagers;
 using CN.Common.Models;
+using System.Diagnostics;
+using System.Collections.ObjectModel;
+using CN.Common.Models.TempModels;
+using CN.Common.Enums;
 
 namespace CN.BL.Managers
 {
@@ -20,9 +24,9 @@ namespace CN.BL.Managers
 
         public Client GetClientByID(string clientID)
         {
+
             Client c = networkRepository.GetClientByID(clientID);
-            Console.WriteLine("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$444");
-            Console.WriteLine(c.ID);
+
             if (c != null)
             {
                 return c;
@@ -33,8 +37,56 @@ namespace CN.BL.Managers
             }
 
         }
-        
+
+        public List<Line> GetClientLines(string clientId)
+        {
+            return networkRepository.GetClientLines(clientId);
+        }
+
+        public async Task<string> Simulate(SimulatorAction simulatorAction)
+        {
+            RequestStatusEnum status = new RequestStatusEnum();
+            if (simulatorAction.Type.Equals("Call"))
+            {
+
+                for (int i = 0; i < simulatorAction.numOfCalls; i++)
+                {
+                    double Duration = GetRandomNumber(simulatorAction.minDuration, simulatorAction.maxDuration);
+
+                    Call call = new Call(simulatorAction.Line, Duration, 20.0, simulatorAction.destCall);
+                    status = await Task.Run(() => {return networkRepository.AddCall(call); });
+                    //status = 
+                    if (status.GetTypeCode() != 0)
+                    {
+                        return "Faild to add call!";
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < simulatorAction.numOfCalls; i++)
+                {
+                    double Duration = GetRandomNumber(simulatorAction.minDuration, simulatorAction.maxDuration);
+
+                    SMS sms = new SMS(simulatorAction.Line, 20.0, simulatorAction.destCall);
+                    status = networkRepository.AddSMS(sms);
+                    if (status.GetTypeCode() != 0)
+                    {
+                        return "Faild to add call!";
+                    }
+                }
+            }
+            return status.GetTypeCode().ToString();
+
+
+        }
+        public double GetRandomNumber(double minimum, double maximum)
+        {
+            Random random = new Random();
+            return random.NextDouble() * (maximum - minimum) + minimum;
+        }
+
         //methods that usr network.dosomething()
-        
+
     }
 }

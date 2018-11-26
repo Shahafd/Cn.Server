@@ -21,46 +21,79 @@ namespace CN.BL.Managers
         }
 
 
-        public Tuple<User, RequestStatusEnum> UserLogin(UserLogin userLogin)
+        public User UserLogin(UserLogin userLogin)
         {
             User user = networkRepository.GetUserByUsername(userLogin.Username);
             if (user != null)
             {
                 if (user.Password == userLogin.Password)
                 {
-                    return new Tuple<User, RequestStatusEnum>(user, RequestStatusEnum.Success);
+                    return user;
                 }
                 else
                 {
-                    return new Tuple<User, RequestStatusEnum>(null, RequestStatusEnum.Unvalid);
+                    return null;
                 }
             }
             else
             {
-                return new Tuple<User, RequestStatusEnum>(null, RequestStatusEnum.Unvalid);
+                return null;
             }
         }
 
-        public RequestStatusEnum UpdateExisitngClient(Client client)
+        public string UpdateExisitngClient(Client client)
         {
             //updates the details of an exisitng client
-            return networkRepository.UpdateClientDetails(client);
-
-        }
-
-        public string AddNewClient(Client client)
-        {
-            //adds a new client
-            string error = "";
-            if (networkRepository.IsClientIdExisits(client.ID))
+            string returnStr = "";
+            if (networkRepository.IsLineNumberExists(client))
             {
-              error=("Client ID already exisits");
+                returnStr = "Line already in use";
             }
             else
             {
+                networkRepository.UpdateClientDetails(client);
+            }
+            return returnStr;
+
+        }
+
+        public List<string> AddNewClient(Client client)
+        {
+            //adds a new client
+            List<string> info = new List<string>();
+            if (networkRepository.IsClientIdExisits(client.ID))
+            {
+                info.Add("Client ID already exisits");
+            }
+            if (networkRepository.IsLineNumberExists(client))
+            {
+                info.Add("Line already in use");
+            }
+            if (info.Count == 0)
+            {
                 networkRepository.AddNewClient(client);
             }
-            return error;
+
+            return info;
         }
+
+        public List<Client> GetAllClients()
+        {
+            //returns a list of the clients from the repository
+            return networkRepository.GetAllClients();
+        }
+
+        public bool IsClientIdExists(string clientId)
+        {
+            //returns if the client id already exists
+            return networkRepository.IsClientIdExisits(clientId);
+        }
+
+        public string DeleteClient(string id)
+        {
+            //deletes the client, his lines and his packages
+            return networkRepository.DeleteClient(id);
+        }
+
     }
 }

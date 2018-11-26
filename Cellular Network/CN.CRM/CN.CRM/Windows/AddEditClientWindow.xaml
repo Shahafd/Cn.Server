@@ -8,7 +8,7 @@
           xmlns:convs ="clr-namespace:CN.CRM.Convertors"
         xmlns:local="clr-namespace:CN.CRM.Windows"
         mc:Ignorable="d"
-        Title="AddEditClientWindow" Height="600" Width="800" ResizeMode="NoResize">
+        Title="AddEditClientWindow" Height="550" Width="800" ResizeMode="NoResize">
     <Window.Resources>
         <convs:BoolSwitchConvertor x:Key="boolSwitchConvertor" />
         <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
@@ -55,7 +55,7 @@
         <DatePicker Grid.Row="6" Grid.Column="1" DisplayDate="{Binding BirthDate}" FontSize="28"  VerticalAlignment="Center" ></DatePicker>
         <TextBlock Margin="15,0,0,0" Grid.Row="7" Grid.Column="0" FontSize="28" Text="Contact Number:" VerticalAlignment="Center" ></TextBlock>
         <TextBox Grid.Row="7" Grid.Column="1" FontSize="28" Text="{Binding ContactNumber}" VerticalAlignment="Center" ></TextBox>
-
+        <Button x:Name="deleteBtn" Grid.Row="1" Grid.Column="2"  Content="Delete" FontSize="30" Height="50" Width="150" Command="{Binding deleteCommand}" BorderBrush="Black" Background="#FFFF9D9D" IsEnabled="{Binding ExisitngClient}"></Button>
         <Button x:Name="sendBtn" Grid.Row="6" Grid.Column="2" Grid.RowSpan="2" Content="Send" FontSize="30" Height="100" Width="150" Command="{Binding submitCommand}"></Button>
     </Grid>
 </Window>

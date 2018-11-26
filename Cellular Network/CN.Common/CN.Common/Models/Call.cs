@@ -12,7 +12,7 @@ namespace CN.Common.Models
         {
 
         }
-        public Call(int LineID,double Duration,double ExternalPrice,string DestinationNumber)
+        public Call(string LineID,double Duration,double ExternalPrice,string DestinationNumber)
         {
             this.LineID = LineID;
             this.Duration = Duration;
@@ -20,7 +20,7 @@ namespace CN.Common.Models
             this.DestinationNumber = DestinationNumber;
         }
         public int ID { get; set; }
-        public int LineID { get; set; }
+        public string LineID { get; set; }
         public double Duration { get; set; }
         public double ExternalPrice { get; set; }
         public string DestinationNumber { get; set; }

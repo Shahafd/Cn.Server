@@ -16,6 +16,7 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
 
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -29,8 +30,7 @@
         <Button Grid.Column="1" Margin="331.667,83,0.333,69" Grid.RowSpan="3" Content="Search" Command="{Binding searchUserCommand}"/>
 
         <TextBlock Grid.Row="2" Text="Client Line:" FontSize="30" Grid.Column="0"></TextBlock>
-        <ComboBox x:Name="LinesCombo"  ItemsSource="{Binding Lines}" 
-                  AllowDrop="True" Grid.Column="1" Grid.Row="2" />
+        <ComboBox x:Name="LinesCombo"  ItemsSource="{Binding Lines}"  AllowDrop="True" Grid.Column="1" Grid.Row="2" SelectedItem="{Binding selectedLine}" />
 
         <TextBlock Text="Min Duraition:" Grid.Row="3"  Grid.Column="0" FontSize="30" ></TextBlock>
         <TextBox Text="{Binding minDuration}" Grid.Row="3" FontSize="30" Grid.Column="1"></TextBox>
@@ -44,7 +44,10 @@
         <TextBlock Text="Destenation:"  Grid.Row="6" Grid.Column="0" FontSize="30"></TextBlock>
         <TextBox Text="{Binding destCall}" Grid.Row="6" FontSize="30" Grid.Column="1"></TextBox>
 
-        <Button  Grid.Row="7" Content="Simulate" Command="{Binding simulateCommand}" Grid.ColumnSpan="2"></Button>
+        <TextBlock Grid.Row="7" Text="Type:" FontSize="30" Grid.Column="0"></TextBlock>
+        <ComboBox x:Name="typeCombo"  ItemsSource="{Binding Types}"  AllowDrop="True" Grid.Column="1" Grid.Row="7" SelectedItem="{Binding SelectedType}" />
+
+        <Button  Grid.Row="8" Content="Simulate" Command="{Binding simulateCommand}" Grid.ColumnSpan="2"></Button>
 
 
     </Grid>

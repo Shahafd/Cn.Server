@@ -12,7 +12,7 @@ namespace CN.Common.Models
         {
 
         }
-        public PackageDetails(int PackageID,string PackageDescription,int MaxMinutes,double UsedMinutes,int MaxSMS,int UsedSMS, double FixedSmsPrice,double FixedCallPrice,double DiscountPercentage, int SelectedNumbersID,string MostCalledNumber)
+        public PackageDetails(int PackageID, string PackageDescription, int MaxMinutes, double UsedMinutes, int MaxSMS, int UsedSMS, double FixedSmsPrice, double FixedCallPrice, double DiscountPercentage, int SelectedNumbersID, string MostCalledNumber)
         {
             this.PackageID = PackageID;
             this.PackageDescription = PackageDescription;
@@ -33,12 +33,10 @@ namespace CN.Common.Models
         public double UsedMinutes { get; set; }
         public int MaxSMS { get; set; }
         public int UsedSMS { get; set; }
-        public double FixedSmsPrice{ get; set; }
+        public double FixedSmsPrice { get; set; }
         public double FixedCallPrice { get; set; }
         public double DiscountPercentage { get; set; }
         public int SelectedNumbersID { get; set; }
         public string MostCalledNumber { get; set; }
-       // public bool InsideFamilyCalls { get; set; }
-
     }
 }

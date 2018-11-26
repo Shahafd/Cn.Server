@@ -12,14 +12,14 @@ namespace CN.Common.Models
         {
 
         }
-        public SMS(int LineID,double ExternalPrice,string DestinationNumber)
+        public SMS(string LineID,double ExternalPrice,string DestintationNumber)
         {
             this.LineID = LineID;
             this.ExternalPrice = ExternalPrice;
             this.DestintationNumber = DestintationNumber;
         }
         public int ID { get; set; }
-        public int LineID { get; set; }
+        public string LineID { get; set; }
         public double ExternalPrice { get; set; }
         public string DestintationNumber { get; set; }
     }

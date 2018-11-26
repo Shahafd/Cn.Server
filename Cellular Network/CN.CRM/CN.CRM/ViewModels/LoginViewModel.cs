@@ -8,10 +8,12 @@ using CN.Common.Infrastructures;
 using CN.Common.Models;
 using CN.Common.Models.TempModels;
 using CN.CRM.Windows;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -29,7 +31,7 @@ namespace CN.CRM.ViewModels
         ILogger logger { get; set; }
         IHttpClient httpClient { get; set; }
 
-        public LoginViewModel(ILogger logger, IHttpClient httpClient,IInputsValidator inputsValidator)
+        public LoginViewModel(ILogger logger, IHttpClient httpClient, IInputsValidator inputsValidator)
         {
             this.logger = logger;
             this.httpClient = httpClient;
@@ -46,18 +48,28 @@ namespace CN.CRM.ViewModels
             if (ValidateFields())
             {
                 UserLogin userLogin = new UserLogin(Username, Password);
-                JObject j = new JObject();
-                j = (JObject)httpClient.PostRequest(ApiConfigs.LoginRoute, userLogin);
-                User user = j.ToObject<User>();
 
-                if (user!=null)
+                Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.LoginRoute, userLogin);
+
+                switch (returnTuple.Item2)
                 {
-                    logger.Print($"Welcome Back {user.Username}!");
-                    CrmWindow crmWindow = new CrmWindow(user);
-                    crmWindow.Show();
-                    CloseThisWindow();
-                }
+                    case HttpStatusCode.OK:
+                        JObject jobj = (JObject)returnTuple.Item1;
+                        User loggedIn = jobj.ToObject<User>();
+                        logger.Print($"Welcome Back {loggedIn.Username}!");
+                        CrmWindow crmWindow = new CrmWindow(loggedIn);
+                        crmWindow.Show();
+                        CloseThisWindow();
+                        break;
 
+                    case HttpStatusCode.Conflict:
+                        logger.Print("Username or password are unvalid.");
+                        break;
+
+                    default:
+                        logger.Print($"{returnTuple.Item2.ToString()} Error.");
+                        break;
+                }
             }
         }
         public bool ValidateFields()

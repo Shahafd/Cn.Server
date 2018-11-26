@@ -1,4 +1,5 @@
 ﻿using CN.Common.Configs;
+
 using CN.Common.Models;
 using System;
 using System.Collections.Generic;
@@ -9,14 +10,15 @@ using System.Threading.Tasks;
 
 namespace CN.DAL.Databases
 {
-    public class CnContext:DbContext
+    public class CnContext : DbContext
     {
-        public CnContext() :base($"name={MainConfigs.ConnectionString}")
+        public CnContext() : base($"name={MainConfigs.ConnectionString}")
         {
             Database.SetInitializer(new CnContextSeedInitializer());
             Database.Initialize(true);
         }
         public virtual DbSet<Client> Clients { get; set; }
+        public virtual DbSet<UnActiveClient> UnActiveClients { get; set; }
         public virtual DbSet<ClientType> ClientTypes { get; set; }
         public virtual DbSet<Call> Calls { get; set; }
         public virtual DbSet<Line> Lines { get; set; }

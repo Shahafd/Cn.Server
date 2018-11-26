@@ -4,33 +4,34 @@ using CN.Common.Contracts.IServices;
 using CN.Common.Contracts.IViewModels;
 using CN.Common.Infrastructures;
 using CN.Common.Models;
+using CN.Common.Models.TempModels;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
+
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net;
 using System.Windows.Input;
 
 namespace CN.Simulator.ViewModels
 {
-    class SimulatorViewModel : ISimulatorViewModel, INotifyPropertyChanged
+    class SimulatorViewModel : ISimulatorViewModel
     {
         ILogger logger { get; set; }
         IInputsValidator inputsValidator { get; set; }
-        public IHttpClient httpClient { get; set; }
+        IHttpClient httpClient { get; set; }
         public ObservableCollection<string> Lines { get; private set; }
         public ICommand searchUserCommand { get; set; }
         public ICommand simulateCommand { get; set; }
         public string ClientId { get; set; }
-        int minDuration { get; set; }
-        int maxDuration { get; set; }
-        int numOfCalls { get; set; }
-        string destCall { get; set; }
-
+        public int minDuration { get; set; }
+        public int maxDuration { get; set; }
+        public int numOfCalls { get; set; }
+        public string destCall { get; set; }
+        public string selectedLine { get; set; }
+        public ObservableCollection<string> Types { get; private set; }
+        public string SelectedType { get; set; }
 
         public SimulatorViewModel(IHttpClient httpClient, ILogger logger, IInputsValidator inputsValidator)
         {
@@ -45,19 +46,37 @@ namespace CN.Simulator.ViewModels
             "test 1",
             "test 2"
             };
+            Types = new ObservableCollection<string> {
+                "Call",
+                "SMS"
+            };
 
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void Notify(string prop)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
 
         private void simulate(object obj)
         {
-            throw new NotImplementedException();
+            Debug.WriteLine("clientID: " + ClientId);
+            Debug.WriteLine("minduration: " + minDuration);
+            Debug.WriteLine("Max duration: " + maxDuration);
+            Debug.WriteLine("selectedline:: " + selectedLine);
+            Debug.WriteLine("dest: " + destCall);
+            Debug.WriteLine("numOfCalls" + numOfCalls);
+            // logger.Print("simulate clicked!");
+
+            //TODO: inputValidations
+            inputsValidator.ValidateIntInput("minduration", minDuration.ToString(), InputsConfigs.SimulatorMinMinute, InputsConfigs.SimulatorMaxMinute);
+            //wrong input validator
+            SimulatorAction simulatorAction = new SimulatorAction(ClientId, selectedLine, SelectedType, destCall, numOfCalls, minDuration, maxDuration);
+
+            //Tuple <obj=statuscode or string to show in logger,statuscode>
+            Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.SimulateRoute, simulatorAction);
+            //
+            JObject jobj = (JObject)returnTuple.Item1;
+            logger.Print(jobj.ToString());
+
+
         }
+
 
         private void searchUser()
         {
@@ -69,18 +88,46 @@ namespace CN.Simulator.ViewModels
             //send user id to server
             if (string.IsNullOrEmpty(idValid))
             {
-                JObject j = new JObject();
-                j = (JObject)httpClient.PostRequest(ApiConfigs.GetClientByIdRoute, ClientId);
-                Client client = j.ToObject<Client>();
-                Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                //UserLogin x = new UserLogin("9898989898", "0987893");
+                String s = ClientId;
 
-                Console.WriteLine(client.ID);
-
-                //get the user lines 
-                if (client != null)
+                Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.GetClientByIdRoute, s);
+                // j = httpClient.PostRequest(ApiConfigs.GetClientByIdRoute, s);
+                //Client client = j.ToObject<Client>();
+                if (returnTuple.Item1 == null)
                 {
-                    Lines = (ObservableCollection<string>)httpClient.PostRequest(ApiConfigs.GetClientLinesRoute, client);
+                    logger.Print("Client not found!");
+                    return;
                 }
+
+
+
+                JObject jobj = (JObject)returnTuple.Item1;
+                Client client = jobj.ToObject<Client>();
+
+
+
+                Debug.WriteLine(client.ID);
+
+                switch (returnTuple.Item2)
+                {
+                    case HttpStatusCode.OK:
+                        //get lines
+                        if (client != null)
+                        {
+                            GetClientLines(client.ID);
+                        }
+                        break;
+
+                    case HttpStatusCode.Conflict:
+                        logger.Print("Username or password are unvalid.");
+                        break;
+
+                    default:
+                        logger.Print($"{returnTuple.Item2.ToString()} Error.");
+                        break;
+                }
+
 
             }
             else
@@ -88,6 +135,23 @@ namespace CN.Simulator.ViewModels
                 logger.Print(idValid);
             }
 
+        }
+        public void GetClientLines(string clientId)
+        {
+            JObject jo = new JObject();
+            //(ObservableCollection<string>)httpClient.PostRequest(ApiConfigs.GetClientLinesRoute, client);
+            Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.GetClientLinesRoute, clientId);
+            JArray jobj = (JArray)returnTuple.Item1;
+            List<Line> LineList = jobj.ToObject<List<Line>>();
+            UpdateLines(LineList);
+        }
+        public void UpdateLines(List<Line> list)
+        {
+            Lines.Clear();
+            foreach (var item in list)
+            {
+                Lines.Add(item.Number);
+            }
         }
 
         //Methods:

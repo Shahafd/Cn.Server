@@ -40,6 +40,17 @@ namespace CN.Common.Services
             }
             return returnStr;
         }
+        public string ValidateIntInput(string fieldName, int input, int minValue, int maxValue)
+        {
+            //validates an input, returns an empty string if the input has been approved
+            string returnStr = "";
+
+            if (input < minValue || input > maxValue)
+            {
+                returnStr = $"{fieldName} must be between {minValue} and {maxValue} digits only";
+            }
+            return returnStr;
+        }
         public string ValidateIDInput(string fieldName, string input)
         {
             //validates an input, returns an empty string if the input has been approved
@@ -70,6 +81,17 @@ namespace CN.Common.Services
                 returnStr = $"Please insert a {fieldName}";
             }
             else if (outNum < minValue || outNum > maxValue)
+            {
+                returnStr = $"{fieldName} must be between {minValue} and {maxValue} digits only";
+            }
+            return returnStr;
+        }
+        public string ValidateDoubleInput(string fieldName, double input, int minValue, int maxValue)
+        {
+            //validates an input, returns an empty string if the input has been approved
+            string returnStr = "";
+          
+             if (input < minValue || input > maxValue)
             {
                 returnStr = $"{fieldName} must be between {minValue} and {maxValue} digits only";
             }

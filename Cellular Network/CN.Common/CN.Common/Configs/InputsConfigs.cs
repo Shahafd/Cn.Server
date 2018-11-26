@@ -17,5 +17,9 @@ namespace CN.Common.Configs
         //the minimum and maximum length of clients's ids
         public const int MinIdLength = 8;
         public const int MaxIdLength = 10;
+
+        //min and max minute per call simulator
+        public const int SimulatorMinMinute = 0;
+        public const int SimulatorMaxMinute = 300;
     }
 }

@@ -105,6 +105,7 @@
     <Compile Include="Configs\MainConfigs.cs" />
     <Compile Include="Configs\PricesConfigs.cs" />
     <Compile Include="Contracts\IManagers\IAccountsManager.cs" />
+    <Compile Include="Contracts\IManagers\ILinesManager.cs" />
     <Compile Include="Contracts\IManagers\ISimulatorManager.cs" />
     <Compile Include="Contracts\IRepositories\INetworkRepository.cs" />
     <Compile Include="Contracts\IServices\IHttpClient.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Contracts\IServices\ILogger.cs" />
     <Compile Include="Contracts\IServices\ISerializer.cs" />
     <Compile Include="Contracts\IViewModels\IAddEditClientViewModel.cs" />
+    <Compile Include="Contracts\IViewModels\IAddEditLineViewModel.cs" />
     <Compile Include="Contracts\IViewModels\ICrmViewModel.cs" />
     <Compile Include="Contracts\IViewModels\ISimulatorViewModel.cs" />
     <Compile Include="Contracts\Signalr\ISignalrClient.cs" />
@@ -122,7 +124,10 @@
     <Compile Include="Enums\RequestStatusEnum.cs" />
     <Compile Include="Infrastructures\ActionCommand.cs" />
     <Compile Include="LoggersAndPoppers\MessageBoxPopper.cs" />
+    <Compile Include="Models\TempModels\LinePackObject.cs" />
+    <Compile Include="Models\TempModels\SimulatorAction.cs" />
     <Compile Include="Models\TempModels\UserLogin.cs" />
+    <Compile Include="Models\UnActiveClient.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Call.cs" />
     <Compile Include="Models\Client.cs" />

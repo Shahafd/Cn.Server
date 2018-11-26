@@ -15,5 +15,17 @@ namespace CN.Common.Contracts.IRepositories
         RequestStatusEnum UpdateClientDetails(Client client);
         RequestStatusEnum AddNewClient(Client client);
         bool IsClientIdExisits(string iD);
+        List<Client> GetAllClients();
+        string DeleteClient(string id);
+        bool IsLineNumberExists(Client client);
+        string GetNewNumber();
+        List<Package> GetDefaultPackages();
+        PackageDetails GetPackageDetailsByPackageId(int id);
+        SelectedNumbers GetSelectedNumbersById(int selectedNumbersId);
+
+        List<Line> GetClientLines(string clientId);
+        RequestStatusEnum AddCall(Call call);
+        RequestStatusEnum AddSMS(SMS sms);
+        Package GetPackageByLineId(string lineId);
     }
 }

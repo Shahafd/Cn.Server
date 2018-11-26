@@ -6,7 +6,7 @@ using CN.Common.Enums;
 using CN.Common.LoggersAndPoppers;
 using CN.Common.Models;
 using CN.Common.Services;
-using CN.CRM.Signalr;
+
 using CN.CRM.ViewModels;
 using SimpleInjector;
 using SimpleInjector.Lifestyles;
@@ -30,8 +30,9 @@ namespace CN.CRM.Containers
 
                 //ViewModels
                 container.Register<ILoginViewModel, LoginViewModel>();
-                container.Register<ICrmViewModel, CrmViewModel>();
+                container.Register<ICrmViewModel, CrmViewModel>(Lifestyle.Singleton);
                 container.Register<IAddEditClientViewModel, AddEditClientViewModel>();
+                container.Register<IAddEditLineViewModel, AddEditLineViewModel>();
 
                 //Services
                 container.Register<ILogger, MessageBoxPopper>(Lifestyle.Singleton);

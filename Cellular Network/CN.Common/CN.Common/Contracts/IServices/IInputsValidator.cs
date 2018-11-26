@@ -10,7 +10,9 @@ namespace CN.Common.Contracts.IServices
     {
         string ValidateStrInput(string fieldName, string input, int minLength, int maxLength);
         string ValidateIntInput(string fieldName, string input, int minValue, int maxValue);
+        string ValidateIntInput(string fieldName, int input, int minValue, int maxValue);
         string ValidateDoubleInput(string fieldName, string input, int minValue, int maxValue);
+        string ValidateDoubleInput(string fieldName, double input, int minValue, int maxValue);
         string ValidateDateInput(string fieldName, DateTime input);
         string ValidateIDInput(string fieldName, string input);
         string ValidatePhoneInput(string input);

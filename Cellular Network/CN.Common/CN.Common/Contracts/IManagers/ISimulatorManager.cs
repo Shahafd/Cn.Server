@@ -1,4 +1,5 @@
 ﻿using CN.Common.Models;
+using CN.Common.Models.TempModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,7 @@ namespace CN.Common.Contracts.IManagers
     public interface  ISimulatorManager
     {
         Client GetClientByID(string clientID);
+        List<Line> GetClientLines(string clientId);
+        Task<string> Simulate(SimulatorAction simulatorAction);
     }
 }

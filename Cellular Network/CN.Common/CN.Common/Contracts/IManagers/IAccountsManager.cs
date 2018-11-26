@@ -11,8 +11,11 @@ namespace CN.Common.Contracts.IManagers
 {
     public interface IAccountsManager
     {
-        Tuple<User, RequestStatusEnum> UserLogin(UserLogin userLogin);
-       RequestStatusEnum UpdateExisitngClient(Client client);
-       string AddNewClient(Client client);
+        User UserLogin(UserLogin userLogin);
+        string UpdateExisitngClient(Client client);
+        List<string> AddNewClient(Client client);
+        List<Client> GetAllClients();
+        bool IsClientIdExists(string clientId);
+        string DeleteClient(string id);
     }
 }

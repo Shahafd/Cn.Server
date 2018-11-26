@@ -1,0 +1,71 @@
+﻿<Window x:Class="CN.CRM.Windows.AddEditLinesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+           xmlns:convs ="clr-namespace:CN.CRM.Convertors"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CN.CRM.Windows"
+        mc:Ignorable="d"
+        Title="AddEditLinesWindow" Height="550" Width="800" ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0.7*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock  Grid.Row="0" Grid.ColumnSpan="3" Text="Client's Lines Window" FontSize="32" TextAlignment="Center" VerticalAlignment="Center"></TextBlock>
+
+        <TextBlock Margin="15,0,0,0" Grid.Row="1" Grid.Column="0" FontSize="20" Text="Line:" VerticalAlignment="Center" ></TextBlock>
+        <ComboBox Grid.Row="1" Grid.Column="1" FontSize="20" ItemsSource="{Binding Lines}" VerticalAlignment="Center" SelectedItem="{Binding SelectedLine}" IsEnabled="{Binding ExistingLine}" ></ComboBox>
+        
+        <TextBlock Margin="15,0,0,0" Grid.Row="2" Grid.Column="0" FontSize="20" Text="Package:" VerticalAlignment="Center" ></TextBlock>
+        <ComboBox Grid.Row="2" Grid.Column="1" FontSize="20"    DisplayMemberPath="PackageName" ItemsSource="{Binding Packages}" VerticalAlignment="Center" SelectedItem="{Binding SelectedPackage}" ></ComboBox>
+        
+        <TextBlock Margin="15,0,0,0" Grid.Row="3" Grid.Column="0" FontSize="20" Text="Minutes:" VerticalAlignment="Center" ></TextBlock>
+        <TextBox Grid.Row="3" Grid.Column="1" FontSize="20" Text="{Binding Minutes}"  VerticalAlignment="Center" ></TextBox>
+
+        <TextBlock Margin="15,0,0,0" Grid.Row="4" Grid.Column="0" FontSize="20" Text="SMS:" VerticalAlignment="Center" ></TextBlock>
+        <TextBox Grid.Row="4" Grid.Column="1" FontSize="20" Text="{Binding SMS}"  VerticalAlignment="Center" ></TextBox>
+
+        <TextBlock Margin="15,0,0,0" Grid.Row="5" Grid.Column="0" FontSize="20" Text="Minute Price:" VerticalAlignment="Center" ></TextBlock>
+        <TextBox Grid.Row="5" Grid.Column="1" FontSize="20" Text="{Binding MinutePrice}"  VerticalAlignment="Center" ></TextBox>
+
+        <TextBlock Margin="15,0,0,0" Grid.Row="6" Grid.Column="0" FontSize="20" Text="SMS Price:" VerticalAlignment="Center" ></TextBlock>
+        <TextBox Grid.Row="6" Grid.Column="1" FontSize="20" Text="{Binding SMSPrice}"  VerticalAlignment="Center" ></TextBox>
+
+        <TextBlock Margin="15,0,0,0" Grid.Row="7" Grid.Column="0" FontSize="20" Text="Discount %:" VerticalAlignment="Center" ></TextBlock>
+        <TextBox Grid.Row="7" Grid.Column="1" FontSize="20" Text="{Binding Discount}"  VerticalAlignment="Center" ></TextBox>
+
+        <TextBlock Margin="15,0,0,0" Grid.Row="8" Grid.Column="0" FontSize="20" Text="Selected Number 1:" VerticalAlignment="Center" ></TextBlock>
+        <TextBox Grid.Row="8" Grid.Column="1" FontSize="20" Text="{Binding SelectedNum1}"  VerticalAlignment="Center" ></TextBox>
+
+        <TextBlock Margin="15,0,0,0" Grid.Row="9" Grid.Column="0" FontSize="20" Text="Selected Number 2:" VerticalAlignment="Center" ></TextBlock>
+        <TextBox Grid.Row="9" Grid.Column="1" FontSize="20" Text="{Binding SelectedNum2}"  VerticalAlignment="Center" ></TextBox>
+
+        <TextBlock Margin="15,0,0,0" Grid.Row="10" Grid.Column="0" FontSize="20" Text="Selected Number 3:" VerticalAlignment="Center" ></TextBlock>
+        <TextBox Grid.Row="10" Grid.Column="1" FontSize="20" Text="{Binding SelectedNum3}"  VerticalAlignment="Center" ></TextBox>
+
+        <TextBlock Margin="15,0,0,0" Grid.Row="11" Grid.Column="0" FontSize="20" Text="Most Called Number:" VerticalAlignment="Center" ></TextBlock>
+        <TextBox Grid.Row="11" Grid.Column="1" FontSize="20" Text="{Binding MostCalledNum}"  VerticalAlignment="Center" ></TextBox>
+        <TextBlock Margin="15,0,0,0" Grid.Row="12" Grid.Column="0" FontSize="20" Text="Package Total Price:" VerticalAlignment="Center" ></TextBlock>
+        <TextBox Grid.Row="12" Grid.Column="1" FontSize="20" Text="{Binding TotalPrice}"  VerticalAlignment="Center" ></TextBox>
+
+        <Button x:Name="deleteBtn" Grid.Row="1" Grid.Column="2"  Content="Delete" FontSize="30" Height="50" Width="150" Command="{Binding deleteCommand}" BorderBrush="Black" Background="#FFFF9D9D" IsEnabled="{Binding ExistingLine}"></Button>
+        <Button x:Name="sendBtn" Grid.Row="10" Grid.Column="2" Grid.RowSpan="2" Content="Send" FontSize="30" Height="80" Width="150" Command="{Binding submitCommand}"></Button>
+    </Grid>
+</Window>
