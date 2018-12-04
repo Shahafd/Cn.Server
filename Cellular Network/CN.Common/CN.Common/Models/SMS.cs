@@ -17,10 +17,12 @@ namespace CN.Common.Models
             this.LineID = LineID;
             this.ExternalPrice = ExternalPrice;
             this.DestintationNumber = DestintationNumber;
+            this.DateOfSMS = DateTime.Now;
         }
         public int ID { get; set; }
         public string LineID { get; set; }
         public double ExternalPrice { get; set; }
         public string DestintationNumber { get; set; }
+        public DateTime DateOfSMS { get; set; }
     }
 }

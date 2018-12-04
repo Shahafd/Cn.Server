@@ -1,5 +1,6 @@
 ﻿using CN.Common.Enums;
 using CN.Common.Models;
+using CN.Common.Models.TempModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,10 +23,20 @@ namespace CN.Common.Contracts.IRepositories
         List<Package> GetDefaultPackages();
         PackageDetails GetPackageDetailsByPackageId(int id);
         SelectedNumbers GetSelectedNumbersById(int selectedNumbersId);
-
         List<Line> GetClientLines(string clientId);
-        RequestStatusEnum AddCall(Call call);
-        RequestStatusEnum AddSMS(SMS sms);
         Package GetPackageByLineId(string lineId);
+        bool IsLineExists(string lineNumber);
+        RequestStatusEnum UpdateLinePackage(LinePackObject linePackObj);
+        RequestStatusEnum CreateNewLinePackage(LinePackObject linePackObj);
+        RequestStatusEnum DeleteLine(string line);
+        LineStatusEnum GetLineStatus(string line);
+        RequestStatusEnum UpdateLineStatus(Line line);
+        Task<bool> AddCall(Call call);
+        Task<bool> AddSms(SMS sms);
+        Line GetLineById(string lineId);
+        List<Call> GetCallsToContactsByDate(string lineNumber, YearAndMonth date);
+        List<Call> GetCallsNotToContactsByDate(string lineNumber, YearAndMonth date);
+        List<SMS> GetSMSToContactsByDate(string lineNumber, YearAndMonth date);
+        Client GetClientByNumber(string lineNumber);
     }
 }

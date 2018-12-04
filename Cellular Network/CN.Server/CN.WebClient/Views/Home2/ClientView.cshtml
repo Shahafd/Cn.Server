@@ -1,0 +1,40 @@
+﻿@model CN.Common.Models.TempModels.ClientWebModel
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.8.3.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/mvc/3.0/jquery.unobtrusive-ajax.min.js"></script>
+    <title>Index</title>
+</head>
+@{
+    ViewBag.Title = "Client Billing Window";
+}
+
+<div class="media">
+    <h2>Client Billing System</h2>
+    <p class="lead"></p>
+</div>
+@{
+    ViewBag.Title = "Client Lines information";
+}
+<div class="row">
+    <div class="col-md-4">
+        @using (Ajax.BeginForm("GetLineInfo", "Home2", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "info" }))
+        {
+
+            @Html.DisplayText($"Hello {Model.ClientName}");
+            @Html.DisplayText("Please select a line to display:");
+            @Html.DropDownListFor(m => m.SelectedLine, Model.Lines);
+            <input type="submit" value="Show Line info" />
+        }
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <script type="text/javascript">
+                  alert("@ViewBag.ErrorMessage");
+            </script>
+        }
+    </div>
+    <br />
+    <div id="info">
+
+    </div>
+</div>

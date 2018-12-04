@@ -52,6 +52,9 @@
     <Reference Include="Microsoft.Owin.Security, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\CN.Server\packages\Microsoft.Owin.Security.2.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\CN.Server\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\CN.Server\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -93,6 +96,27 @@
       <HintPath>..\..\CN.Server\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\CN.Server\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\CN.Server\packages\Microsoft.AspNet.Mvc.4.0.30506.0\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc.Extensions, Version=1.0.9.0, Culture=neutral, PublicKeyToken=17e35335fc9f8fc8, processorArchitecture=MSIL">
+      <HintPath>..\..\CN.Server\packages\System.Web.Mvc.Extensions.Mvc.4.1.0.9\lib\net40\System.Web.Mvc.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\CN.Server\packages\Microsoft.AspNet.Razor.2.0.20710.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\CN.Server\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\CN.Server\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\CN.Server\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -114,6 +138,8 @@
     <Compile Include="Contracts\IServices\ISerializer.cs" />
     <Compile Include="Contracts\IViewModels\IAddEditClientViewModel.cs" />
     <Compile Include="Contracts\IViewModels\IAddEditLineViewModel.cs" />
+    <Compile Include="Contracts\IViewModels\IBillDatePickerViewModel.cs" />
+    <Compile Include="Contracts\IViewModels\IBillViewModel.cs" />
     <Compile Include="Contracts\IViewModels\ICrmViewModel.cs" />
     <Compile Include="Contracts\IViewModels\ISimulatorViewModel.cs" />
     <Compile Include="Contracts\Signalr\ISignalrClient.cs" />
@@ -123,10 +149,18 @@
     <Compile Include="Enums\LineStatusEnum.cs" />
     <Compile Include="Enums\RequestStatusEnum.cs" />
     <Compile Include="Infrastructures\ActionCommand.cs" />
+    <Compile Include="LoggersAndPoppers\DebugLogger.cs" />
     <Compile Include="LoggersAndPoppers\MessageBoxPopper.cs" />
+    <Compile Include="Models\TempModels\BillRequestModel.cs" />
+    <Compile Include="Models\TempModels\ClientBill.cs" />
+    <Compile Include="Models\TempModels\ClientLogin.cs" />
+    <Compile Include="Models\TempModels\ClientWebModel.cs" />
+    <Compile Include="Models\TempModels\LineDetails.cs" />
     <Compile Include="Models\TempModels\LinePackObject.cs" />
+    <Compile Include="Models\TempModels\Receipt.cs" />
     <Compile Include="Models\TempModels\SimulatorAction.cs" />
     <Compile Include="Models\TempModels\UserLogin.cs" />
+    <Compile Include="Models\TempModels\YearAndMonth.cs" />
     <Compile Include="Models\UnActiveClient.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Call.cs" />

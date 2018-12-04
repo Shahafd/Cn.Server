@@ -1,0 +1,40 @@
+﻿<Window x:Class="CN.CRM.Windows.BillDatePicker"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CN.CRM.Windows"
+        mc:Ignorable="d"
+        Title="BillDatePicker" Height="300" Width="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.2*"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="Receipt" Grid.Row="0" HorizontalAlignment="Center" FontSize="30" FontStyle="Italic" FontWeight="UltraBold" Grid.Column="0" Grid.ColumnSpan="2"/>
+
+        <TextBlock Text="Select Lines: " Grid.Row="1" Grid.Column="0" FontSize="25" HorizontalAlignment="Center"/>
+        <!--<ComboBox  x:Name="LinesCombo" Grid.Row="1" Grid.Column="1" FontSize="25"   ItemsSource="{Binding Lines}" AllowDrop="True"  SelectedItem="{Binding selectedLine}"/>-->
+        <ComboBox x:Name="cbObjects" Grid.Column="1" Grid.Row="1" FontSize="25"   ItemsSource="{Binding cbObjects}" >
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox IsChecked="{Binding IsSelected}" Width="20" VerticalAlignment="Center" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"  />
+                        <TextBlock Text="{Binding ObjectData}" VerticalAlignment="Center" />
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+
+    </Grid>
+</Window>

@@ -21,5 +21,8 @@ namespace CN.Common.Configs
         //min and max minute per call simulator
         public const int SimulatorMinMinute = 0;
         public const int SimulatorMaxMinute = 300;
+
+        //maximum calls to generate in simulator 
+        public const int MaxNumOfCalls = 100;
     }
 }

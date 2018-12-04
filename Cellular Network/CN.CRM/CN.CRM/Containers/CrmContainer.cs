@@ -33,6 +33,8 @@ namespace CN.CRM.Containers
                 container.Register<ICrmViewModel, CrmViewModel>(Lifestyle.Singleton);
                 container.Register<IAddEditClientViewModel, AddEditClientViewModel>();
                 container.Register<IAddEditLineViewModel, AddEditLineViewModel>();
+                container.Register<IBillViewModel, BillViewModel>();
+                container.Register<IBillDatePickerViewModel, BillDatePickerViewModel>();
 
                 //Services
                 container.Register<ILogger, MessageBoxPopper>(Lifestyle.Singleton);

@@ -28,7 +28,7 @@
         <TextBlock  Grid.Row="0" Margin="0,-15,0,0" Grid.ColumnSpan="3" Text="CRM Main Window" FontSize="32" TextAlignment="Center" VerticalAlignment="Center"></TextBlock>
 
         <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" FontSize="26" Height="30" Background="#FF3F8383" Text="Search: " Foreground="White" ></TextBlock>
-        <TextBox x:Name="searchInputTbx" Grid.Row="0" Grid.Column="2" Text="{Binding SearchInput,Mode=TwoWay}" VerticalAlignment="Bottom" FontSize="20" Height="30"  Foreground="White" Background="#FF3F8383" TextChanged="searchInputTbx_TextChanged" ></TextBox>
+        <TextBox x:Name="searchInputTbx" Grid.Row="0" Grid.Column="2" Text="{Binding searchInput,Mode=TwoWay}" VerticalAlignment="Bottom" FontSize="20" Height="30"  Foreground="White" Background="#FF3F8383" TextChanged="searchInputTbx_TextChanged" ></TextBox>
         <ListView Grid.Row="1" Grid.RowSpan="6" Grid.Column="1" Grid.ColumnSpan="2" Name="itemsLV" ItemsSource="{Binding Clients}" SelectedItem="{Binding selectedClient}" >
             <ListView.View>
                 <GridView>

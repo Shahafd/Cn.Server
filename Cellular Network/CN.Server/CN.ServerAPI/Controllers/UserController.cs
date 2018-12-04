@@ -122,16 +122,78 @@ namespace CN.ServerAPI.Controllers
             return Ok(clientLinesStr);
         }
         [HttpPost]
+        [Route(ApiConfigs.GetPackageByLineRoute)]
         public IHttpActionResult GetPackagesByLineId([FromBody] string lineId)
         {
             //returns the package that matches this line id
             return Ok(linesManager.GetPackageByLineId(lineId));
         }
         [HttpPost]
+        [Route(ApiConfigs.SendLinePackageRoute)]
         public IHttpActionResult SendPackage([FromBody] LinePackObject linePackObj)
         {
             //gets the line and package object from the clients and add/updates it
             return Ok(linesManager.SendLinePackageObj(linePackObj));
+        }
+        [HttpPost]
+        [Route(ApiConfigs.DeleteLineRoute)]
+        public IHttpActionResult DeleteLine([FromBody] string line)
+        {
+            //deletes the line and its belongings
+            return Ok(linesManager.DeleteLine(line));
+
+        }
+        [HttpPost]
+        [Route(ApiConfigs.ClientSearchRoute)]
+        public IHttpActionResult SearchClient([FromBody]string input)
+        {
+            //returns the client that their fields matches the input
+            return Ok(accountsManager.SearchForClients(input));
+        }
+        [HttpPost]
+        [Route(ApiConfigs.GetLineStatusRoute)]
+        public IHttpActionResult GetLineStatus([FromBody]string line)
+        {
+            //returns the status of this line
+            return Ok(linesManager.GetLineStatus(line));
+        }
+        [HttpPost]
+        [Route(ApiConfigs.SendLineStatusRoute)]
+        public IHttpActionResult SendLineStatus([FromBody]Line line)
+        {
+            //sends a line status to update in the server
+            return Ok(linesManager.UpdateLineStatus(line));
+        }
+        [HttpPost]
+        [Route(ApiConfigs.ClientLoginRoute)]
+        public IHttpActionResult ClientWebLogin([FromBody]ClientLogin clientLogin)
+        {
+            //tries a client login from the web service
+
+            Client client = accountsManager.ClientLogin(clientLogin);
+            if (client != null)
+            {
+
+                return Ok(client);
+            }
+            else
+            {
+                return Conflict();
+            }
+        }
+        [HttpPost]
+        [Route(ApiConfigs.GetLineDetailsRoute)]
+        public IHttpActionResult GetLineDetails([FromBody]string lineNumber)
+        {
+            //returns the details for the web client for this line
+            return Ok(linesManager.GetLineDetails(lineNumber));
+        }
+        [HttpPost]
+        [Route(ApiConfigs.GetSpecficLinesBillRoute)]
+        public IHttpActionResult GetSpecficLinesBiil([FromBody] BillRequestModel billRequestModel)
+        {
+            //returns the bill for the specific lines chosen
+            return Ok(linesManager.GetBillForSpecificLines(billRequestModel.ClientID, billRequestModel.Date, billRequestModel.Lines));
         }
     }
 }

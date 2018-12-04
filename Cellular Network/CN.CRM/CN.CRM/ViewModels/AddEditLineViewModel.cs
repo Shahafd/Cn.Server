@@ -2,9 +2,11 @@
 using CN.Common.Contracts;
 using CN.Common.Contracts.IServices;
 using CN.Common.Contracts.IViewModels;
+using CN.Common.Enums;
 using CN.Common.Infrastructures;
 using CN.Common.Models;
 using CN.Common.Models.TempModels;
+using CN.CRM.Windows;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -14,6 +16,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace CN.CRM.ViewModels
@@ -26,6 +29,7 @@ namespace CN.CRM.ViewModels
             get { return _ExistingLine; }
             set { _ExistingLine = value; Notify(nameof(ExistingLine)); }
         }
+        public string ClientId { get; set; }
         private SelectedNumbers _selectedNumbers;
         public SelectedNumbers SelectedNumbers
         {
@@ -117,18 +121,27 @@ namespace CN.CRM.ViewModels
             set { _MostCalledNum = value; Notify(nameof(MostCalledNum)); }
         }
         private double _TotalPrice;
-
         public double TotalPrice
         {
             get { return _TotalPrice; }
-            set { _TotalPrice = value;Notify(nameof(TotalPrice)); }
+            set { _TotalPrice = value; Notify(nameof(TotalPrice)); }
+        }
+        private LineStatusEnum _LineStatus;
+
+        public LineStatusEnum LineStatus
+        {
+            get { return _LineStatus; }
+            set { _LineStatus = value; Notify(nameof(LineStatus)); }
         }
 
+        
 
         public IHttpClient httpClient { get; set; }
         public IInputsValidator inputsValidator { get; set; }
         public ILogger logger { get; set; }
         public ICommand submitCommand { get; set; }
+        public ICommand deleteCommand { get; set; }
+        public ICommand sendStatusCommand { get; set; }
         public AddEditLineViewModel(IHttpClient httpClient, IInputsValidator inputsValidator, ILogger logger)
         {
             this.httpClient = httpClient;
@@ -136,12 +149,62 @@ namespace CN.CRM.ViewModels
             this.logger = logger;
             InitCollections();
             InitCommands();
+            SelectedNumbers = new SelectedNumbers();
         }
 
         private void InitCommands()
         {
             //inits the commands
             submitCommand = new ActionCommand(SendLine);
+            deleteCommand = new ActionCommand(DeleteLine);
+            sendStatusCommand = new ActionCommand(SendStatus);
+        }
+
+        private void SendStatus()
+        {
+            //sends the updated line status to the server
+            if (string.IsNullOrEmpty(SelectedLine))
+            {
+                logger.Print("Please selected a line first.");
+                return;
+            }
+            Line updatedLine = new Line();
+            updatedLine.Number = SelectedLine;
+            updatedLine.Status = LineStatus;
+            Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.SendLineStatusRoute, updatedLine);
+            if (returnTuple.Item2 == HttpStatusCode.OK)
+            {
+                RequestStatusEnum status = (RequestStatusEnum)Enum.ToObject(typeof(RequestStatusEnum), returnTuple.Item1);
+                logger.Print("Status updated successfully.");
+                CloseThisWindow();
+            }
+            else
+            {
+                logger.Print($"{returnTuple.Item2.ToString()} Error.");
+            }
+        }
+
+        private void DeleteLine()
+        {
+            //deletes the line,its package, package details and selected numbers
+            if (!string.IsNullOrEmpty(SelectedLine))
+            {
+                Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.DeleteLineRoute, SelectedLine);
+                if (returnTuple.Item2 == HttpStatusCode.OK)
+                {
+                    RequestStatusEnum status = (RequestStatusEnum)Enum.ToObject(typeof(RequestStatusEnum), returnTuple.Item1);
+                    logger.Print("Line Removed Successfully");
+                    CloseThisWindow();
+                }
+                else
+                {
+                    logger.Print($"{returnTuple.Item2.ToString()} Error.");
+                }
+            }
+            else
+            {
+                logger.Print("Please select a line first.");
+            }
         }
 
         private void SendLine()
@@ -149,22 +212,73 @@ namespace CN.CRM.ViewModels
             //validates the fields and send the line,package and details
             if (ValidateFields())
             {
-                SelectedPackageDetails.MaxMinutes = Minutes;
-                SelectedPackageDetails.MaxSMS = SMS;
-                SelectedPackageDetails.FixedCallPrice = MinutePrice;
-                SelectedPackageDetails.FixedSmsPrice = SMSPrice;
-                SelectedPackageDetails.DiscountPercentage = Discount;
-                SelectedPackageDetails.MostCalledNumber = MostCalledNum;
-                SelectedNumbers.FirstNumber = SelectedNum1;
-                SelectedNumbers.SecondNumber = SelectedNum2;
-                SelectedNumbers.ThirdNumber = SelectedNum3;
-                SelectedPackage.DefaultPackage = false;
-                SelectedPackage.PackageTotalPrice = TotalPrice;
-                LinePackObject linePackObj = new LinePackObject(SelectedLine, SelectedPackage, SelectedPackageDetails, SelectedNumbers);
+                UpdateModels();
+
+                LinePackObject linePackObj = new LinePackObject(SelectedLine, SelectedPackage, SelectedPackageDetails, SelectedNumbers, ClientId);
                 Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.SendLinePackageRoute, linePackObj);
+                if (returnTuple.Item2 == HttpStatusCode.OK)
+                {
+                    if (ExistingLine)
+                    {
+                        logger.Print("Line and package updated succesfully.");
+                        CloseThisWindow();
+                    }
+                    else
+                    {
+                        logger.Print("line and package added succsefully");
+                        CloseThisWindow();
+                    }
+
+                }
+                else
+                {
+                    logger.Print(returnTuple.Item2.ToString());
+                }
             }
         }
 
+        private void UpdateModels()
+        {
+            //updates the models from the props of the viewmodel
+            SelectedPackageDetails.MaxMinutes = Minutes;
+            SelectedPackageDetails.MaxSMS = SMS;
+            SelectedPackageDetails.FixedCallPrice = MinutePrice;
+            SelectedPackageDetails.FixedSmsPrice = SMSPrice;
+            SelectedPackageDetails.DiscountPercentage = Discount;
+            if (MostCalledNum != null)
+            {
+                SelectedPackageDetails.MostCalledNumber = MostCalledNum;
+            }
+
+            if (SelectedNum1 != null)
+            {
+                SelectedNumbers.FirstNumber = SelectedNum1;
+            }
+            if (SelectedNum2 != null)
+            {
+                SelectedNumbers.SecondNumber = SelectedNum2;
+            }
+            if (SelectedNum3 != null)
+            {
+                SelectedNumbers.ThirdNumber = SelectedNum3;
+            }
+
+
+            SelectedPackage.DefaultPackage = false;
+            SelectedPackage.PackageTotalPrice = TotalPrice;
+        }
+
+        private void CloseThisWindow()
+        {
+            //closes this window
+            for (int i = 0; i < Application.Current.Windows.Count; i++)
+            {
+                if (Application.Current.Windows[i].GetType() == typeof(AddEditLinesWindow))
+                {
+                    Application.Current.Windows[i].Close();
+                }
+            }
+        }
         private bool ValidateFields()
         {
             //validates the fields, return true if all fields are valid
@@ -217,7 +331,6 @@ namespace CN.CRM.ViewModels
                 return false;
             }
         }
-
 
         private void InitCollections()
         {
@@ -291,6 +404,49 @@ namespace CN.CRM.ViewModels
         private void SelectedLineChanged()
         {
             //the client selected a line
+            ClearSelectedNumbers();
+           
+            if (ExistingLine)
+            {
+                GetPackageForLine();
+                GetLineStatus();
+            }
+            else
+            {
+                GetDefaultPackages();
+            }
+        }
+
+        private void GetLineStatus()
+        {
+            //gets the status of the slected line into the line status enum
+            if (!string.IsNullOrEmpty(SelectedLine))
+            {
+                Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.GetLineStatusRoute, SelectedLine);
+                if (returnTuple.Item2 == HttpStatusCode.OK)
+                {
+                    LineStatusEnum status = (LineStatusEnum)Enum.ToObject(typeof(LineStatusEnum), returnTuple.Item1);
+                    LineStatus = status;
+                }
+                else
+                {
+                    logger.Print($"{returnTuple.Item2.ToString()} Error.");
+                }
+            }
+        }
+
+        private void ClearSelectedNumbers()
+        {
+            //clears the selected numbers
+            SelectedNum1 = "";
+            SelectedNum2 = "";
+            SelectedNum3 = "";
+            MostCalledNum = "";
+        }
+
+        private void GetPackageForLine()
+        {
+            //gets the package of the slected line
             Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.GetPackageByLineRoute, SelectedLine);
             if (returnTuple.Item2 == HttpStatusCode.OK)
             {
@@ -315,6 +471,7 @@ namespace CN.CRM.ViewModels
         public void GetData(Client client, bool newLine)
         {
             //gets the data sent from the view
+            ClientId = client.ID;
             ExistingLine = !newLine;
             if (newLine)
             {

@@ -3,10 +3,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
            xmlns:convs ="clr-namespace:CN.CRM.Convertors"
+          xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CN.CRM.Windows"
+         xmlns:enums="clr-namespace:CN.Common.Enums;assembly=CN.Common"
         mc:Ignorable="d"
         Title="AddEditLinesWindow" Height="550" Width="800" ResizeMode="NoResize">
+    <Window.Resources>
+        <convs:SelectLineButtonConvertor x:Key="selectLineButtonConvertor" />
+        <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="enums:LineStatusEnum"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -32,10 +44,10 @@
 
         <TextBlock Margin="15,0,0,0" Grid.Row="1" Grid.Column="0" FontSize="20" Text="Line:" VerticalAlignment="Center" ></TextBlock>
         <ComboBox Grid.Row="1" Grid.Column="1" FontSize="20" ItemsSource="{Binding Lines}" VerticalAlignment="Center" SelectedItem="{Binding SelectedLine}" IsEnabled="{Binding ExistingLine}" ></ComboBox>
-        
+
         <TextBlock Margin="15,0,0,0" Grid.Row="2" Grid.Column="0" FontSize="20" Text="Package:" VerticalAlignment="Center" ></TextBlock>
-        <ComboBox Grid.Row="2" Grid.Column="1" FontSize="20"    DisplayMemberPath="PackageName" ItemsSource="{Binding Packages}" VerticalAlignment="Center" SelectedItem="{Binding SelectedPackage}" ></ComboBox>
-        
+        <ComboBox Grid.Row="2" Grid.Column="1" FontSize="20" ItemsSource="{Binding Packages}" VerticalAlignment="Center" DisplayMemberPath="PackageName" SelectedItem="{Binding SelectedPackage}" ></ComboBox>
+
         <TextBlock Margin="15,0,0,0" Grid.Row="3" Grid.Column="0" FontSize="20" Text="Minutes:" VerticalAlignment="Center" ></TextBlock>
         <TextBox Grid.Row="3" Grid.Column="1" FontSize="20" Text="{Binding Minutes}"  VerticalAlignment="Center" ></TextBox>
 
@@ -67,5 +79,10 @@
 
         <Button x:Name="deleteBtn" Grid.Row="1" Grid.Column="2"  Content="Delete" FontSize="30" Height="50" Width="150" Command="{Binding deleteCommand}" BorderBrush="Black" Background="#FFFF9D9D" IsEnabled="{Binding ExistingLine}"></Button>
         <Button x:Name="sendBtn" Grid.Row="10" Grid.Column="2" Grid.RowSpan="2" Content="Send" FontSize="30" Height="80" Width="150" Command="{Binding submitCommand}"></Button>
+
+        <TextBlock Margin="15,0,0,0" Grid.Row="3" Grid.Column="2" FontSize="25" Text="Line Status:" VerticalAlignment="Center" ></TextBlock>
+        <ComboBox Grid.Row="4" Grid.Column="2" FontSize="28" IsEnabled="{Binding ExistingLine}" ItemsSource="{Binding Source={StaticResource dataFromEnum}}"
+                  SelectedItem="{Binding Path=LineStatus}" />
+        <Button x:Name="sendStatusBtn" Grid.Row="5" Grid.Column="3"  Content="Update Status" FontSize="25"  Command="{Binding sendStatusCommand}"  IsEnabled="{Binding ExistingLine}"  ></Button>
     </Grid>
 </Window>

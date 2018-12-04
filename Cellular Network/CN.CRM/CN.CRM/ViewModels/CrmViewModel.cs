@@ -30,9 +30,15 @@ namespace CN.CRM.ViewModels
         public ICommand editDeleteClientCommand { get; set; }
         public ICommand newLineCommand { get; set; }
         public ICommand editDeleteLinesCommand { get; set; }
+        private string _searchInput;
+
+        public string searchInput
+        {
+            get { return _searchInput; }
+            set { _searchInput = value; SearchInputChanged(searchInput); }
+        }
 
         private string _myDetails;
-
         public string MyDetails
         {
             get { return _myDetails; }
@@ -45,7 +51,32 @@ namespace CN.CRM.ViewModels
             get { return _selectedClient; }
             set { _selectedClient = value; Notify(nameof(selectedClient)); }
         }
+        public void SearchInputChanged(string input)
+        {
+            //search for a client that one of it fields matches the search input
+            Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.ClientSearchRoute,input);
+            if (returnTuple.Item2 == HttpStatusCode.OK)
+            {
+                JArray jarr = new JArray();
+                jarr = (JArray)returnTuple.Item1;
+                List<Client> clients = jarr.ToObject<List<Client>>();
+                UpdateClientsFromSearch(clients);
+            }
+            else
+            {
+                logger.Print($"{returnTuple.Item2.ToString()} Error.");
+            }
+        }
 
+        private void UpdateClientsFromSearch(List<Client> clients)
+        {
+            //updates the observable collection after recieved from the search 
+            Clients.Clear();
+            foreach (var item in clients)
+            {
+                Clients.Add(item);
+            }
+        }
         private ObservableCollection<Client> _Clients;
         public ObservableCollection<Client> Clients
         {
@@ -60,6 +91,7 @@ namespace CN.CRM.ViewModels
             InitCollections();
             InitCommands();
             LoadClients();
+            searchInput = "";
         }
 
         private void InitCommands()
@@ -122,7 +154,7 @@ namespace CN.CRM.ViewModels
             //loads the clients
             Clients.Clear();
             JArray jarr = new JArray();
-            Tuple<object,HttpStatusCode> returnTuple = httpClient.GetRequest(ApiConfigs.GetAllClientsRoute);
+            Tuple<object, HttpStatusCode> returnTuple = httpClient.GetRequest(ApiConfigs.GetAllClientsRoute);
             if (returnTuple.Item2 == HttpStatusCode.OK)
             {
                 jarr = (JArray)returnTuple.Item1;
@@ -131,9 +163,9 @@ namespace CN.CRM.ViewModels
                     Clients.Add(item);
                 }
             }
-           
-           
-           
+
+
+
         }
     }
 }

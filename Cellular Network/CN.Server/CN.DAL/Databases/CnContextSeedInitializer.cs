@@ -32,9 +32,9 @@ namespace CN.DAL.Databases
             context.ClientTypes.Add(new ClientType(3, "Bussiness", BussinessCallPrice, BussinessSmsPrice));
 
             //PACKAGES
-            context.Packages.Add(new Package("Soldier Package", 50,true));
-            context.Packages.Add(new Package("Basic Package", 100,true));
-            context.Packages.Add(new Package("Premium Package", 150,true));
+            context.Packages.Add(new Package("Soldier Package", 50, true));
+            context.Packages.Add(new Package("Basic Package", 100, true));
+            context.Packages.Add(new Package("Premium Package", 150, true));
 
             //PACKAGE DETAILS
             context.PackageDetails.Add(new PackageDetails(1, "A Package for soldiers", 200, 0, 200, 0, PricesConfigs.SmsPrice, PricesConfigs.CallMinPrice, 15, -1, null));
@@ -42,10 +42,10 @@ namespace CN.DAL.Databases
             context.PackageDetails.Add(new PackageDetails(3, "A premium Package", 350, 0, 350, 0, PricesConfigs.SmsPrice, PricesConfigs.CallMinPrice, 20, -1, null));
 
             //Clients
-            context.Clients.Add(new Client("312149891", "Shahaf", "Dahan", ClientTypeEnum.Private, "Tishbi 17", "0523974471", DateTime.Now.AddDays(-1)));
+            string dateStr = "Jan 7, 1994";
+            DateTime birthDate = DateTime.Parse(dateStr);
+            context.Clients.Add(new Client("312149891", "Shahaf", "Dahan", ClientTypeEnum.Private, "Tishbi 17", "0523974471", birthDate));
 
-            context.Lines.Add(new Line("312149891", "0523974471", LineStatusEnum.Available, 1));
-            context.Lines.Add(new Line("312149891", "0523974472", LineStatusEnum.Available, 2));
             context.SaveChanges();
         }
     }

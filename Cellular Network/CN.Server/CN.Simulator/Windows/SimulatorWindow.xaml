@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CN.Simulator.Windows"
         mc:Ignorable="d"
-        Title="SimulatorWindow" Height="600" Width="650">
+        Title="SimulatorWindow" Height="600" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1.2*"></RowDefinition>
@@ -23,31 +23,31 @@
             <ColumnDefinition Width="0.6*"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBlock  TextAlignment="Center" Text="Simulator Window" Grid.ColumnSpan="2" FontSize="24" Grid.Row="0"/>
+        <TextBlock  TextAlignment="Center" Text="Simulator Window" Grid.ColumnSpan="2" FontSize="32" Grid.Row="0"/>
 
-        <TextBlock Grid.Row="1" Text="Client Name:" FontSize="30" Grid.Column="0"></TextBlock>
-        <TextBox Text="{Binding ClientId}" Grid.Row="1"  Grid.Column="1" FontSize="30" />
-        <Button Grid.Column="1" Margin="331.667,83,0.333,69" Grid.RowSpan="3" Content="Search" Command="{Binding searchUserCommand}"/>
+        <TextBlock Grid.Row="1" Text="Client ID:" FontSize="27" Grid.Column="0"></TextBlock>
+        <TextBox Text="{Binding ClientId}" Grid.Row="1"  Grid.Column="1" FontSize="27" IsEnabled="{Binding lockIdBox}" />
+        <Button Grid.Column="1" Margin="331.667,83,0.333,69" Grid.RowSpan="3" Content="Search" Command="{Binding searchUserCommand}" FontSize="27" IsEnabled="{Binding lockIdBox}"/>
 
-        <TextBlock Grid.Row="2" Text="Client Line:" FontSize="30" Grid.Column="0"></TextBlock>
-        <ComboBox x:Name="LinesCombo"  ItemsSource="{Binding Lines}"  AllowDrop="True" Grid.Column="1" Grid.Row="2" SelectedItem="{Binding selectedLine}" />
+        <TextBlock Grid.Row="2" Text="Client Line:" FontSize="27" Grid.Column="0"></TextBlock>
+        <ComboBox x:Name="LinesCombo" FontSize="27"   ItemsSource="{Binding Lines}"  AllowDrop="True" Grid.Column="1" Grid.Row="2" SelectedItem="{Binding selectedLine}"  />
 
-        <TextBlock Text="Min Duraition:" Grid.Row="3"  Grid.Column="0" FontSize="30" ></TextBlock>
-        <TextBox Text="{Binding minDuration}" Grid.Row="3" FontSize="30" Grid.Column="1"></TextBox>
+        <TextBlock Text="Min Duraition:" Grid.Row="3"  Grid.Column="0" FontSize="27" ></TextBlock>
+        <TextBox Text="{Binding minDuration}" Grid.Row="3" FontSize="27" Grid.Column="1"></TextBox>
 
-        <TextBlock Text="Man Duraition:" Grid.Row="4" FontSize="30" Grid.Column="0"></TextBlock>
-        <TextBox Text="{Binding maxDuration}" Grid.Row="4" FontSize="30" Grid.Column="1"></TextBox>
+        <TextBlock Text="Max Duraition:" Grid.Row="4" FontSize="27" Grid.Column="0"></TextBlock>
+        <TextBox Text="{Binding maxDuration}" Grid.Row="4" FontSize="27" Grid.Column="1"></TextBox>
 
-        <TextBlock Text="Number Of Calls/SMS:" Grid.Column="0" FontSize="30" Grid.Row="5"></TextBlock>
-        <TextBox Text="{Binding numOfCalls}" Grid.Row="5" FontSize="30" Grid.Column="1"></TextBox>
+        <TextBlock Text="Number Of Calls/SMS:" Grid.Column="0" FontSize="27" Grid.Row="5"></TextBlock>
+        <TextBox Text="{Binding numOfCalls}" Grid.Row="5" FontSize="27" Grid.Column="1"></TextBox>
 
-        <TextBlock Text="Destenation:"  Grid.Row="6" Grid.Column="0" FontSize="30"></TextBlock>
-        <TextBox Text="{Binding destCall}" Grid.Row="6" FontSize="30" Grid.Column="1"></TextBox>
+        <TextBlock Text="Destenation:"  Grid.Row="6" Grid.Column="0" FontSize="27"></TextBlock>
+        <TextBox Text="{Binding destCall}" Grid.Row="6" FontSize="27" Grid.Column="1"></TextBox>
 
-        <TextBlock Grid.Row="7" Text="Type:" FontSize="30" Grid.Column="0"></TextBlock>
-        <ComboBox x:Name="typeCombo"  ItemsSource="{Binding Types}"  AllowDrop="True" Grid.Column="1" Grid.Row="7" SelectedItem="{Binding SelectedType}" />
+        <TextBlock Grid.Row="7" Text="Type:" FontSize="27" Grid.Column="0"></TextBlock>
+        <ComboBox x:Name="typeCombo" FontSize="27"  ItemsSource="{Binding Types}"  AllowDrop="True" Grid.Column="1" Grid.Row="7" SelectedItem="{Binding SelectedType}"  />
 
-        <Button  Grid.Row="8" Content="Simulate" Command="{Binding simulateCommand}" Grid.ColumnSpan="2"></Button>
+        <Button  Grid.Row="8" Content="Simulate" FontSize="27" Command="{Binding simulateCommand}" Grid.ColumnSpan="2"></Button>
 
 
     </Grid>

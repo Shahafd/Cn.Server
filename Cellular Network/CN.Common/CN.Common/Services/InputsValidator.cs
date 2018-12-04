@@ -40,6 +40,25 @@ namespace CN.Common.Services
             }
             return returnStr;
         }
+
+        public string ValidateYearOfBirthInput(string fieldName, string input)
+        {
+            string returnStr = "";
+            int inputAsInt;
+            bool parseSuccess = int.TryParse(input, out inputAsInt);
+            if (input.Length != 4)
+            {
+                returnStr = $"{fieldName} must be between {0} and {DateTime.Now.Year}. 4 digits only";
+            }
+            if (parseSuccess)
+            {
+                if (inputAsInt < 0 || inputAsInt > DateTime.Now.Year)
+                {
+                    returnStr = $"{fieldName} must be between {0} and {DateTime.Now.Year}. 4 digits only";
+                }
+            }
+            return returnStr;
+        }
         public string ValidateIntInput(string fieldName, int input, int minValue, int maxValue)
         {
             //validates an input, returns an empty string if the input has been approved
@@ -90,8 +109,8 @@ namespace CN.Common.Services
         {
             //validates an input, returns an empty string if the input has been approved
             string returnStr = "";
-          
-             if (input < minValue || input > maxValue)
+
+            if (input < minValue || input > maxValue)
             {
                 returnStr = $"{fieldName} must be between {minValue} and {maxValue} digits only";
             }

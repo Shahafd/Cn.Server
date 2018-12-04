@@ -33,7 +33,7 @@ namespace CN.CRM.Windows
 
         private void searchInputTbx_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+            viewModel.SearchInputChanged(searchInputTbx.Text);
         }
     }
 }

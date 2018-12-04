@@ -18,12 +18,14 @@ namespace CN.Common.Models
             this.Duration = Duration;
             this.ExternalPrice = ExternalPrice;
             this.DestinationNumber = DestinationNumber;
+            this.DateOfCall = DateTime.Now;
         }
         public int ID { get; set; }
         public string LineID { get; set; }
         public double Duration { get; set; }
         public double ExternalPrice { get; set; }
         public string DestinationNumber { get; set; }
+        public DateTime DateOfCall { get; set; }
 
     }
 }

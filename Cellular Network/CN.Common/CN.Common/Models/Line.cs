@@ -20,6 +20,7 @@ namespace CN.Common.Models
             this.Number = Number;
             this.Status = Status;
             this.PackageID = PackageID;
+           
         }
         [Key]
         public string Number { get; set; }

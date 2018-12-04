@@ -11,5 +11,6 @@ namespace CN.Common.Contracts.IViewModels
     {
         void UpdateUser(User user);
         void LoadClients();
+        void SearchInputChanged(string input);
     }
 }

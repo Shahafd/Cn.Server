@@ -1,6 +1,7 @@
 ﻿using CN.Common.Contracts.IRepositories;
 using CN.Common.Enums;
 using CN.Common.Models;
+using CN.Common.Models.TempModels;
 using CN.DAL.Databases;
 using System;
 using System.Collections.Generic;
@@ -23,29 +24,50 @@ namespace CN.DAL.Repositories
         public List<SMS> SMS { get; set; }
         public List<Payment> Payments { get; set; }
         public static readonly object callLock = new object();
+        public static readonly object dbLock = new object();
         public NetworkRepository()
         {
 
             InitCollections();
             LoadCollections();
         }
-
-        private void LoadCollections()
+        private void LoadLinesAndPackges()
         {
-            //Loads the collections from the database
+            //loads line,packages and etc
+            using (CnContext context = new CnContext())
+            {
+                Lines = context.Lines.ToList();
+                Packages = context.Packages.ToList();
+                PackageDetails = context.PackageDetails.ToList();
+                SelectedNumbers = context.SelectedNumbers.ToList();
+            }
+        }
+        private void LoadClients()
+        {
+            //loads clients,users and etc
             using (CnContext context = new CnContext())
             {
                 Clients = context.Clients.ToList();
                 Users = context.Users.ToList();
                 ClientTypes = context.ClientTypes.ToList();
+            }
+        }
+        private void LoadCallsAndSms()
+        {
+            //loads calls,sms and payments
+            using (CnContext context = new CnContext())
+            {
                 Calls = context.Calls.ToList();
-                Lines = context.Lines.ToList();
-                Packages = context.Packages.ToList();
-                PackageDetails = context.PackageDetails.ToList();
-                SelectedNumbers = context.SelectedNumbers.ToList();
                 SMS = context.SMS.ToList();
                 Payments = context.Payments.ToList();
             }
+        }
+        private void LoadCollections()
+        {
+            //Loads the collections from the database
+            LoadLinesAndPackges();
+            LoadClients();
+            LoadCallsAndSms();
         }
         private void InitCollections()
         {
@@ -241,7 +263,7 @@ namespace CN.DAL.Repositories
             //returns the selected numbers that matches this idd
             return SelectedNumbers.FirstOrDefault(sn => sn.ID == selectedNumbersId);
         }
-        public RequestStatusEnum AddCall(Call call)
+        public async Task<bool> AddCall(Call call)
         {
             using (CnContext context = new CnContext())
             {
@@ -250,14 +272,22 @@ namespace CN.DAL.Repositories
             }
             Calls.Add(call);
 
-            return RequestStatusEnum.Success;
+            return true;
 
         }
 
-        public RequestStatusEnum AddSMS(SMS sms)
+        public async Task<bool> AddSms(SMS sms)
         {
-            throw new NotImplementedException();
+            using (CnContext context = new CnContext())
+            {
+
+                context.SMS.Add(sms);
+                context.SaveChanges();
+            }
+            SMS.Add(sms);
+            return true;
         }
+
 
         public List<Line> GetClientLines(string clientId)
         {
@@ -269,13 +299,162 @@ namespace CN.DAL.Repositories
         {
             //returns the package that matches this line id
             Line line = GetLineById(lineId);
-            return Packages.FirstOrDefault(p => p.ID == line.PackageID);
+            if (line != null)
+            {
+                return Packages.FirstOrDefault(p => p.ID == line.PackageID);
+            }
+            else
+            {
+                return null;
+            }
         }
 
-        private Line GetLineById(string lineId)
+        public Line GetLineById(string lineId)
         {
             //returns the line that matches this id
             return Lines.FirstOrDefault(l => l.Number == lineId);
+        }
+
+        public bool IsLineExists(string lineNumber)
+        {
+            //checks if the line already exists
+            return Lines.Exists(l => l.Number == lineNumber);
+        }
+
+        public RequestStatusEnum UpdateLinePackage(LinePackObject linePackObj)
+        {
+            //updates the line,package,package details,and selected numbers
+            using (CnContext context = new CnContext())
+            {
+                Package packpageFromDb = context.Packages.FirstOrDefault(p => p.ID == linePackObj.Package.ID);
+                packpageFromDb.PackageTotalPrice = linePackObj.Package.PackageTotalPrice;
+                PackageDetails packdetFromDb = context.PackageDetails.FirstOrDefault(pd => pd.ID == linePackObj.PackageDetails.ID);
+                packdetFromDb.DiscountPercentage = linePackObj.PackageDetails.DiscountPercentage;
+                packdetFromDb.FixedCallPrice = linePackObj.PackageDetails.FixedCallPrice;
+                packdetFromDb.FixedSmsPrice = linePackObj.PackageDetails.FixedSmsPrice;
+                packdetFromDb.MaxMinutes = linePackObj.PackageDetails.MaxMinutes;
+                packdetFromDb.MaxSMS = linePackObj.PackageDetails.MaxSMS;
+                packdetFromDb.MostCalledNumber = linePackObj.PackageDetails.MostCalledNumber;
+                SelectedNumbers selectedNumsFromDb = context.SelectedNumbers.FirstOrDefault(sn => sn.ID == linePackObj.SelectedNumbers.ID);
+                selectedNumsFromDb.FirstNumber = linePackObj.SelectedNumbers.FirstNumber;
+                selectedNumsFromDb.SecondNumber = linePackObj.SelectedNumbers.SecondNumber;
+                selectedNumsFromDb.ThirdNumber = linePackObj.SelectedNumbers.ThirdNumber;
+                context.SaveChanges();
+            }
+            LoadCollections();
+            return RequestStatusEnum.Success;
+        }
+
+        public RequestStatusEnum CreateNewLinePackage(LinePackObject linePackObj)
+        {
+            //creates a new line,package,package details,and selected numbers
+            lock (dbLock)
+            {
+                using (CnContext context = new CnContext())
+                {
+                    context.Packages.Add(new Package(linePackObj.ClientId, linePackObj.Package.PackageTotalPrice));
+                    context.SaveChanges();
+                    LoadLinesAndPackges();
+
+                    int PackageId = Packages.Last().ID;
+
+                    context.SelectedNumbers.Add(new SelectedNumbers(linePackObj.SelectedNumbers.FirstNumber, linePackObj.SelectedNumbers.SecondNumber, linePackObj.SelectedNumbers.ThirdNumber));
+                    context.SaveChanges();
+                    LoadLinesAndPackges();
+                    int selectedNumId = SelectedNumbers.Last().ID;
+
+                    context.PackageDetails.Add(new PackageDetails(PackageId, "Custom Package", linePackObj.PackageDetails.MaxMinutes, 0, linePackObj.PackageDetails.MaxSMS, 0, linePackObj.PackageDetails.FixedSmsPrice, linePackObj.PackageDetails.FixedCallPrice, linePackObj.PackageDetails.DiscountPercentage, selectedNumId, linePackObj.PackageDetails.MostCalledNumber));
+
+                    context.Lines.Add(new Line(linePackObj.ClientId, linePackObj.LineNumber, LineStatusEnum.Available, PackageId));
+                    context.SaveChanges();
+                }
+                LoadCollections();
+                return RequestStatusEnum.Success;
+            }
+        }
+
+        public RequestStatusEnum DeleteLine(string line)
+        {
+            //deletes the line and all its belongings
+            lock (dbLock)
+            {
+                using (CnContext context = new CnContext())
+                {
+                    Line lineFromDb = context.Lines.FirstOrDefault(l => l.Number == line);
+                    Package packageFromDb = context.Packages.FirstOrDefault(p => p.ID == lineFromDb.PackageID);
+                    PackageDetails packDetFromDb = context.PackageDetails.FirstOrDefault(pd => pd.PackageID == packageFromDb.ID);
+                    SelectedNumbers selectedNumsFromDb = context.SelectedNumbers.FirstOrDefault(sn => sn.ID == packDetFromDb.SelectedNumbersID);
+                    context.Lines.Remove(lineFromDb);
+                    context.Packages.Remove(packageFromDb);
+                    context.PackageDetails.Remove(packDetFromDb);
+                    context.SelectedNumbers.Remove(selectedNumsFromDb);
+                    context.SaveChanges();
+                    LoadLinesAndPackges();
+                }
+                return RequestStatusEnum.Success;
+            }
+        }
+
+        public LineStatusEnum GetLineStatus(string line)
+        {
+            //returns the status of this line
+            return GetLineById(line).Status;
+        }
+
+        public RequestStatusEnum UpdateLineStatus(Line line)
+        {
+            //updates the line's new status
+            using (CnContext context = new CnContext())
+            {
+                Line lineFromDb = context.Lines.FirstOrDefault(l => l.Number == line.Number);
+                if (lineFromDb != null)
+                {
+                    lineFromDb.Status = line.Status;
+                    context.SaveChanges();
+                    LoadLinesAndPackges();
+                    return RequestStatusEnum.Success;
+                }
+                else
+                {
+                    return RequestStatusEnum.Error;
+                }
+            }
+        }
+
+
+
+        public List<Call> GetCallsToContactsByDate(string lineNumber, YearAndMonth date)
+        {
+            //returns all the calls that a client made to his contacts in this month of the year
+            Package package = GetPackageByLineId(lineNumber);
+            PackageDetails packDet = GetPackageDetailsByPackageId(package.ID);
+            SelectedNumbers selectedNums = GetSelectedNumbersById(packDet.SelectedNumbersID);
+            return Calls.Where(c => c.LineID == lineNumber && c.DestinationNumber == selectedNums.FirstNumber || c.DestinationNumber == selectedNums.SecondNumber || c.DestinationNumber == selectedNums.ThirdNumber || c.DestinationNumber == packDet.MostCalledNumber && c.DateOfCall.Month == date.Month && c.DateOfCall.Year == date.Year).ToList();
+        }
+
+        public List<Call> GetCallsNotToContactsByDate(string lineNumber, YearAndMonth date)
+        {
+            //returns all the calls that a client made to clients other than his contacts in this month of the year
+            Package package = GetPackageByLineId(lineNumber);
+            PackageDetails packDet = GetPackageDetailsByPackageId(package.ID);
+            SelectedNumbers selectedNums = GetSelectedNumbersById(packDet.SelectedNumbersID);
+            return Calls.Where(c => c.LineID == lineNumber && c.DestinationNumber != selectedNums.FirstNumber && c.DestinationNumber != selectedNums.SecondNumber && c.DestinationNumber != selectedNums.ThirdNumber && c.DestinationNumber != packDet.MostCalledNumber && c.DateOfCall.Month == date.Month && c.DateOfCall.Year == date.Year).ToList();
+        }
+
+        public List<SMS> GetSMSToContactsByDate(string lineNumber, YearAndMonth date)
+        {
+            //returns all the sms that a client made to his contacts in this month of the year
+            Package package = GetPackageByLineId(lineNumber);
+            PackageDetails packDet = GetPackageDetailsByPackageId(package.ID);
+            SelectedNumbers selectedNums = GetSelectedNumbersById(packDet.SelectedNumbersID);
+            return SMS.Where(c => c.LineID == lineNumber && c.DestintationNumber == selectedNums.FirstNumber || c.DestintationNumber == selectedNums.SecondNumber || c.DestintationNumber == selectedNums.ThirdNumber || c.DestintationNumber == packDet.MostCalledNumber && c.DateOfSMS.Month == date.Month && c.DateOfSMS.Year == date.Year).ToList();
+        }
+
+        public Client GetClientByNumber(string lineNumber)
+        {
+            //returns the client that matches this number
+            string clientId = Lines.FirstOrDefault(l => l.Number == lineNumber).ClientID;
+            return GetClientByID(clientId);
         }
     }
 }

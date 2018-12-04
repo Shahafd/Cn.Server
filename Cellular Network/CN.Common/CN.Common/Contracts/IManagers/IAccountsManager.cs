@@ -17,5 +17,7 @@ namespace CN.Common.Contracts.IManagers
         List<Client> GetAllClients();
         bool IsClientIdExists(string clientId);
         string DeleteClient(string id);
+        List<Client> SearchForClients(string input);
+        Client ClientLogin(ClientLogin clientLogin);
     }
 }

@@ -1,0 +1,41 @@
+﻿@model CN.Common.Models.TempModels.ClientLogin
+@{
+    ViewBag.Title = "Client Web Login";
+}
+
+<div class="media">
+    <h2>Client Billing System</h2>
+    <p class="lead"></p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        @using (Html.BeginForm("ClientLogin", "Home2", FormMethod.Post))
+        {
+
+            @Html.TextBoxFor(m => m.ID, new { placeholder = "ID", @class = "form-input" })<br />
+            @Html.TextBoxFor(model => model.YearOfBirth, new { placeholder = "Year Of Birth", @class = "form-input" })<br />
+
+            <input type="submit" value="Log In" />
+        }
+        @if (ViewBag.Message1 != null)
+        {
+            <script type="text/javascript">
+                                alert("@ViewBag.Message1");
+            </script>
+        }
+        @if (ViewBag.Message2 != null)
+        {
+            <script type="text/javascript">
+                                alert("@ViewBag.Message2");
+            </script>
+        }
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <script type="text/javascript">
+                alert("@ViewBag.ErrorMessage");
+            </script>
+        }
+
+    </div>
+</div>

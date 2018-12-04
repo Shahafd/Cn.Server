@@ -1,0 +1,99 @@
+﻿<Window x:Class="CN.CRM.Windows.BillWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CN.CRM.Windows"
+        mc:Ignorable="d"
+        Title="BillWindow" Height="600" Width="800">
+
+
+    <Grid >
+
+        <ScrollViewer>
+            <Grid>
+
+                <Grid Margin="10,0,10,558.333">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="11*"></RowDefinition>
+                        <RowDefinition Height="40*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="payment" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="5" FontSize="30" Margin="0,0,0,137.667" Grid.RowSpan="2"/>
+
+                    <TextBlock Text="Client name:" Grid.Row="1" Grid.Column="0" Margin="0,0.333,0,-0.333"/>
+                    <TextBlock Text="{Binding ClientNameStr}" Grid.Row="1" Grid.Column="1" Margin="0,0.333,0,-0.333" ></TextBlock>
+                    <TextBlock Text="Month:" Grid.Row="1" Grid.Column="2" Margin="0,0.333,0,-0.333"/>
+                    <TextBlock Text="{Binding MonthStr}" Grid.Row="1" Grid.Column="3" Margin="0,0.333,0.333,-0.333"/>
+                    <TextBlock Text="Total Price:" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Margin="95,0.333,0.333,-0.333"/>
+                    <TextBlock Text="{Binding PriceStr}" Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="3" Margin="95.667,0.333,95.667,-0.333"/>
+                    <Button Content="Export" Grid.Row="1" Grid.Column="7" Command="{Binding ExportCommand}" Margin="0.333,0.333,0,-0.333"/>
+                </Grid>
+                <Grid x:Name="DynamicGrid" Margin="0,182,0,-0.667"  >
+
+
+
+                </Grid>
+            </Grid>
+
+        </ScrollViewer>
+    </Grid>
+
+
+
+
+
+    <!--<Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.2*"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="payment" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="6" FontSize="30"/>
+
+        <TextBlock Text="Client name:" Grid.Row="1" Grid.Column="0"/>
+        <TextBlock Text="{Binding ClientNameStr}" Grid.Row="1" Grid.Column="1" ></TextBlock>
+        <TextBlock Text="Month:" Grid.Row="1" Grid.Column="2"/>
+        <TextBlock Text="{Binding MonthStr}" Grid.Row="1" Grid.Column="3"/>
+        <TextBlock Text="Total Price:" Grid.Row="1" Grid.Column="4"/>
+        <TextBlock Text="{Binding PriceStr}" Grid.Row="1" Grid.Column="5"/>
+        <Button Content="Export" Grid.Row="1" Grid.Column="7" Command="{Binding ExportCommand}"/>
+
+        <TextBlock Text="Line Number:" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" FontSize="25"/>
+        <TextBlock Text="{Binding LineNumberStr}" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" FontSize="25"/>
+
+        <TextBlock Text="Price:" Grid.Row="3" Grid.Column="0" />
+        <TextBlock Text="{Binding PriceStr}" Grid.Row="3" Grid.Column="1"/>
+        <TextBlock Text="Package Info" Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="2" TextDecorations="Underline"  FontWeight="UltraBold" FontSize="20"/>
+        
+        
+
+    </Grid>-->
+</Window>

@@ -43,12 +43,19 @@ namespace CN.ServerAPI.Controllers
         [Route(ApiConfigs.SimulateRoute)]
         public IHttpActionResult Simulate([FromBody] SimulatorAction simulatorAction)
         {
-            string s = simulatorManager.Simulate(simulatorAction).Result;
-            if (s.Equals(RequestStatusEnum.Success))//chek not work
+            bool b = simulatorManager.Simulate(simulatorAction);
+            if (b)
             {
-                return Ok(s);
+                if (simulatorAction.Type.Equals("Call"))
+                {
+                    return Ok("Calls added succesfully");
+                }
+                else
+                {
+                    return Ok("SMS added succesfully.");
+                }
             }
-            return null;
+            return Ok("failed to add calls");
         }
 
     }

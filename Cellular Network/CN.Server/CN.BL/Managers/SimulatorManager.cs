@@ -43,22 +43,19 @@ namespace CN.BL.Managers
             return networkRepository.GetClientLines(clientId);
         }
 
-        public async Task<string> Simulate(SimulatorAction simulatorAction)
+        public bool Simulate(SimulatorAction simulatorAction)
         {
-            RequestStatusEnum status = new RequestStatusEnum();
             if (simulatorAction.Type.Equals("Call"))
             {
-
                 for (int i = 0; i < simulatorAction.numOfCalls; i++)
                 {
                     double Duration = GetRandomNumber(simulatorAction.minDuration, simulatorAction.maxDuration);
-
                     Call call = new Call(simulatorAction.Line, Duration, 20.0, simulatorAction.destCall);
-                    status = await Task.Run(() => {return networkRepository.AddCall(call); });
-                    //status = 
-                    if (status.GetTypeCode() != 0)
+                    bool b = networkRepository.AddCall(call).Result;
+
+                    if (!b)
                     {
-                        return "Faild to add call!";
+                        return b;
                     }
                 }
             }
@@ -67,16 +64,17 @@ namespace CN.BL.Managers
                 for (int i = 0; i < simulatorAction.numOfCalls; i++)
                 {
                     double Duration = GetRandomNumber(simulatorAction.minDuration, simulatorAction.maxDuration);
+                    SMS Sms = new SMS(simulatorAction.Line, 20.0, simulatorAction.destCall);
+                    bool b = networkRepository.AddSms(Sms).Result;
 
-                    SMS sms = new SMS(simulatorAction.Line, 20.0, simulatorAction.destCall);
-                    status = networkRepository.AddSMS(sms);
-                    if (status.GetTypeCode() != 0)
+                    if (!b)
                     {
-                        return "Faild to add call!";
+                        return b;
                     }
+
                 }
             }
-            return status.GetTypeCode().ToString();
+            return true;
 
 
         }
@@ -86,7 +84,7 @@ namespace CN.BL.Managers
             return random.NextDouble() * (maximum - minimum) + minimum;
         }
 
-        //methods that usr network.dosomething()
+
 
     }
 }

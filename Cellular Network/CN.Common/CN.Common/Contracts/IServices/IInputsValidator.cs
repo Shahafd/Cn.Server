@@ -16,5 +16,6 @@ namespace CN.Common.Contracts.IServices
         string ValidateDateInput(string fieldName, DateTime input);
         string ValidateIDInput(string fieldName, string input);
         string ValidatePhoneInput(string input);
+        string ValidateYearOfBirthInput(string fieldName, string input);
     }
 }

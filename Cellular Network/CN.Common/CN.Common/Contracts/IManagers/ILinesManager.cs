@@ -1,4 +1,5 @@
-﻿using CN.Common.Models;
+﻿using CN.Common.Enums;
+using CN.Common.Models;
 using CN.Common.Models.TempModels;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,11 @@ namespace CN.Common.Contracts.IManagers
         SelectedNumbers GetSelectedNumbersById(int selectedNumbersId);
         List<Line> GetClientLinesByClientId(string id);
         Package GetPackageByLineId(string lineId);
-        object SendLinePackageObj(LinePackObject linePackObj);
+        RequestStatusEnum SendLinePackageObj(LinePackObject linePackObj);
+        RequestStatusEnum DeleteLine(string line);
+       LineStatusEnum GetLineStatus(string line);
+        RequestStatusEnum UpdateLineStatus(Line line);
+        LineDetails GetLineDetails(string lineNumber);
+        ClientBill GetBillForSpecificLines(string clientId, YearAndMonth Date, List<string> lines);
     }
 }

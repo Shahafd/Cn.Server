@@ -227,9 +227,12 @@
     <Compile Include="Containers\CrmContainer.cs" />
     <Compile Include="Convertors\BoolSwitchConvertor.cs" />
     <Compile Include="Convertors\SelectClientButtonConvertor.cs" />
+    <Compile Include="Convertors\SelectLineButtonConvertor.cs" />
     <Compile Include="Signalr\SignalrClient.cs" />
     <Compile Include="ViewModels\AddEditClientViewModel.cs" />
     <Compile Include="ViewModels\AddEditLineViewModel.cs" />
+    <Compile Include="ViewModels\BillDatePickerViewModel.cs" />
+    <Compile Include="ViewModels\BillViewModel.cs" />
     <Compile Include="ViewModels\CrmViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="Windows\AddEditClientWindow.xaml.cs">
@@ -237,6 +240,12 @@
     </Compile>
     <Compile Include="Windows\AddEditLinesWindow.xaml.cs">
       <DependentUpon>AddEditLinesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\BillDatePicker.xaml.cs">
+      <DependentUpon>BillDatePicker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\BillWindow.xaml.cs">
+      <DependentUpon>BillWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\CrmWindow.xaml.cs">
       <DependentUpon>CrmWindow.xaml</DependentUpon>
@@ -258,6 +267,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AddEditLinesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\BillDatePicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\BillWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

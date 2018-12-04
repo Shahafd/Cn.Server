@@ -12,6 +12,6 @@ namespace CN.Common.Contracts.IManagers
     {
         Client GetClientByID(string clientID);
         List<Line> GetClientLines(string clientId);
-        Task<string> Simulate(SimulatorAction simulatorAction);
+       bool Simulate(SimulatorAction simulatorAction);
     }
 }

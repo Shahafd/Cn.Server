@@ -302,6 +302,10 @@
       <Project>{28E78DD6-1FBE-4174-B07B-E3D4AFC02044}</Project>
       <Name>CN.DAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CN.WebClient\CN.WebClient.csproj">
+      <Project>{19AFC3F9-6DAA-4B58-8CD0-904CB8017D70}</Project>
+      <Name>CN.WebClient</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

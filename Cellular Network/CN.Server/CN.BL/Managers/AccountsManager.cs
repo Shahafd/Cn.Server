@@ -95,5 +95,32 @@ namespace CN.BL.Managers
             return networkRepository.DeleteClient(id);
         }
 
+        public List<Client> SearchForClients(string input)
+        {
+            //searches for the client that their fields matches this input
+            input = input.ToLower();
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return networkRepository.GetAllClients();
+            }
+            else
+            {
+                return networkRepository.GetAllClients().Where(c => c.FirstName.ToLower().Contains(input) || c.LastName.ToLower().Contains(input) || c.ID.Contains(input) || c.Address.ToLower().Contains(input)).ToList();
+            }
+        }
+
+        public Client ClientLogin(ClientLogin clientLogin)
+        {
+            //tries a client login, returns null if info is unvalid
+            Client client = networkRepository.GetClientByID(clientLogin.ID);
+            if (client != null)
+            {
+                if (client.BirthDate.Year == clientLogin.YearOfBirth)
+                {
+                    return client;
+                }
+            }
+            return null;
+        }
     }
 }

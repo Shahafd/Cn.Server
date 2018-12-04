@@ -26,17 +26,17 @@ namespace CN.Common.Services
             using (client = new HttpClient())
             {
                 InitHttpClient();
-               try
-               {
-                  HttpResponseMessage response = client.GetAsync(client.BaseAddress + route).Result;
-                  object result = response.Content.ReadAsAsync(typeof(object)).Result;
-                  return new Tuple<object, HttpStatusCode>(result, response.StatusCode);
+                try
+                {
+                    HttpResponseMessage response = client.GetAsync(client.BaseAddress + route).Result;
+                    object result = response.Content.ReadAsAsync(typeof(object)).Result;
+                    return new Tuple<object, HttpStatusCode>(result, response.StatusCode);
                 }
                 catch (AggregateException e)
                 {
-                  logger.Print(e.Message);
-                  //Write to error table
-                  return new Tuple<object, HttpStatusCode>(null, HttpStatusCode.NotFound);
+                    logger.Print(e.Message);
+                    //Write to error table
+                    return new Tuple<object, HttpStatusCode>(null, HttpStatusCode.NotFound);
                 }
             }
         }
@@ -46,18 +46,18 @@ namespace CN.Common.Services
             using (client = new HttpClient())
             {
                 InitHttpClient();
-               try
-               {
-                 HttpResponseMessage response = client.PostAsJsonAsync(client.BaseAddress +route, obj).Result;
-                 object result = response.Content.ReadAsAsync(typeof(object)).Result;
-                 return new Tuple<object, HttpStatusCode>(result, response.StatusCode);
-               }
-               catch(AggregateException e)
-               {
-                 logger.Print(e.Message);
-                 //Write to error table
-                 return new Tuple<object, HttpStatusCode>(null, HttpStatusCode.NotFound);
-               }
+                try
+                {
+                    HttpResponseMessage response = client.PostAsJsonAsync(client.BaseAddress + route, obj).Result;
+                    object result = response.Content.ReadAsAsync(typeof(object)).Result;
+                    return new Tuple<object, HttpStatusCode>(result, response.StatusCode);
+                }
+                catch (AggregateException e)
+                {
+                    logger.Print(e.Message);
+                    //Write to error table
+                    return new Tuple<object, HttpStatusCode>(null, HttpStatusCode.NotFound);
+                }
             }
         }
         public void InitHttpClient()
