@@ -10,5 +10,7 @@ namespace CN.Common.Contracts.IViewModels
     public interface IAddEditLineViewModel
     {
         void GetData(Client client, bool newLine);
+        void GetLoggedInUser(User loggedInUser);
+        bool HasNoLines(Client selectedClient);
     }
 }

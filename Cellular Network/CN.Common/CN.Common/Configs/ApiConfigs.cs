@@ -9,6 +9,7 @@ namespace CN.Common.Configs
     public static class ApiConfigs
     {
         public const string LoginRoute = "Api/user/Login";
+        public const string ManagerLoginRoute = "Api/user/managerLogin";
 
         //Clients
         public const string IsClientIdExistsRoute = "Api/user/IsClientidExists";

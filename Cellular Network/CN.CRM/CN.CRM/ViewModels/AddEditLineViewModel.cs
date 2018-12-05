@@ -15,6 +15,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -30,6 +31,7 @@ namespace CN.CRM.ViewModels
             set { _ExistingLine = value; Notify(nameof(ExistingLine)); }
         }
         public string ClientId { get; set; }
+        public int EmployeeID { get; set; }
         private SelectedNumbers _selectedNumbers;
         public SelectedNumbers SelectedNumbers
         {
@@ -134,7 +136,7 @@ namespace CN.CRM.ViewModels
             set { _LineStatus = value; Notify(nameof(LineStatus)); }
         }
 
-        
+
 
         public IHttpClient httpClient { get; set; }
         public IInputsValidator inputsValidator { get; set; }
@@ -214,7 +216,7 @@ namespace CN.CRM.ViewModels
             {
                 UpdateModels();
 
-                LinePackObject linePackObj = new LinePackObject(SelectedLine, SelectedPackage, SelectedPackageDetails, SelectedNumbers, ClientId);
+                LinePackObject linePackObj = new LinePackObject(SelectedLine, SelectedPackage, SelectedPackageDetails, SelectedNumbers, ClientId, EmployeeID);
                 Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.SendLinePackageRoute, linePackObj);
                 if (returnTuple.Item2 == HttpStatusCode.OK)
                 {
@@ -228,7 +230,6 @@ namespace CN.CRM.ViewModels
                         logger.Print("line and package added succsefully");
                         CloseThisWindow();
                     }
-
                 }
                 else
                 {
@@ -262,7 +263,6 @@ namespace CN.CRM.ViewModels
             {
                 SelectedNumbers.ThirdNumber = SelectedNum3;
             }
-
 
             SelectedPackage.DefaultPackage = false;
             SelectedPackage.PackageTotalPrice = TotalPrice;
@@ -405,7 +405,7 @@ namespace CN.CRM.ViewModels
         {
             //the client selected a line
             ClearSelectedNumbers();
-           
+
             if (ExistingLine)
             {
                 GetPackageForLine();
@@ -479,6 +479,7 @@ namespace CN.CRM.ViewModels
             }
             else
             {
+
                 GetClientLines(client);
             }
 
@@ -493,6 +494,7 @@ namespace CN.CRM.ViewModels
                 JArray jarr = new JArray();
                 jarr = (JArray)returnTuple.Item1;
                 List<string> clientLines = jarr.ToObject<List<string>>();
+
                 Lines.Clear();
                 foreach (var item in clientLines)
                 {
@@ -536,6 +538,37 @@ namespace CN.CRM.ViewModels
             else
             {
                 logger.Print($"{returnTuple.Item2.ToString()} Error.");
+            }
+        }
+
+        public void GetLoggedInUser(User loggedInUser)
+        {
+            //updates the employee id
+            EmployeeID = loggedInUser.ID;
+        }
+
+        public bool HasNoLines(Client selectedClient)
+        {
+            //checks if the client has no lines
+            Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.GetClientLinesStrRoute, selectedClient.ID);
+            if (returnTuple.Item2 == HttpStatusCode.OK)
+            {
+                JArray jarr = new JArray();
+                jarr = (JArray)returnTuple.Item1;
+                List<string> clientLines = jarr.ToObject<List<string>>();
+                if (clientLines.Count == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                logger.Print(returnTuple.Item2.ToString());
+                return false;
             }
         }
     }

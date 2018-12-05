@@ -25,8 +25,8 @@ namespace CN.CRM.ViewModels
 
 
         Grid DynamicGrid { get; set; }
-        ClientBill clientBill = new ClientBill("omer", new List<Receipt> {new Receipt(new Line("12345678","222222",Common.Enums.LineStatusEnum.Available,1),new Package("poor",200.0,false),new PackageDetails(1,"poor",300,30.0,600,400,40.0,20.0,30.0,2,"3232322232"),50.0,40.0),
-                                                                         new Receipt(new Line("87654321","555555",Common.Enums.LineStatusEnum.Available,1),new Package("poor",100.0,false),new PackageDetails(1,"poor",300,30.0,600,400,40.0,20.0,30.0,2,"3232322232"),50.0,40.0)  });
+        ClientBill clientBill = new ClientBill("omer", new List<Receipt> {new Receipt(new Line("12345678","222222",Common.Enums.LineStatusEnum.Available,1,1),new Package("poor",200.0,false),new PackageDetails(1,"poor",300,30.0,600,400,40.0,20.0,30.0,2,"3232322232"),50.0,40.0),
+                                                                         new Receipt(new Line("87654321","555555",Common.Enums.LineStatusEnum.Available,1,1),new Package("poor",100.0,false),new PackageDetails(1,"poor",300,30.0,600,400,40.0,20.0,30.0,2,"3232322232"),50.0,40.0)  });
 
 
         public BillViewModel(ILogger logger, IHttpClient httpClient)

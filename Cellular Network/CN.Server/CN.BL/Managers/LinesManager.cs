@@ -177,7 +177,18 @@ namespace CN.BL.Managers
             {
                 numOfLines = 4;
             }
-            return GetSumOfLast3Months(client);
+            double sumOfLast3Receppits= GetSumOfLast3Months(client)/1000;
+            if (sumOfLast3Receppits > 6)
+            {
+                sumOfLast3Receppits = 6;
+            }
+            double callsToCenterVal = client.CallsToCenter * 0.1;
+            if (callsToCenterVal > -3)
+            {
+                callsToCenterVal = -3;
+            }
+           return numOfLines + sumOfLast3Receppits + callsToCenterVal;
+           
         }
 
         private double GetSumOfLast3Months(Client client)
@@ -190,7 +201,7 @@ namespace CN.BL.Managers
                 YearAndMonth date = new YearAndMonth(DateTime.Now.Year - i, DateTime.Now.Month - i);
                 foreach (var item in clientLines)
                 {
-                    allRecepits.Add(GetRecipetByLineAndDate(clientLines[i].Number, date));
+                    allRecepits.Add(GetRecipetByLineAndDate(item.Number, date));
                 }
             }
             double sumOfRecepits=0;

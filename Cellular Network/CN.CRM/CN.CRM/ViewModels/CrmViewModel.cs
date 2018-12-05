@@ -17,6 +17,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace CN.CRM.ViewModels
@@ -30,6 +31,7 @@ namespace CN.CRM.ViewModels
         public ICommand editDeleteClientCommand { get; set; }
         public ICommand newLineCommand { get; set; }
         public ICommand editDeleteLinesCommand { get; set; }
+        public ICommand logoutCommand { get; set; }
         private string _searchInput;
 
         public string searchInput
@@ -54,7 +56,7 @@ namespace CN.CRM.ViewModels
         public void SearchInputChanged(string input)
         {
             //search for a client that one of it fields matches the search input
-            Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.ClientSearchRoute,input);
+            Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.ClientSearchRoute, input);
             if (returnTuple.Item2 == HttpStatusCode.OK)
             {
                 JArray jarr = new JArray();
@@ -101,19 +103,47 @@ namespace CN.CRM.ViewModels
             editDeleteClientCommand = new ActionCommand(OpenEditDeleteClientWindow);
             newLineCommand = new ActionCommand(OpenNewLineWindow);
             editDeleteLinesCommand = new ActionCommand(OpenLinesWindow);
+            logoutCommand = new ActionCommand(Logout);
+        }
+
+        private void Logout()
+        {
+            //logs out of the crm
+            MainWindow loginWindow = new MainWindow();
+            loginWindow.Show();
+            CloseThisWindow();
+        }
+
+        private void CloseThisWindow()
+        {
+            //closes this window
+            for (int i = 0; i < Application.Current.Windows.Count; i++)
+            {
+                if (Application.Current.Windows[i].GetType() == typeof(CrmWindow))
+                {
+                    Application.Current.Windows[i].Close();
+                }
+            }
         }
 
         private void OpenNewLineWindow()
         {
             //opens a new line window for the selected client
-            AddEditLinesWindow addEditLineWindow = new AddEditLinesWindow(selectedClient, true);
+            AddEditLinesWindow addEditLineWindow = new AddEditLinesWindow(selectedClient, true, loggedInUser);
             addEditLineWindow.Show();
         }
         private void OpenLinesWindow()
         {
             //opens a lines window for editing and deleting for the selected client
             AddEditLinesWindow addEditLineWindow = new AddEditLinesWindow(selectedClient, false);
-            addEditLineWindow.Show();
+            if (!addEditLineWindow.viewModel.HasNoLines(selectedClient))
+            {
+                addEditLineWindow.Show();
+            }
+            else
+            {
+                logger.Print("Client has no lines, being redirected to new line window. ");
+            }
         }
 
         private void OpenEditDeleteClientWindow()

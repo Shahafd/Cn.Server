@@ -24,12 +24,33 @@ namespace CN.ServerAPI.Controllers
             accountsManager = CnContainer.container.GetInstance<IAccountsManager>();
             linesManager = CnContainer.container.GetInstance<ILinesManager>();
         }
-
+        [HttpPost]
+        [Route(ApiConfigs.ManagerLoginRoute)]
+        public IHttpActionResult TryManagersLogin([FromBody]UserLogin userLogin)
+        {
+            //a user login for the managers application
+            User loggedIn = accountsManager.UserLogin(userLogin);
+            if (loggedIn != null)
+            {
+                if (loggedIn.Type == UserTypeEnum.Manager || loggedIn.Type == UserTypeEnum.Admin)
+                {
+                    return Ok(loggedIn);
+                }
+                else
+                {
+                    return Unauthorized();
+                }
+            }
+            else
+            {
+                return Conflict();
+            }
+        }
         [HttpPost]
         [Route(ApiConfigs.LoginRoute)]
         public IHttpActionResult TryLogin([FromBody]UserLogin userLogin)
         {
-            //a login on the clients
+            //u user login for the crm and simulator
             User loggedIn = accountsManager.UserLogin(userLogin);
             if (loggedIn != null)
             {

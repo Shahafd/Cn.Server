@@ -268,6 +268,10 @@ namespace CN.DAL.Repositories
             using (CnContext context = new CnContext())
             {
                 context.Calls.Add(call);
+                Package package = GetPackageByLineId(call.LineID);
+                PackageDetails packDet = GetPackageDetailsByPackageId(package.ID);
+                packDet.UsedMinutes += call.Duration;
+                UpdateDBPackageDetails(packDet);
                 context.SaveChanges();
             }
             Calls.Add(call);
@@ -280,14 +284,31 @@ namespace CN.DAL.Repositories
         {
             using (CnContext context = new CnContext())
             {
-
                 context.SMS.Add(sms);
+                Package package = GetPackageByLineId(sms.LineID);
+                PackageDetails packDet = GetPackageDetailsByPackageId(package.ID);
+                packDet.UsedSMS++;
+                UpdateDBPackageDetails(packDet);
                 context.SaveChanges();
             }
             SMS.Add(sms);
             return true;
         }
 
+        private void UpdateDBPackageDetails(PackageDetails packDet)
+        {
+           //updates the package details in the database
+           using(CnContext context= new CnContext())
+            {
+                PackageDetails packDetFromDb = context.PackageDetails.FirstOrDefault(pd => pd.ID == packDet.ID);
+                if (packDetFromDb != null)
+                {
+                    packDetFromDb.UsedMinutes = packDet.UsedMinutes;
+                    packDetFromDb.UsedSMS = packDet.UsedSMS;
+                }
+                context.SaveChanges();
+            }
+        }
 
         public List<Line> GetClientLines(string clientId)
         {
@@ -365,7 +386,7 @@ namespace CN.DAL.Repositories
 
                     context.PackageDetails.Add(new PackageDetails(PackageId, "Custom Package", linePackObj.PackageDetails.MaxMinutes, 0, linePackObj.PackageDetails.MaxSMS, 0, linePackObj.PackageDetails.FixedSmsPrice, linePackObj.PackageDetails.FixedCallPrice, linePackObj.PackageDetails.DiscountPercentage, selectedNumId, linePackObj.PackageDetails.MostCalledNumber));
 
-                    context.Lines.Add(new Line(linePackObj.ClientId, linePackObj.LineNumber, LineStatusEnum.Available, PackageId));
+                    context.Lines.Add(new Line(linePackObj.ClientId, linePackObj.LineNumber, LineStatusEnum.Available, PackageId,linePackObj.EmployeeID));
                     context.SaveChanges();
                 }
                 LoadCollections();

@@ -21,14 +21,14 @@
             <RowDefinition ></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.25*"></ColumnDefinition>
+            <ColumnDefinition Width="0.3*"></ColumnDefinition>
             <ColumnDefinition Width="0.2*"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <TextBlock  Grid.Row="0" Margin="0,-15,0,0" Grid.ColumnSpan="3" Text="CRM Main Window" FontSize="32" TextAlignment="Center" VerticalAlignment="Center"></TextBlock>
 
-        <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" FontSize="26" Height="30" Background="#FF3F8383" Text="Search: " Foreground="White" ></TextBlock>
-        <TextBox x:Name="searchInputTbx" Grid.Row="0" Grid.Column="2" Text="{Binding searchInput,Mode=TwoWay}" VerticalAlignment="Bottom" FontSize="20" Height="30"  Foreground="White" Background="#FF3F8383" TextChanged="searchInputTbx_TextChanged" ></TextBox>
+        <TextBlock Grid.Row="0" Grid.Column="1"  VerticalAlignment="Bottom" FontSize="26" Height="30" Background="#FF9A65B4" Text="Search: " Foreground="White" ></TextBlock>
+        <TextBox x:Name="searchInputTbx" Grid.Row="0" Grid.Column="2" Text="{Binding searchInput,Mode=TwoWay}" VerticalAlignment="Bottom" FontSize="20" Height="30"  Foreground="White" Background="#FF9A65B4" TextChanged="searchInputTbx_TextChanged" ></TextBox>
         <ListView Grid.Row="1" Grid.RowSpan="6" Grid.Column="1" Grid.ColumnSpan="2" Name="itemsLV" ItemsSource="{Binding Clients}" SelectedItem="{Binding selectedClient}" >
             <ListView.View>
                 <GridView>
@@ -44,15 +44,15 @@
         </ListView>
         <TextBlock Grid.Row="0" Grid.Column="0" Margin="20,0,0,0" Grid.ColumnSpan="2" FontSize="22" Text="{Binding MyDetails}" FontWeight="Bold"></TextBlock>
 
-        <Button x:Name="newItemBtn" Grid.Row="1" Grid.Column="0" Content="New Client" FontSize="24"  Width="150"  Command="{Binding newClientCommand}"></Button>
+        <Button x:Name="newItemBtn" Grid.Row="1" Grid.Column="0" Content="New Client" FontSize="24"    Command="{Binding newClientCommand}"></Button>
 
-        <Button x:Name="editDeleteBtn" Grid.Row="2" Grid.Column="0" Content="Edit\ Delete Client" FontSize="24" IsEnabled="{Binding selectedClient, Converter= {StaticResource selectClientButtonConvertor},Mode=TwoWay}"  Width="150" Command="{Binding editDeleteClientCommand}"></Button>
+        <Button x:Name="editDeleteBtn" Grid.Row="2" Grid.Column="0" Content="Edit\Del Client" FontSize="24" IsEnabled="{Binding selectedClient, Converter= {StaticResource selectClientButtonConvertor},Mode=TwoWay}"   Command="{Binding editDeleteClientCommand}"></Button>
 
-        <Button x:Name="newLineBtn" Grid.Row="3" Grid.Column="0" Content="New Line" FontSize="24" IsEnabled="{Binding selectedClient, Converter= {StaticResource selectClientButtonConvertor},Mode=TwoWay}"  Width="150" Command="{Binding newLineCommand}"></Button>
+        <Button x:Name="newLineBtn" Grid.Row="3" Grid.Column="0" Content="New Line" FontSize="24" IsEnabled="{Binding selectedClient, Converter= {StaticResource selectClientButtonConvertor},Mode=TwoWay}"  Command="{Binding newLineCommand}"></Button>
 
-        <Button x:Name="editLinesBtn" Grid.Row="4" Grid.Column="0" Content="Edit\ Delete Lines" FontSize="24" IsEnabled="{Binding selectedClient, Converter= {StaticResource selectClientButtonConvertor},Mode=TwoWay}"  Width="150" Command="{Binding editDeleteLinesCommand}"></Button>
+        <Button x:Name="editLinesBtn" Grid.Row="4" Grid.Column="0" Content="Edit\Del Lines" FontSize="24" IsEnabled="{Binding selectedClient, Converter= {StaticResource selectClientButtonConvertor},Mode=TwoWay}" Command="{Binding editDeleteLinesCommand}"></Button>
 
-        <Button x:Name="logoutBtn" Grid.Row="0" VerticalAlignment="Top" Grid.Column="3" HorizontalAlignment="Right" Content="Logout" FontSize="24" Height="50" Width="100"  Command="{Binding logoutCommand}" Background="#FFFFA3A3"></Button>
+        <Button x:Name="logoutBtn" Grid.Row="0" VerticalAlignment="Top" Grid.Column="3" HorizontalAlignment="Right" Content="Logout" FontSize="24" Height="50"  Command="{Binding logoutCommand}" Background="#FFFFA3A3"></Button>
 
     </Grid>
 </Window>

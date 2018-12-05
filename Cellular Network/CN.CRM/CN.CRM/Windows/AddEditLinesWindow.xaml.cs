@@ -23,12 +23,16 @@ namespace CN.CRM.Windows
     public partial class AddEditLinesWindow : Window
     {
         public IAddEditLineViewModel viewModel { get; set; }
-        public AddEditLinesWindow(Client client,bool newLine)
+        public AddEditLinesWindow(Client client,bool newLine,User loggedInUser=null)
         {
             InitializeComponent();
             viewModel = CrmContianer.container.GetInstance<IAddEditLineViewModel>();
             DataContext = viewModel;
             viewModel.GetData(client, newLine);
+            if (loggedInUser != null)
+            {
+                viewModel.GetLoggedInUser(loggedInUser);
+            }
         }
     }
 }

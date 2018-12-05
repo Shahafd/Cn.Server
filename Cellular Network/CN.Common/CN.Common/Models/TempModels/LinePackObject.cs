@@ -9,17 +9,19 @@ namespace CN.Common.Models.TempModels
     public class LinePackObject
     {
         public string ClientId { get; set; }
+        public int EmployeeID { get; set; }
         public string LineNumber { get; set; }
         public Package Package { get; set; }
         public PackageDetails PackageDetails{ get; set; }
         public SelectedNumbers SelectedNumbers { get; set; }
-        public LinePackObject(string LineNumber,Package Package,PackageDetails PackageDetails,SelectedNumbers SelectedNumbers,string ClientId)
+        public LinePackObject(string LineNumber,Package Package,PackageDetails PackageDetails,SelectedNumbers SelectedNumbers,string ClientId,int EmployeeID)
         {
             this.LineNumber = LineNumber;
             this.Package = Package;
             this.PackageDetails = PackageDetails;
             this.SelectedNumbers = SelectedNumbers;
             this.ClientId = ClientId;
+            this.EmployeeID = EmployeeID;
         }
     }
 }
