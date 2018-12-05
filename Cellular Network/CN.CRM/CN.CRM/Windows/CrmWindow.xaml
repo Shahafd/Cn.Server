@@ -51,6 +51,8 @@
         <Button x:Name="newLineBtn" Grid.Row="3" Grid.Column="0" Content="New Line" FontSize="24" IsEnabled="{Binding selectedClient, Converter= {StaticResource selectClientButtonConvertor},Mode=TwoWay}"  Command="{Binding newLineCommand}"></Button>
 
         <Button x:Name="editLinesBtn" Grid.Row="4" Grid.Column="0" Content="Edit\Del Lines" FontSize="24" IsEnabled="{Binding selectedClient, Converter= {StaticResource selectClientButtonConvertor},Mode=TwoWay}" Command="{Binding editDeleteLinesCommand}"></Button>
+        
+        <Button x:Name="recieptBtn" Grid.Row="5" Grid.Column="0" Content="Reciept" FontSize="24" IsEnabled="{Binding selectedClient, Converter= {StaticResource selectClientButtonConvertor},Mode=TwoWay}"  Width="150" Command="{Binding ReceipetCommand}"></Button>
 
         <Button x:Name="logoutBtn" Grid.Row="0" VerticalAlignment="Top" Grid.Column="3" HorizontalAlignment="Right" Content="Logout" FontSize="24" Height="50"  Command="{Binding logoutCommand}" Background="#FFFFA3A3"></Button>
 

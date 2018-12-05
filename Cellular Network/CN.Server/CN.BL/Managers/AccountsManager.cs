@@ -15,9 +15,11 @@ namespace CN.BL.Managers
     public class AccountsManager : IAccountsManager
     {
         public INetworkRepository networkRepository { get; set; }
-        public AccountsManager(INetworkRepository networkRepository)
+        public ILinesManager linesManager { get; set; }
+        public AccountsManager(INetworkRepository networkRepository, ILinesManager linesManager)
         {
             this.networkRepository = networkRepository;
+            this.linesManager = linesManager;
         }
 
 
@@ -121,6 +123,38 @@ namespace CN.BL.Managers
                 }
             }
             return null;
+        }
+
+        public List<Client> GetMostValueClients()
+        {
+            //returns the 10 most valueable clients
+            List<Client> allClients = networkRepository.GetAllClients();
+            foreach (var client in allClients)
+            {
+                client.Value = linesManager.GetClientValue(client);
+            }
+            return allClients.OrderByDescending(c => c.Value).Take(10).ToList();
+        }
+
+        public List<Client> GetMostCallingToCenter()
+        {
+            //gets the clients that called the most to the center
+            return networkRepository.GetAllClients().OrderByDescending(c => c.CallsToCenter).Take(10).ToList();
+        }
+
+        public List<User> GetBestSellers()
+        {
+            //gets the sellers who sold the most lines
+            List<User> users = networkRepository.GetAllUsers();
+            foreach (var line in networkRepository.GetAllLines())
+            {
+                User user = users.FirstOrDefault(u => u.ID == line.EmployeeID);
+                if (user != null)
+                {
+                    user.NumOfSales++;
+                }
+            }
+            return users;
         }
     }
 }

@@ -20,10 +20,14 @@ namespace CN.Common.Configs
         public const string ClientSearchRoute = "Api/user/clientSearch";
         public const string ClientLoginRoute = "Api/user/clientLogin";
 
+        //Managers
+        public const string GetValueClientsRoute = "Api/user/getValueClients";
+        public const string GetMostCallingRoute = "Api/user/GetMostCallingClients";
+        public const string GetBestSellersRoute = "api/user/getBestSellers";
 
         //Lines And Packages
         public const string GetNewLine = "Api/user/GetNewLine";
-        public const string GetClientLinesStrRoute = "Api/user/getClientStrLines"; 
+        public const string GetClientLinesStrRoute = "Api/user/getClientStrLines";
         public const string GetDefaultPackagesRoute = "Api/user/GetDefaultPackages";
         public const string GetPackageDetails = "Api/user/GetPackageDetails";
         public const string GetSelectedNumbersRoute = "Api/user/GetSelectedNumbers";
@@ -42,6 +46,6 @@ namespace CN.Common.Configs
         public const string GetClientByIdRoute = "Api/simulator/getClientByID";
         public const string SimulateRoute = "Api/simulator/Simulate";
 
-      
+
     }
 }

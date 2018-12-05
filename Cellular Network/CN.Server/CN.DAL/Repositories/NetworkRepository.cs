@@ -297,8 +297,8 @@ namespace CN.DAL.Repositories
 
         private void UpdateDBPackageDetails(PackageDetails packDet)
         {
-           //updates the package details in the database
-           using(CnContext context= new CnContext())
+            //updates the package details in the database
+            using (CnContext context = new CnContext())
             {
                 PackageDetails packDetFromDb = context.PackageDetails.FirstOrDefault(pd => pd.ID == packDet.ID);
                 if (packDetFromDb != null)
@@ -386,7 +386,7 @@ namespace CN.DAL.Repositories
 
                     context.PackageDetails.Add(new PackageDetails(PackageId, "Custom Package", linePackObj.PackageDetails.MaxMinutes, 0, linePackObj.PackageDetails.MaxSMS, 0, linePackObj.PackageDetails.FixedSmsPrice, linePackObj.PackageDetails.FixedCallPrice, linePackObj.PackageDetails.DiscountPercentage, selectedNumId, linePackObj.PackageDetails.MostCalledNumber));
 
-                    context.Lines.Add(new Line(linePackObj.ClientId, linePackObj.LineNumber, LineStatusEnum.Available, PackageId,linePackObj.EmployeeID));
+                    context.Lines.Add(new Line(linePackObj.ClientId, linePackObj.LineNumber, LineStatusEnum.Available, PackageId, linePackObj.EmployeeID));
                     context.SaveChanges();
                 }
                 LoadCollections();
@@ -476,6 +476,34 @@ namespace CN.DAL.Repositories
             //returns the client that matches this number
             string clientId = Lines.FirstOrDefault(l => l.Number == lineNumber).ClientID;
             return GetClientByID(clientId);
+        }
+
+        public void AddCallsToCenter(string clientId)
+        {
+            //adds a calls to center to this client
+            Client client = GetClientByID(clientId);
+            client.CallsToCenter++;
+            using (CnContext context = new CnContext())
+            {
+                Client dbClient = context.Clients.FirstOrDefault(c => c.ID == clientId);
+                if (dbClient != null)
+                {
+                    dbClient.CallsToCenter++;
+                }
+                context.SaveChanges();
+            }
+        }
+
+        public List<User> GetAllUsers()
+        {
+            //returns all the users(sellers and managers)
+            return Users;
+        }
+
+        public List<Line> GetAllLines()
+        {
+            //returns all the lines
+            return Lines;
         }
     }
 }

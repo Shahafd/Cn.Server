@@ -15,8 +15,8 @@ namespace CN.DAL.Databases
         protected override void Seed(CnContext context)
         {
             //USERS
-            context.Users.Add(new User { Username = "Omer", Password = "123457" });
-            context.Users.Add(new User { Username = "Shahaf", Password = "123456" });
+            context.Users.Add(new User { Username = "Omer", Password = "123457",Type=UserTypeEnum.Admin });
+            context.Users.Add(new User { Username = "Shahaf", Password = "123456",Type=UserTypeEnum.Admin });
 
             double BussinessCallPrice = PricesConfigs.CallMinPrice - (PricesConfigs.CallMinPrice * PricesConfigs.BussinessDiscountPrecentage / 100);
 

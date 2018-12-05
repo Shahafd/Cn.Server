@@ -19,9 +19,10 @@ namespace CN.Common.Contracts.IManagers
         Package GetPackageByLineId(string lineId);
         RequestStatusEnum SendLinePackageObj(LinePackObject linePackObj);
         RequestStatusEnum DeleteLine(string line);
-       LineStatusEnum GetLineStatus(string line);
+        LineStatusEnum GetLineStatus(string line);
         RequestStatusEnum UpdateLineStatus(Line line);
         LineDetails GetLineDetails(string lineNumber);
         ClientBill GetBillForSpecificLines(string clientId, YearAndMonth Date, List<string> lines);
+        double GetClientValue(Client client);
     }
 }

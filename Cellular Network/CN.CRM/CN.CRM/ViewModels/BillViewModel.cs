@@ -1,15 +1,20 @@
 ﻿using CN.Common.Contracts;
 using CN.Common.Contracts.IServices;
 using CN.Common.Contracts.IViewModels;
+using CN.Common.Infrastructures;
 using CN.Common.Models;
 using CN.Common.Models.TempModels;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace CN.CRM.ViewModels
@@ -22,22 +27,121 @@ namespace CN.CRM.ViewModels
         public string ClientNameStr { get; set; }
         public string MonthStr { get; set; }
         public string PriceStr { get; set; }
-
+        public ClientBill clientBill { get; set; }
+        public ICommand ExportCommand { get; set; }
 
         Grid DynamicGrid { get; set; }
-        ClientBill clientBill = new ClientBill("omer", new List<Receipt> {new Receipt(new Line("12345678","222222",Common.Enums.LineStatusEnum.Available,1,1),new Package("poor",200.0,false),new PackageDetails(1,"poor",300,30.0,600,400,40.0,20.0,30.0,2,"3232322232"),50.0,40.0),
-                                                                         new Receipt(new Line("87654321","555555",Common.Enums.LineStatusEnum.Available,1,1),new Package("poor",100.0,false),new PackageDetails(1,"poor",300,30.0,600,400,40.0,20.0,30.0,2,"3232322232"),50.0,40.0)  });
-
-
+     
         public BillViewModel(ILogger logger, IHttpClient httpClient)
         {
             this.logger = logger;
             this.httpClient = httpClient;
-            this.ClientNameStr = clientBill.ClientName;
-            this.MonthStr = "TODO MONTH";
-            this.PriceStr = clientBill.TotalBill.ToString();
+            ExportCommand = new ActionCommand(exportToPdf);
 
 
+        }
+
+        private void exportToPdf()
+        {
+            string fileName = "bill-" + clientBill.ClientName + clientBill.yearAndMonth.Month + "-" + clientBill.yearAndMonth.Year + ".pdf";
+          string filePath=  Path.Combine(Directory.GetCurrentDirectory(), fileName);
+           // string filePath = @"C:\Users\DELL\pdfsBill\" + fileName;
+            Document doc = new Document(PageSize.A4);
+            var output = new FileStream(filePath, FileMode.Create);
+            var writer = PdfWriter.GetInstance(doc, output);
+
+            doc.Open();
+            PdfPTable table1 = createBillConstTable(clientBill);
+            doc.Add(table1);
+            for (int i = 0; i < clientBill.Recepits.Count; i++)
+            {
+                PdfPTable table2 = createLineTable(clientBill.Recepits[i]);
+                doc.Add(table2);
+            }
+            doc.Close();
+
+        }
+
+        private PdfPTable createBillConstTable(ClientBill clientBill)
+        {
+            /////////////const data/////////////////////
+            PdfPTable table = new PdfPTable(2);
+            //table1.DefaultCell.Border = 0;
+            table.WidthPercentage = 100;
+
+            PdfPCell cell11 = new PdfPCell();
+            cell11.Colspan = 1;
+            cell11.AddElement(new Paragraph("Client Name: " + clientBill.ClientName, new Font()));
+            cell11.AddElement(new Paragraph("Date: " + clientBill.yearAndMonth.Month + "/" + clientBill.yearAndMonth.Year, new Font()));
+            cell11.VerticalAlignment = Element.ALIGN_LEFT;
+
+            PdfPCell cell12 = new PdfPCell();
+            cell12.AddElement(new Paragraph("Total Price: " + clientBill.TotalBill, new Font()));
+            cell12.VerticalAlignment = Element.ALIGN_CENTER;
+
+            table.AddCell(cell11);
+            table.AddCell(cell12);
+            return table;
+        }
+
+        private PdfPTable createLineTable(Receipt receipt)
+        {
+            ///////////////////dynamic data//////////////////////////
+            PdfPTable table = new PdfPTable(3);
+            table.WidthPercentage = 100;
+
+            PdfPCell cell = new PdfPCell(new Phrase("Line Number:" + receipt.LineNumber));
+            cell.Colspan = 3;
+            cell.HorizontalAlignment = Element.ALIGN_CENTER;
+            table.AddCell(cell);
+
+            table.AddCell("price: " + receipt.PackagePrice + "$");
+            cell = new PdfPCell(new Phrase("Package info:"));
+            cell.Colspan = 2;
+            table.AddCell(cell);
+
+            cell = new PdfPCell(new Phrase("Package"));
+            cell.Colspan = 3;
+            cell.HorizontalAlignment = Element.ALIGN_LEFT;
+            table.AddCell(cell);
+
+            table.AddCell("Minute: " + receipt.UsedMinutes);  // "Row 4, Col 1"
+            table.AddCell("Minute left: " + receipt.MinutesLeftInPackage);  // "Row 4, Col 2"
+            table.AddCell("Package used: " + receipt.MinutesUsagePrecentage + "%");  // "Row 4, Col 3"
+
+            table.AddCell("SMS: " + receipt.UsedSMS);  // "Row 5, Col 1"
+            table.AddCell("SMS left: " + receipt.SMSLeftInPackage);  // "Row 5, Col 2"
+            table.AddCell("Package used: " + receipt.SMSUsagePrecentage + "%");  // "Row 5, Col 3"
+
+            cell = new PdfPCell(new Phrase("Package price: " + receipt.PackagePrice + "$"));
+            cell.Colspan = 3;
+            cell.HorizontalAlignment = Element.ALIGN_CENTER;
+            table.AddCell(cell);
+
+            cell = new PdfPCell(new Phrase("Out of Package"));
+            cell.Colspan = 3;
+            cell.HorizontalAlignment = Element.ALIGN_LEFT;
+            table.AddCell(cell);
+
+            table.AddCell("Minute beyond package: " + receipt.MinutesBeyondPackage);  // "Row 8, Col 1"
+            table.AddCell("price per minunte: " + receipt.PricePerMinute + "$");  // "Row 8, Col 2"
+            table.AddCell("Total: " + receipt.TotalPaidMinutes);  // "Row 8, Col 3"
+
+            table.AddCell("SMS beyond package: " + receipt.SMSBeyondPackage);  // "Row 9, Col 1"
+            table.AddCell("price per SMS: " + receipt.PricePerSMS + "$");  // "Row 9, Col 2"
+            table.AddCell("Total: " + receipt.TotalPaidSMS);  // "Row 9, Col 3"
+
+            cell = new PdfPCell(new Phrase("Total:" + receipt.TotalPayment));
+            cell.Colspan = 3;
+            cell.HorizontalAlignment = Element.ALIGN_CENTER;
+            table.AddCell(cell);
+
+            cell = new PdfPCell(new Phrase("  "));
+            cell.Colspan = 3;
+            cell.HorizontalAlignment = Element.ALIGN_CENTER;
+            table.AddCell(cell);
+
+            return table;
         }
 
         public void GetGridFromWindow(Grid grid)
@@ -282,6 +386,14 @@ namespace CN.CRM.ViewModels
 
 
             return GridL;
+        }
+
+        public void GetClientBill(ClientBill clientBill)
+        {
+            this.clientBill = clientBill;
+            this.ClientNameStr = clientBill.ClientName;
+            this.MonthStr = "TODO MONTH";
+            this.PriceStr = clientBill.TotalBill.ToString();
         }
     }
 }

@@ -97,7 +97,7 @@ namespace CN.BL.Managers
             {
                 recepits.Add(GetRecipetByLineAndDate(item, Date));
             }
-            return new ClientBill($"{client.LastName} {client.FirstName}", recepits);
+            return new ClientBill($"{client.LastName} {client.FirstName}", recepits, Date);
         }
         public ClientBill GetBillForClientByDate(string clientId, YearAndMonth Date)
         {
@@ -108,7 +108,7 @@ namespace CN.BL.Managers
             {
                 recepits.Add(GetRecipetByLineAndDate(item.Number, Date));
             }
-            return new ClientBill($"{client.LastName} {client.FirstName}", recepits);
+            return new ClientBill($"{client.LastName} {client.FirstName}", recepits, Date);
         }
         public Receipt GetRecipetByLineAndDate(string lineNumber, YearAndMonth Date)
         {
@@ -119,7 +119,7 @@ namespace CN.BL.Managers
             SelectedNumbers selectedNums = networkRepository.GetSelectedNumbersById(packDet.SelectedNumbersID);
             double MinutesToContacts = GetMinutesToContacts(lineNumber, Date);
             double SMSToContacts = GetSMSToContacts(lineNumber, Date);
-            return new Receipt(line, package, packDet, MinutesToContacts, SMSToContacts);
+            return new Receipt(line.Number, package, packDet, MinutesToContacts, SMSToContacts);
         }
         public double GetPriceForPackageByLine(string lineNumber, Package package, YearAndMonth Date)
         {
@@ -130,7 +130,7 @@ namespace CN.BL.Managers
             SelectedNumbers selectedNums = networkRepository.GetSelectedNumbersById(packDetForLine.SelectedNumbersID);
             double MinutesToContacts = GetMinutesToContacts(lineNumber, Date);
             double SMSToContacts = GetSMSToContacts(lineNumber, Date);
-            Receipt recepitForPackage = new Receipt(line, package, packDetForLine, MinutesToContacts, SMSToContacts);
+            Receipt recepitForPackage = new Receipt(line.Number, package, packDetForLine, MinutesToContacts, SMSToContacts);
             return recepitForPackage.TotalPayment;
         }
         private double GetSMSToContacts(string lineNumber, YearAndMonth date)
@@ -168,7 +168,7 @@ namespace CN.BL.Managers
             return new LineDetails(mainRecepit, GetClientValue(client), Package1Name, Package2Name, Package3Name, Package1Price, Package2Price, Package3Price);
         }
 
-        private double GetClientValue(Client client)
+        public double GetClientValue(Client client)
         {
             //returns the calculation of the clients's value
             List<Line> clientLines = networkRepository.GetClientLines(client.ID);

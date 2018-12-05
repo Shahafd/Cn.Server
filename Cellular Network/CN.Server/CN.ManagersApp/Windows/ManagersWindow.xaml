@@ -3,10 +3,76 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-       
+          xmlns:convs ="clr-namespace:CN.ManagersApp.Convertors"
         mc:Ignorable="d"
-        Title="ManagersWindow" Height="450" Width="800">
+        Title="ManagersWindow" Height="600" Width="800" ResizeMode="NoResize">
+    <Window.Resources>
+        <convs:BoolVisablitySwitchConvertor x:Key="boolVisablitySwitchConvertor" />
+    </Window.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.25*"></RowDefinition>
+            <RowDefinition Height="0.15*" ></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
         
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock  Grid.Row="0" Margin="0,-15,0,0" Grid.ColumnSpan="3" Text="Managers Panel Window" FontSize="32" TextAlignment="Center" VerticalAlignment="Center"></TextBlock>
+
+
+        <ListView Grid.Row="2"  Grid.ColumnSpan="3"  Visibility="{Binding MostValSwitch, Converter= {StaticResource boolVisablitySwitchConvertor},Mode=TwoWay}" ItemsSource="{Binding ValueClients}"  >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ID" Width="80" DisplayMemberBinding="{Binding ID}" />
+                    <GridViewColumn Header="First Name" Width="120" DisplayMemberBinding="{Binding FirstName}" />
+                    <GridViewColumn Header="Last Name" Width="120" DisplayMemberBinding="{Binding LastName}" />
+                    <GridViewColumn Header="Client Type" Width="120" DisplayMemberBinding="{Binding ClientType}" />
+                    <GridViewColumn Header="Address" Width="120" DisplayMemberBinding="{Binding Address}" />
+                    <GridViewColumn Header="Contact Number" Width="80" DisplayMemberBinding="{Binding ContactNumber}" />
+                    <GridViewColumn Header="Client Value" Width="80" DisplayMemberBinding="{Binding Value}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListView Grid.Row="2"  Grid.ColumnSpan="3"   Visibility="{Binding MostCalledSwitch, Converter= {StaticResource boolVisablitySwitchConvertor},Mode=TwoWay}" ItemsSource="{Binding CallingClients}"  >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ID" Width="80" DisplayMemberBinding="{Binding ID}" />
+                    <GridViewColumn Header="First Name" Width="120" DisplayMemberBinding="{Binding FirstName}" />
+                    <GridViewColumn Header="Last Name" Width="120" DisplayMemberBinding="{Binding LastName}" />
+                    <GridViewColumn Header="Client Type" Width="120" DisplayMemberBinding="{Binding ClientType}" />
+                    <GridViewColumn Header="Address" Width="120" DisplayMemberBinding="{Binding Address}" />
+                    <GridViewColumn Header="Contact Number" Width="80" DisplayMemberBinding="{Binding ContactNumber}" />
+                    <GridViewColumn Header="Called To Center" Width="80" DisplayMemberBinding="{Binding CallsToCenter}" />
+
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <ListView Grid.Row="2"  Grid.ColumnSpan="3" Visibility="{Binding BestSellersSwitch, Converter= {StaticResource boolVisablitySwitchConvertor},Mode=TwoWay}"  ItemsSource="{Binding BestSellers}"  >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ID" Width="80" DisplayMemberBinding="{Binding ID}" />
+                    <GridViewColumn Header="User Name" Width="120" DisplayMemberBinding="{Binding Username}" />
+                    <GridViewColumn Header="Type" Width="120" DisplayMemberBinding="{Binding Type}" />
+                    <GridViewColumn Header="Number Of Sales" Width="120" DisplayMemberBinding="{Binding NumOfSales}" />
+
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="20,0,0,0" Grid.ColumnSpan="2" FontSize="22" Text="{Binding MyDetails}" FontWeight="Bold"></TextBlock>
+
+
+        <Button  Grid.Row="1" Grid.Column="0" Content="Most Valueable Clients" FontSize="24"  Command="{Binding mostValcommand}"></Button>
+        <Button  Grid.Row="1" Grid.Column="1" Content="Most Called Clients" FontSize="24"  Command="{Binding mostCalledcommand}"></Button>
+        <Button  Grid.Row="1" Grid.Column="2" IsEnabled="" Content="Best Sellers Employees" FontSize="24"  Command="{Binding bestSellerscommand}"></Button>
+
+
     </Grid>
 </Window>

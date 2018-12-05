@@ -49,13 +49,17 @@ namespace CN.BL.Managers
             {
                 for (int i = 0; i < simulatorAction.numOfCalls; i++)
                 {
+                    if (i % 5 == 0)
+                    {
+                        networkRepository.AddCallsToCenter(simulatorAction.ClientId);
+                    }
                     double Duration = GetRandomNumber(simulatorAction.minDuration, simulatorAction.maxDuration);
                     Call call = new Call(simulatorAction.Line, Duration, 20.0, simulatorAction.destCall);
-                    bool b = networkRepository.AddCall(call).Result;
+                    bool success = networkRepository.AddCall(call).Result;
 
-                    if (!b)
+                    if (!success)
                     {
-                        return b;
+                        return success;
                     }
                 }
             }
@@ -63,15 +67,18 @@ namespace CN.BL.Managers
             {
                 for (int i = 0; i < simulatorAction.numOfCalls; i++)
                 {
+                    if (i % 5 == 0)
+                    {
+                        networkRepository.AddCallsToCenter(simulatorAction.ClientId);
+                    }
                     double Duration = GetRandomNumber(simulatorAction.minDuration, simulatorAction.maxDuration);
                     SMS Sms = new SMS(simulatorAction.Line, 20.0, simulatorAction.destCall);
-                    bool b = networkRepository.AddSms(Sms).Result;
+                    bool success = networkRepository.AddSms(Sms).Result;
 
-                    if (!b)
+                    if (!success)
                     {
-                        return b;
+                        return success;
                     }
-
                 }
             }
             return true;

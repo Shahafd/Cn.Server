@@ -81,6 +81,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Convertors\BoolSwitchConvertor.cs" />
+    <Compile Include="Convertors\BoolVisablitySwitchConvertor.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\ManagersViewModel.cs" />
     <Compile Include="Windows\ManagersWindow.xaml.cs">

@@ -32,9 +32,14 @@ namespace CN.Common.Models.TempModels
 
         public double TotalPayment { get; set; }
 
-        public Receipt(Line line, Package package, PackageDetails packDet, double MinutesToContacts, double SMSToContacts)
+        public Receipt()
         {
-            LineNumber = line.Number;
+
+        }
+
+        public Receipt(string lineNumber, Package package, PackageDetails packDet, double MinutesToContacts, double SMSToContacts)
+        {
+            LineNumber = lineNumber;
             UsedMinutes = packDet.UsedMinutes;
             UsedSMS = packDet.UsedSMS;
             MinutesLeftInPackage = GetUnitsLeft(packDet.UsedSMS, packDet.MaxMinutes);

@@ -216,5 +216,26 @@ namespace CN.ServerAPI.Controllers
             //returns the bill for the specific lines chosen
             return Ok(linesManager.GetBillForSpecificLines(billRequestModel.ClientID, billRequestModel.Date, billRequestModel.Lines));
         }
+        [HttpPost]
+        [Route(ApiConfigs.GetValueClientsRoute)]
+        public IHttpActionResult GetValueableClients()
+        {
+            //returns the 10 most valueable clients
+            return Ok(accountsManager.GetMostValueClients());
+        }
+        [HttpPost]
+        [Route(ApiConfigs.GetMostCallingRoute)]
+        public IHttpActionResult GetMostCallingClients()
+        {
+            //returns the 10 clients who called the center the most
+            return Ok(accountsManager.GetMostCallingToCenter());
+        }
+        [HttpPost]
+        [Route(ApiConfigs.GetBestSellersRoute)]
+        public IHttpActionResult GetBestSellers()
+        {
+            //returns the 10 employee who added the most lines
+            return Ok(accountsManager.GetBestSellers());
+        }
     }
 }

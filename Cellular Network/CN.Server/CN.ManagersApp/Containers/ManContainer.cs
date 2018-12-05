@@ -26,6 +26,7 @@ namespace CN.ManagersApp.Containers
 
                 //ViewModels
                 container.Register<ILoginViewModel, LoginViewModel>();
+                container.Register<IManagersViewModel, ManagersViewModel>();
                
                 //Services
                 container.Register<ILogger, MessageBoxPopper>(Lifestyle.Singleton);

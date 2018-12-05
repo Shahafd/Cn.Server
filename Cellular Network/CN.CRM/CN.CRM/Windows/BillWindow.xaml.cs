@@ -1,4 +1,5 @@
 ﻿using CN.Common.Contracts.IViewModels;
+using CN.Common.Models.TempModels;
 using CN.CRM.Containers;
 using System;
 using System.Collections.Generic;
@@ -23,11 +24,12 @@ namespace CN.CRM.Windows
     {
         public IBillViewModel viewModel { get; set; }
 
-        public BillWindow()
+        public BillWindow(ClientBill clientBill)
         {
             InitializeComponent();
             viewModel = CrmContianer.container.GetInstance<IBillViewModel>();
             DataContext = viewModel;
+            viewModel.GetClientBill(clientBill);
             viewModel.GetGridFromWindow(DynamicGrid);
         }
     }

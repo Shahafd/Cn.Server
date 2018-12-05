@@ -34,9 +34,12 @@ namespace CN.Common.Contracts.IRepositories
         Task<bool> AddCall(Call call);
         Task<bool> AddSms(SMS sms);
         Line GetLineById(string lineId);
+        void AddCallsToCenter(string clientId);
         List<Call> GetCallsToContactsByDate(string lineNumber, YearAndMonth date);
         List<Call> GetCallsNotToContactsByDate(string lineNumber, YearAndMonth date);
         List<SMS> GetSMSToContactsByDate(string lineNumber, YearAndMonth date);
         Client GetClientByNumber(string lineNumber);
+        List<User> GetAllUsers();
+        List<Line> GetAllLines();
     }
 }

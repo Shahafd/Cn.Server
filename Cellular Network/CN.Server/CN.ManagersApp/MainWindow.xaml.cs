@@ -1,4 +1,6 @@
-﻿using CN.Common.Models;
+﻿using CN.Common.Contracts.IViewModels;
+using CN.Common.Models;
+using CN.ManagersApp.Containers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +23,12 @@ namespace CN.ManagersApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(User loggedIn)
+        ILoginViewModel viewModel { get; set; }
+        public MainWindow()
         {
             InitializeComponent();
+            viewModel = ManContainer.container.GetInstance<ILoginViewModel>();
+            DataContext = viewModel;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CN.Common.Contracts.IViewModels;
+using CN.Common.Models;
 using CN.CRM.Containers;
 using System;
 using System.Collections.Generic;
@@ -22,12 +23,20 @@ namespace CN.CRM.Windows
     public partial class BillDatePicker : Window
     {
         public IBillDatePickerViewModel viewModel { get; set; }
-        public BillDatePicker()
+
+
+        public BillDatePicker(Client client)
         {
             InitializeComponent();
             viewModel = CrmContianer.container.GetInstance<IBillDatePickerViewModel>();
             DataContext = viewModel;
+            // this.currentClient = client;
+            viewModel.getClientFromWindow(client);
         }
+
+
+
+
 
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {

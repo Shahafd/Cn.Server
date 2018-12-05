@@ -32,6 +32,7 @@ namespace CN.CRM.ViewModels
         public ICommand newLineCommand { get; set; }
         public ICommand editDeleteLinesCommand { get; set; }
         public ICommand logoutCommand { get; set; }
+        public ICommand ReceipetCommand { get; set; }
         private string _searchInput;
 
         public string searchInput
@@ -104,6 +105,15 @@ namespace CN.CRM.ViewModels
             newLineCommand = new ActionCommand(OpenNewLineWindow);
             editDeleteLinesCommand = new ActionCommand(OpenLinesWindow);
             logoutCommand = new ActionCommand(Logout);
+            ReceipetCommand = new ActionCommand(CreateReceipt);
+
+        }
+
+        private void CreateReceipt()
+        {
+            //opens a new recepit window 
+            BillDatePicker billDatePicker = new BillDatePicker(selectedClient);
+            billDatePicker.Show();
         }
 
         private void Logout()

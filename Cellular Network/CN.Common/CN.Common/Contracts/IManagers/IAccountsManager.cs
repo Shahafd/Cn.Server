@@ -19,5 +19,8 @@ namespace CN.Common.Contracts.IManagers
         string DeleteClient(string id);
         List<Client> SearchForClients(string input);
         Client ClientLogin(ClientLogin clientLogin);
+        List<Client> GetMostValueClients();
+        List<Client> GetMostCallingToCenter();
+        List<User> GetBestSellers();
     }
 }

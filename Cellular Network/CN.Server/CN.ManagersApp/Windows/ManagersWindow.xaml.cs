@@ -1,4 +1,7 @@
-﻿using System;
+﻿using CN.Common.Contracts.IViewModels;
+using CN.Common.Models;
+using CN.ManagersApp.Containers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +22,13 @@ namespace CN.ManagersApp.Windows
     /// </summary>
     public partial class ManagersWindow : Window
     {
-        public ManagersWindow()
+        IManagersViewModel viewModel { get; set; }
+        public ManagersWindow(User user)
         {
             InitializeComponent();
+            viewModel = ManContainer.container.GetInstance<IManagersViewModel>();
+            DataContext = viewModel;
+            viewModel.GetUser(user);
         }
     }
 }

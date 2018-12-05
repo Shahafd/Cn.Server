@@ -24,16 +24,24 @@
 
         <TextBlock Text="Select Lines: " Grid.Row="1" Grid.Column="0" FontSize="25" HorizontalAlignment="Center"/>
         <!--<ComboBox  x:Name="LinesCombo" Grid.Row="1" Grid.Column="1" FontSize="25"   ItemsSource="{Binding Lines}" AllowDrop="True"  SelectedItem="{Binding selectedLine}"/>-->
-        <ComboBox x:Name="cbObjects" Grid.Column="1" Grid.Row="1" FontSize="25"   ItemsSource="{Binding cbObjects}" >
+        <ComboBox x:Name="cbObjects" Grid.Column="1" Grid.Row="1" FontSize="25"   ItemsSource="{Binding cbObjects}"  >
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox IsChecked="{Binding IsSelected}" Width="20" VerticalAlignment="Center" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"  />
-                        <TextBlock Text="{Binding ObjectData}" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding ObjectData.Number}" VerticalAlignment="Center" />
                     </StackPanel>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
+
+        <TextBlock Text="Month: " Grid.Row="2" Grid.Column="0" FontSize="25" HorizontalAlignment="Center"/>
+        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding MonthList}" FontSize="20" SelectedItem="{Binding SelectedMonth}"/>
+
+        <TextBlock Text="Year: " Grid.Row="3" Grid.Column="0" FontSize="25" HorizontalAlignment="Center"/>
+        <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding YearList}" FontSize="20" SelectedItem="{Binding SelectedYear}"/>
+
+        <Button Grid.Row="5" Grid.ColumnSpan="2"  Content="Calculate" Command="{Binding CalculateCommand}"/>
 
 
     </Grid>
