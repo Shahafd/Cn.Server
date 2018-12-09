@@ -11,6 +11,6 @@ namespace CN.Common.Contracts.IViewModels
     {
         void GetData(Client client, bool newLine);
         void GetLoggedInUser(User loggedInUser);
-        bool HasNoLines(Client selectedClient);
+      
     }
 }

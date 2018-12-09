@@ -28,7 +28,7 @@
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox IsChecked="{Binding IsSelected}" Width="20" VerticalAlignment="Center" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"  />
+                        <CheckBox IsChecked="{Binding IsSelected}" Width="20" VerticalAlignment="Center"   />
                         <TextBlock Text="{Binding ObjectData.Number}" VerticalAlignment="Center" />
                     </StackPanel>
                 </DataTemplate>

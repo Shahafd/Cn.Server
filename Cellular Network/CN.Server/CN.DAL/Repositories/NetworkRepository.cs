@@ -23,7 +23,6 @@ namespace CN.DAL.Repositories
         public List<SelectedNumbers> SelectedNumbers { get; set; }
         public List<SMS> SMS { get; set; }
         public List<Payment> Payments { get; set; }
-        public static readonly object callLock = new object();
         public static readonly object dbLock = new object();
         public NetworkRepository()
         {
@@ -34,32 +33,41 @@ namespace CN.DAL.Repositories
         private void LoadLinesAndPackges()
         {
             //loads line,packages and etc
-            using (CnContext context = new CnContext())
+            lock (dbLock)
             {
-                Lines = context.Lines.ToList();
-                Packages = context.Packages.ToList();
-                PackageDetails = context.PackageDetails.ToList();
-                SelectedNumbers = context.SelectedNumbers.ToList();
+                using (CnContext context = new CnContext())
+                {
+                    Lines = context.Lines.ToList();
+                    Packages = context.Packages.ToList();
+                    PackageDetails = context.PackageDetails.ToList();
+                    SelectedNumbers = context.SelectedNumbers.ToList();
+                }
             }
         }
         private void LoadClients()
         {
             //loads clients,users and etc
-            using (CnContext context = new CnContext())
+            lock (dbLock)
             {
-                Clients = context.Clients.ToList();
-                Users = context.Users.ToList();
-                ClientTypes = context.ClientTypes.ToList();
+                using (CnContext context = new CnContext())
+                {
+                    Clients = context.Clients.ToList();
+                    Users = context.Users.ToList();
+                    ClientTypes = context.ClientTypes.ToList();
+                }
             }
         }
         private void LoadCallsAndSms()
         {
             //loads calls,sms and payments
-            using (CnContext context = new CnContext())
+            lock (dbLock)
             {
-                Calls = context.Calls.ToList();
-                SMS = context.SMS.ToList();
-                Payments = context.Payments.ToList();
+                using (CnContext context = new CnContext())
+                {
+                    Calls = context.Calls.ToList();
+                    SMS = context.SMS.ToList();
+                    Payments = context.Payments.ToList();
+                }
             }
         }
         private void LoadCollections()
@@ -106,17 +114,19 @@ namespace CN.DAL.Repositories
         public RequestStatusEnum UpdateClientDetails(Client client)
         {
             //updates the details of an exisiting client
-
-            using (CnContext context = new CnContext())
+            lock (dbLock)
             {
-                Client dbClient = context.Clients.FirstOrDefault(c => c.ID == client.ID);
-                dbClient.FirstName = client.FirstName;
-                dbClient.LastName = client.LastName;
-                dbClient.Address = client.Address;
-                dbClient.BirthDate = client.BirthDate;
-                dbClient.ClientType = client.ClientType;
-                dbClient.ContactNumber = client.ContactNumber;
-                context.SaveChanges();
+                using (CnContext context = new CnContext())
+                {
+                    Client dbClient = context.Clients.FirstOrDefault(c => c.ID == client.ID);
+                    dbClient.FirstName = client.FirstName;
+                    dbClient.LastName = client.LastName;
+                    dbClient.Address = client.Address;
+                    dbClient.BirthDate = client.BirthDate;
+                    dbClient.ClientType = client.ClientType;
+                    dbClient.ContactNumber = client.ContactNumber;
+                    context.SaveChanges();
+                }
             }
             Client toUpdate = GetClientByID(client.ID);
             toUpdate.FirstName = client.FirstName;
@@ -132,14 +142,15 @@ namespace CN.DAL.Repositories
         public RequestStatusEnum AddNewClient(Client client)
         {
             //adds a new Client
-
-            using (CnContext context = new CnContext())
+            lock (dbLock)
             {
-                context.Clients.Add(client);
-                context.SaveChanges();
+                using (CnContext context = new CnContext())
+                {
+                    context.Clients.Add(client);
+                    context.SaveChanges();
+                }
             }
             Clients.Add(client);
-
             return RequestStatusEnum.Success;
         }
 
@@ -158,16 +169,19 @@ namespace CN.DAL.Repositories
         public string DeleteClient(string id)
         {
             //moves the client to the un active clients 
-            Client client = GetClientByID(id);
-            DiactivateClientLinesById(id);
-            using (CnContext context = new CnContext())
+            lock (dbLock)
             {
-                UnActiveClient unActive = ConvertClientToUnActive(client);
-                context.UnActiveClients.Add(unActive);
-                //  context.Clients.Remove(c=)
-                context.SaveChanges();
+                Client client = GetClientByID(id);
+                DiactivateClientLinesById(id);
+                using (CnContext context = new CnContext())
+                {
+                    UnActiveClient unActive = ConvertClientToUnActive(client);
+                    context.UnActiveClients.Add(unActive);
+                    context.Clients.Remove(context.Clients.FirstOrDefault(c => c.ID == id));
+                    context.SaveChanges();
+                }
+                Clients.Remove(client);
             }
-            Clients.Remove(client);
             return "Client removed succesfully!";
         }
 
@@ -180,19 +194,22 @@ namespace CN.DAL.Repositories
         private void DiactivateClientLinesById(string id)
         {
             //deactivates the client lines
-            List<Line> clientLines = GetClientLinesById(id);
-            using (CnContext context = new CnContext())
+            lock (dbLock)
             {
-                foreach (var item in clientLines)
+                List<Line> clientLines = GetClientLinesById(id);
+                using (CnContext context = new CnContext())
                 {
-                    Line dbLine = context.Lines.FirstOrDefault(l => l.ClientID == id);
-                    if (dbLine != null)
+                    foreach (var item in clientLines)
                     {
-                        dbLine.Status = LineStatusEnum.Blocked;
+                        Line dbLine = context.Lines.FirstOrDefault(l => l.ClientID == id);
+                        if (dbLine != null)
+                        {
+                            dbLine.Status = LineStatusEnum.Blocked;
+                        }
+                        item.Status = LineStatusEnum.Blocked;
                     }
-                    item.Status = LineStatusEnum.Blocked;
+                    context.SaveChanges();
                 }
-                context.SaveChanges();
             }
         }
 
@@ -265,14 +282,17 @@ namespace CN.DAL.Repositories
         }
         public async Task<bool> AddCall(Call call)
         {
-            using (CnContext context = new CnContext())
+            lock (dbLock)
             {
-                context.Calls.Add(call);
-                Package package = GetPackageByLineId(call.LineID);
-                PackageDetails packDet = GetPackageDetailsByPackageId(package.ID);
-                packDet.UsedMinutes += call.Duration;
-                UpdateDBPackageDetails(packDet);
-                context.SaveChanges();
+                using (CnContext context = new CnContext())
+                {
+                    context.Calls.Add(call);
+                    Package package = GetPackageByLineId(call.LineID);
+                    PackageDetails packDet = GetPackageDetailsByPackageId(package.ID);
+                    packDet.UsedMinutes += call.Duration;
+                    UpdateDBPackageDetails(packDet);
+                    context.SaveChanges();
+                }
             }
             Calls.Add(call);
 
@@ -282,14 +302,17 @@ namespace CN.DAL.Repositories
 
         public async Task<bool> AddSms(SMS sms)
         {
-            using (CnContext context = new CnContext())
+            lock (dbLock)
             {
-                context.SMS.Add(sms);
-                Package package = GetPackageByLineId(sms.LineID);
-                PackageDetails packDet = GetPackageDetailsByPackageId(package.ID);
-                packDet.UsedSMS++;
-                UpdateDBPackageDetails(packDet);
-                context.SaveChanges();
+                using (CnContext context = new CnContext())
+                {
+                    context.SMS.Add(sms);
+                    Package package = GetPackageByLineId(sms.LineID);
+                    PackageDetails packDet = GetPackageDetailsByPackageId(package.ID);
+                    packDet.UsedSMS++;
+                    UpdateDBPackageDetails(packDet);
+                    context.SaveChanges();
+                }
             }
             SMS.Add(sms);
             return true;
@@ -298,15 +321,18 @@ namespace CN.DAL.Repositories
         private void UpdateDBPackageDetails(PackageDetails packDet)
         {
             //updates the package details in the database
-            using (CnContext context = new CnContext())
+            lock (dbLock)
             {
-                PackageDetails packDetFromDb = context.PackageDetails.FirstOrDefault(pd => pd.ID == packDet.ID);
-                if (packDetFromDb != null)
+                using (CnContext context = new CnContext())
                 {
-                    packDetFromDb.UsedMinutes = packDet.UsedMinutes;
-                    packDetFromDb.UsedSMS = packDet.UsedSMS;
+                    PackageDetails packDetFromDb = context.PackageDetails.FirstOrDefault(pd => pd.ID == packDet.ID);
+                    if (packDetFromDb != null)
+                    {
+                        packDetFromDb.UsedMinutes = packDet.UsedMinutes;
+                        packDetFromDb.UsedSMS = packDet.UsedSMS;
+                    }
+                    context.SaveChanges();
                 }
-                context.SaveChanges();
             }
         }
 
@@ -345,22 +371,27 @@ namespace CN.DAL.Repositories
         public RequestStatusEnum UpdateLinePackage(LinePackObject linePackObj)
         {
             //updates the line,package,package details,and selected numbers
-            using (CnContext context = new CnContext())
+            lock (dbLock)
             {
-                Package packpageFromDb = context.Packages.FirstOrDefault(p => p.ID == linePackObj.Package.ID);
-                packpageFromDb.PackageTotalPrice = linePackObj.Package.PackageTotalPrice;
-                PackageDetails packdetFromDb = context.PackageDetails.FirstOrDefault(pd => pd.ID == linePackObj.PackageDetails.ID);
-                packdetFromDb.DiscountPercentage = linePackObj.PackageDetails.DiscountPercentage;
-                packdetFromDb.FixedCallPrice = linePackObj.PackageDetails.FixedCallPrice;
-                packdetFromDb.FixedSmsPrice = linePackObj.PackageDetails.FixedSmsPrice;
-                packdetFromDb.MaxMinutes = linePackObj.PackageDetails.MaxMinutes;
-                packdetFromDb.MaxSMS = linePackObj.PackageDetails.MaxSMS;
-                packdetFromDb.MostCalledNumber = linePackObj.PackageDetails.MostCalledNumber;
-                SelectedNumbers selectedNumsFromDb = context.SelectedNumbers.FirstOrDefault(sn => sn.ID == linePackObj.SelectedNumbers.ID);
-                selectedNumsFromDb.FirstNumber = linePackObj.SelectedNumbers.FirstNumber;
-                selectedNumsFromDb.SecondNumber = linePackObj.SelectedNumbers.SecondNumber;
-                selectedNumsFromDb.ThirdNumber = linePackObj.SelectedNumbers.ThirdNumber;
-                context.SaveChanges();
+                using (CnContext context = new CnContext())
+                {
+                    Package packpageFromDb = context.Packages.FirstOrDefault(p => p.ID == linePackObj.Package.ID);
+                    packpageFromDb.PackageTotalPrice = linePackObj.Package.PackageTotalPrice;
+                    packpageFromDb.PackageName = linePackObj.Package.PackageName;
+                    PackageDetails packdetFromDb = context.PackageDetails.FirstOrDefault(pd => pd.ID == linePackObj.PackageDetails.ID);
+                    packdetFromDb.DiscountPercentage = linePackObj.PackageDetails.DiscountPercentage;
+                    packdetFromDb.FixedCallPrice = linePackObj.PackageDetails.FixedCallPrice;
+                    packdetFromDb.FixedSmsPrice = linePackObj.PackageDetails.FixedSmsPrice;
+                    packdetFromDb.MaxMinutes = linePackObj.PackageDetails.MaxMinutes;
+                    packdetFromDb.MaxSMS = linePackObj.PackageDetails.MaxSMS;
+                    packdetFromDb.MostCalledNumber = linePackObj.PackageDetails.MostCalledNumber;
+
+                    SelectedNumbers selectedNumsFromDb = context.SelectedNumbers.FirstOrDefault(sn => sn.ID == linePackObj.SelectedNumbers.ID);
+                    selectedNumsFromDb.FirstNumber = linePackObj.SelectedNumbers.FirstNumber;
+                    selectedNumsFromDb.SecondNumber = linePackObj.SelectedNumbers.SecondNumber;
+                    selectedNumsFromDb.ThirdNumber = linePackObj.SelectedNumbers.ThirdNumber;
+                    context.SaveChanges();
+                }
             }
             LoadCollections();
             return RequestStatusEnum.Success;
@@ -373,7 +404,7 @@ namespace CN.DAL.Repositories
             {
                 using (CnContext context = new CnContext())
                 {
-                    context.Packages.Add(new Package(linePackObj.ClientId, linePackObj.Package.PackageTotalPrice));
+                    context.Packages.Add(new Package(linePackObj.Package.PackageName, linePackObj.Package.PackageTotalPrice));
                     context.SaveChanges();
                     LoadLinesAndPackges();
 
@@ -442,8 +473,6 @@ namespace CN.DAL.Repositories
             }
         }
 
-
-
         public List<Call> GetCallsToContactsByDate(string lineNumber, YearAndMonth date)
         {
             //returns all the calls that a client made to his contacts in this month of the year
@@ -481,16 +510,19 @@ namespace CN.DAL.Repositories
         public void AddCallsToCenter(string clientId)
         {
             //adds a calls to center to this client
-            Client client = GetClientByID(clientId);
-            client.CallsToCenter++;
-            using (CnContext context = new CnContext())
+            lock (dbLock)
             {
-                Client dbClient = context.Clients.FirstOrDefault(c => c.ID == clientId);
-                if (dbClient != null)
+                Client client = GetClientByID(clientId);
+                client.CallsToCenter++;
+                using (CnContext context = new CnContext())
                 {
-                    dbClient.CallsToCenter++;
+                    Client dbClient = context.Clients.FirstOrDefault(c => c.ID == clientId);
+                    if (dbClient != null)
+                    {
+                        dbClient.CallsToCenter++;
+                    }
+                    context.SaveChanges();
                 }
-                context.SaveChanges();
             }
         }
 
@@ -504,6 +536,46 @@ namespace CN.DAL.Repositories
         {
             //returns all the lines
             return Lines;
+        }
+
+        public RequestStatusEnum SaveException(Error error)
+        {
+            //saves the exception to the database
+            using (CnContext context = new CnContext())
+            {
+                context.Errors.Add(error);
+                context.SaveChanges();
+            }
+            return RequestStatusEnum.Success;
+        }
+
+        public RequestStatusEnum SaveExceptionsList(List<Error> errors)
+        {
+            //saves the exceptions to the database
+            using (CnContext context = new CnContext())
+            {
+                foreach (var error in errors)
+                {
+                    context.Errors.Add(error);
+                }
+                context.SaveChanges();
+            }
+            return RequestStatusEnum.Success;
+        }
+
+        public List<Call> GetCallsThisMonth(string lineNumber, YearAndMonth date)
+        {
+            //returns all the calls that a client made this month
+            Package package = GetPackageByLineId(lineNumber);
+            PackageDetails packDet = GetPackageDetailsByPackageId(package.ID);
+            return Calls.Where(c => c.LineID == lineNumber && c.DateOfCall.Month == date.Month && c.DateOfCall.Year == date.Year).ToList();
+        }
+        public List<SMS> GetSMSThisMonth(string lineNumber, YearAndMonth date)
+        {
+            //returns all the sms that a client made this month
+            Package package = GetPackageByLineId(lineNumber);
+            PackageDetails packDet = GetPackageDetailsByPackageId(package.ID);
+            return SMS.Where(c => c.LineID == lineNumber && c.DateOfSMS.Month == date.Month && c.DateOfSMS.Year == date.Year).ToList();
         }
     }
 }

@@ -34,18 +34,5 @@ namespace CN.CRM.Windows
             viewModel.getClientFromWindow(client);
         }
 
-
-
-
-
-        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            viewModel.OnCbObjectCheckBoxUnChecked(sender, e);
-        }
-
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            viewModel.OnCbObjectCheckBoxChecked(sender, e);
-        }
     }
 }

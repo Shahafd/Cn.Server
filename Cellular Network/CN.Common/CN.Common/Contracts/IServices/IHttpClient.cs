@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using CN.Common.Models.TempModels;
 
 namespace CN.Common.Contracts.IServices
 {
@@ -11,6 +12,6 @@ namespace CN.Common.Contracts.IServices
     {
         Tuple<object, HttpStatusCode> PostRequest(string route, object obj=null);
         Tuple<object, HttpStatusCode> GetRequest(string route);
-      
+       
     }
 }

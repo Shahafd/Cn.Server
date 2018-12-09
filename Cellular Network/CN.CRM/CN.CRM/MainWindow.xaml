@@ -22,8 +22,5 @@
         <TextBlock Grid.Row="3" Text="Password:" FontSize="30"></TextBlock>
         <PasswordBox x:Name="PasswordTbx" Grid.Row="4" Password="123456" FontSize="30" Background="#FFEAFFF2"></PasswordBox>
         <Button Grid.Row="5"  Content="Sign In" FontSize="30" Height="75" Command="{Binding loginCommand}" CommandParameter="{Binding ElementName=PasswordTbx}" Background="#FF81FF81"></Button>
-       
-
-
     </Grid>
 </Window>

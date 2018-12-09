@@ -6,7 +6,9 @@ using CN.Common.Enums;
 using CN.Common.Infrastructures;
 using CN.Common.Models;
 using CN.Common.Models.TempModels;
+using CN.Simulator.Containers;
 using CN.Simulator.Windows;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -25,15 +27,17 @@ namespace CN.Simulator.ViewModels
         public string Username { get; set; }
         public string Password { get; set; }
         public ICommand loginCommand { get; set; }
+        public IInputsValidator inputsValidator { get; set; }
         ILogger logger { get; set; }
-        IInputsValidator inputsValidator { get; set; }
         IHttpClient httpClient { get; set; }
+        IFileManager fileManager { get; set; }
 
-        public LoginViewModel(ILogger logger, IHttpClient httpClient, IInputsValidator inputsValidator)
+        public LoginViewModel(ILogger logger, IHttpClient httpClient, IInputsValidator inputsValidator, IFileManager fileManager)
         {
             this.logger = logger;
-            this.inputsValidator = inputsValidator;
             this.httpClient = httpClient;
+            this.inputsValidator = inputsValidator;
+            this.fileManager = fileManager;
             loginCommand = new ActionCommand<object>(TryLogin);
             Username = "Shahaf";
         }
@@ -46,14 +50,15 @@ namespace CN.Simulator.ViewModels
             if (ValidateFields())
             {
                 UserLogin userLogin = new UserLogin(Username, Password);
-
                 Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.LoginRoute, userLogin);
-                JObject jobj = (JObject)returnTuple.Item1;
-                User loggedIn = jobj.ToObject<User>();
 
                 switch (returnTuple.Item2)
                 {
                     case HttpStatusCode.OK:
+                        JObject jobj = (JObject)returnTuple.Item1;
+                        User loggedIn = jobj.ToObject<User>();
+                        UpdateSessionOnUserLogin(loggedIn);
+                        CheckAndSendExceptions();
                         logger.Print($"Welcome Back {loggedIn.Username}!");
                         SimulatorWindow simulatorWindow = new SimulatorWindow(loggedIn);
                         simulatorWindow.Show();
@@ -70,6 +75,37 @@ namespace CN.Simulator.ViewModels
                 }
             }
         }
+
+        private void CheckAndSendExceptions()
+        {
+            //checks if there are saved exceptions on the exceptions log file, and try to send them to the server
+            List<Error> errors = new List<Error>();
+            if (fileManager.FileExists(MainConfigs.ErrorsFile))
+            {
+                foreach (var item in fileManager.ReadFromFile(MainConfigs.ErrorsFile))
+                {
+                    Error error = JsonConvert.DeserializeObject<Error>(item);
+                    errors.Add(error);
+                }
+                if (errors.Count > 0)
+                {
+                    Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.SendExceptionsListRoute, errors);
+                    if (returnTuple.Item2 == HttpStatusCode.OK)
+                    {
+                        fileManager.ClearFile(MainConfigs.ErrorsFile);
+                        logger.Print("Your last errors has been sent to the server, thanks for your support.");
+                    }
+                }
+            }
+        }
+
+        private void UpdateSessionOnUserLogin(User loggedIn)
+        {
+            //updates the app on a loggedin user for exceptions handling
+
+            SimulatorContainer.container.GetInstance<ISessionData>().updateLoggedInID(loggedIn.ID);
+        }
+
         public bool ValidateFields()
         {
             //validates the fields

@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CN.CRM.Containers
 {
@@ -27,6 +28,7 @@ namespace CN.CRM.Containers
             {
                 container = new Container();
                 container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
+             
 
                 //ViewModels
                 container.Register<ILoginViewModel, LoginViewModel>();
@@ -40,6 +42,8 @@ namespace CN.CRM.Containers
                 container.Register<ILogger, MessageBoxPopper>(Lifestyle.Singleton);
                 container.Register<IHttpClient, HttpClientSender>(Lifestyle.Singleton);
                 container.Register<IInputsValidator, InputsValidator>(Lifestyle.Singleton);
+                container.Register<ISessionData, SessionData>(Lifestyle.Singleton);
+                container.Register<IFileManager, FileManager>(Lifestyle.Singleton);
 
 
                 container.Verify();

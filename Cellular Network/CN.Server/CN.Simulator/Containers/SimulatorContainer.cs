@@ -32,7 +32,9 @@ namespace CN.Simulator.Containers
                 container.Register<ILogger, MessageBoxPopper>(Lifestyle.Singleton);
                 container.Register<IHttpClient, HttpClientSender>(Lifestyle.Singleton);
                 container.Register<IInputsValidator, InputsValidator>(Lifestyle.Singleton);
-           
+                container.Register<ISessionData, SessionData>(Lifestyle.Singleton);
+                container.Register<IFileManager, FileManager>(Lifestyle.Singleton);
+
             }
         }
     }

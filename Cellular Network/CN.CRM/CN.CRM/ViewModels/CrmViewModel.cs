@@ -145,14 +145,17 @@ namespace CN.CRM.ViewModels
         private void OpenLinesWindow()
         {
             //opens a lines window for editing and deleting for the selected client
-            AddEditLinesWindow addEditLineWindow = new AddEditLinesWindow(selectedClient, false);
-            if (!addEditLineWindow.viewModel.HasNoLines(selectedClient))
+            if (!HasNoLines(selectedClient))
             {
+                AddEditLinesWindow addEditLineWindow = new AddEditLinesWindow(selectedClient, false);
                 addEditLineWindow.Show();
             }
             else
             {
                 logger.Print("Client has no lines, being redirected to new line window. ");
+                AddEditLinesWindow addEditLineWindow = new AddEditLinesWindow(selectedClient, true, loggedInUser);
+                addEditLineWindow.Show();
+
             }
         }
 
@@ -204,8 +207,30 @@ namespace CN.CRM.ViewModels
                 }
             }
 
-
-
+        }
+        public bool HasNoLines(Client selectedClient)
+        {
+            //checks if the client has no lines
+            Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.GetClientLinesStrRoute, selectedClient.ID);
+            if (returnTuple.Item2 == HttpStatusCode.OK)
+            {
+                JArray jarr = new JArray();
+                jarr = (JArray)returnTuple.Item1;
+                List<string> clientLines = jarr.ToObject<List<string>>();
+                if (clientLines.Count == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                logger.Print(returnTuple.Item2.ToString());
+                return false;
+            }
         }
     }
 }

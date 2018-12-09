@@ -22,5 +22,7 @@ namespace CN.Common.Contracts.IManagers
         List<Client> GetMostValueClients();
         List<Client> GetMostCallingToCenter();
         List<User> GetBestSellers();
+        RequestStatusEnum SendException(Error error);
+        RequestStatusEnum SendExceptionsList(List<Error> errors);
     }
 }

@@ -4,6 +4,7 @@ using CN.Common.Contracts.IServices;
 using CN.Common.Contracts.IViewModels;
 using CN.Common.Infrastructures;
 using CN.Common.Models;
+using CN.ManagersApp.Windows;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -13,12 +14,14 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace CN.ManagersApp.ViewModels
 {
     public class ManagersViewModel : IManagersViewModel, INotifyPropertyChanged
     {
+        public string MyDetails { get; set; }
         private User _loggedInUser;
         public User LoggedInUser
         {
@@ -64,12 +67,13 @@ namespace CN.ManagersApp.ViewModels
 
         IHttpClient httpClient { get; set; }
         ILogger logger { get; set; }
-        public  ICommand mostValcommand { get; set; }
-        public  ICommand mostCalledcommand { get; set; }
-        public  ICommand bestSellerscommand { get; set; }
+        public ICommand mostValcommand { get; set; }
+        public ICommand mostCalledcommand { get; set; }
+        public ICommand bestSellerscommand { get; set; }
+        public ICommand logoutcommand { get; set; }
 
 
-        public ManagersViewModel(IHttpClient httpClient,ILogger logger)
+        public ManagersViewModel(IHttpClient httpClient, ILogger logger)
         {
             this.httpClient = httpClient;
             this.logger = logger;
@@ -84,6 +88,15 @@ namespace CN.ManagersApp.ViewModels
             mostValcommand = new ActionCommand(LoadValueClientsAction);
             mostCalledcommand = new ActionCommand(LoadMostCalledAction);
             bestSellerscommand = new ActionCommand(LoadBestSellersAction);
+            logoutcommand = new ActionCommand(Logout);
+        }
+
+        private void Logout()
+        {
+            //logs out of the system
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+            CloseThisWindow();
         }
 
         private void LoadBestSellersAction()
@@ -208,6 +221,18 @@ namespace CN.ManagersApp.ViewModels
         {
             //gets the user from the window
             LoggedInUser = user;
+            MyDetails = $"Hello, {user.Username}";
+        }
+        private void CloseThisWindow()
+        {
+            //closes this window
+            for (int i = 0; i < Application.Current.Windows.Count; i++)
+            {
+                if (Application.Current.Windows[i].GetType() == typeof(ManagersWindow))
+                {
+                    Application.Current.Windows[i].Close();
+                }
+            }
         }
 
     }

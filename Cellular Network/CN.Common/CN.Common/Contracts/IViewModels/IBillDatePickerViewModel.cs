@@ -11,8 +11,6 @@ namespace CN.Common.Contracts.IViewModels
 {
     public interface IBillDatePickerViewModel
     {
-        void OnCbObjectCheckBoxChecked(object sender, EventArgs e);
-        void OnCbObjectCheckBoxUnChecked(object sender, EventArgs e);
         void getClientFromWindow(Client client);
     }
 }

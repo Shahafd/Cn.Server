@@ -1,6 +1,7 @@
 ﻿using CN.Common.Configs;
 
 using CN.Common.Models;
+using CN.Common.Models.TempModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -28,6 +29,7 @@ namespace CN.DAL.Databases
         public virtual DbSet<SMS> SMS { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Error> Errors { get; set; }
 
     }
 }

@@ -24,5 +24,7 @@ namespace CN.Common.Contracts.IManagers
         LineDetails GetLineDetails(string lineNumber);
         ClientBill GetBillForSpecificLines(string clientId, YearAndMonth Date, List<string> lines);
         double GetClientValue(Client client);
+        bool LineExistedAtDate(string lineNumber, YearAndMonth date);
+        double GetSumOfLast3Months(Client client);
     }
 }

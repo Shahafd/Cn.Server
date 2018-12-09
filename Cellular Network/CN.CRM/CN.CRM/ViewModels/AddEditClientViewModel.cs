@@ -22,13 +22,51 @@ namespace CN.CRM.ViewModels
 {
     public class AddEditClientViewModel : IAddEditClientViewModel, INotifyPropertyChanged
     {
-        public string ID { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Address { get; set; }
-        public ClientTypeEnum ClientType { get; set; }
-        public DateTime BirthDate { get; set; }
-        public string ContactNumber { get; set; }
+        private string _ID;
+        public string ID
+        {
+            get { return _ID; }
+            set { _ID = value; Notify(nameof(ID)); }
+        }
+
+        private string _FirstName;
+        public string FirstName
+        {
+            get { return _FirstName; }
+            set { _FirstName = value; Notify(nameof(FirstName)); }
+        }
+        private string _LastName;
+        public string LastName
+        {
+            get { return _LastName; }
+            set { _LastName = value; Notify(nameof(LastName)); }
+        }
+        private string _Address;
+        public string Address
+        {
+            get { return _Address; }
+            set { _Address = value; Notify(nameof(Address)); }
+        }
+        private ClientTypeEnum _ClientType;
+
+        public ClientTypeEnum ClientType
+        {
+            get { return _ClientType; }
+            set { _ClientType = value; Notify(nameof(ClientType)); }
+        }
+        private DateTime _BirthDate;
+
+        public DateTime BirthDate
+        {
+            get { return _BirthDate; }
+            set { _BirthDate = value; Notify(nameof(BirthDate)); }
+        }
+        private string _ContactsNumber;
+        public string ContactsNumber
+        {
+            get { return _ContactsNumber; }
+            set { _ContactsNumber = value; Notify(nameof(ContactsNumber)); }
+        }
         private bool _ExisitngClient;
 
         public bool ExisitngClient
@@ -36,10 +74,10 @@ namespace CN.CRM.ViewModels
             get { return _ExisitngClient; }
             set { _ExisitngClient = value; Notify(nameof(ExisitngClient)); }
         }
-
-
+        
         public ICommand submitCommand { get; set; }
         public ICommand deleteCommand { get; set; }
+        public ICommand clearCommand { get; set; }
         public IInputsValidator inputsValidator { get; set; }
         public IHttpClient httpClient { get; set; }
         public ILogger logger { get; set; }
@@ -60,6 +98,23 @@ namespace CN.CRM.ViewModels
             //inits the commands
             submitCommand = new ActionCommand(SendClient);
             deleteCommand = new ActionCommand(DeleteClient);
+            clearCommand = new ActionCommand(ClearFields);
+        }
+
+        private void ClearFields()
+        {
+            //clears the fields
+
+            FirstName = "";
+            LastName = "";
+            Address = "";
+            ClientType = ClientTypeEnum.Private;
+            BirthDate = DateTime.Now;
+            if (!ExisitngClient)
+            {
+                ID = "";
+                ContactsNumber = "";
+            }
         }
 
         private void DeleteClient()
@@ -88,7 +143,7 @@ namespace CN.CRM.ViewModels
             Address = client.Address;
             ClientType = client.ClientType;
             BirthDate = client.BirthDate;
-            ContactNumber = client.ContactNumber;
+            ContactsNumber = client.ContactNumber;
 
         }
         private void SendClient()
@@ -96,7 +151,7 @@ namespace CN.CRM.ViewModels
             //verify the fields, if all are valid sends the model to the server
             if (VerifyFields())
             {
-                Client client = new Client(ID, FirstName, LastName, ClientType, Address, ContactNumber, BirthDate);
+                Client client = new Client(ID, FirstName, LastName, ClientType, Address, ContactsNumber, BirthDate);
                 if (ExisitngClient)
                 {
                     TryUpdateExisitingClient(client);
@@ -187,7 +242,7 @@ namespace CN.CRM.ViewModels
             validations.Add(inputsValidator.ValidateStrInput("First Name", FirstName, InputsConfigs.MinGenInputLength, InputsConfigs.MaxGenInputLength));
             validations.Add(inputsValidator.ValidateStrInput("Last Name", LastName, InputsConfigs.MinGenInputLength, InputsConfigs.MaxGenInputLength));
             validations.Add(inputsValidator.ValidateStrInput("Address", Address, InputsConfigs.MinGenInputLength, InputsConfigs.MaxGenInputLength));
-            validations.Add(inputsValidator.ValidatePhoneInput(ContactNumber));
+            validations.Add(inputsValidator.ValidatePhoneInput(ContactsNumber));
             validations.Add(inputsValidator.ValidateDateInput("Birth Date", BirthDate));
 
             List<string> errors = new List<string>();

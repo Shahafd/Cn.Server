@@ -1,6 +1,8 @@
 ﻿using CN.Common.Configs;
 using CN.Common.Contracts;
 using CN.Common.Contracts.IServices;
+using CN.Common.Models.TempModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +17,13 @@ namespace CN.Common.Services
     public class HttpClientSender : IHttpClient
     {
         public ILogger logger { get; set; }
-        public HttpClientSender(ILogger logger)
+        public ISessionData sessionData { get; set; }
+        public IFileManager fileManager { get; set; }
+        public HttpClientSender(ILogger logger, ISessionData sessionData, IFileManager fileManager)
         {
             this.logger = logger;
+            this.sessionData = sessionData;
+            this.fileManager = fileManager;
         }
         public HttpClient client { get; set; }
 
@@ -34,10 +40,12 @@ namespace CN.Common.Services
                 }
                 catch (AggregateException e)
                 {
-                    logger.Print(e.Message);
-                    //Write to error table
-                    return new Tuple<object, HttpStatusCode>(null, HttpStatusCode.NotFound);
+                    Error error = new Error(e, sessionData.GetLoggedInID());
+                    string errorStr = JsonConvert.SerializeObject(error);
+                    fileManager.WriteToFile(MainConfigs.ErrorsFile, errorStr);
+                    return new Tuple<object, HttpStatusCode>(null, HttpStatusCode.ExpectationFailed);
                 }
+
             }
         }
 
@@ -52,11 +60,12 @@ namespace CN.Common.Services
                     object result = response.Content.ReadAsAsync(typeof(object)).Result;
                     return new Tuple<object, HttpStatusCode>(result, response.StatusCode);
                 }
-                catch (AggregateException e)
+                catch(AggregateException e)
                 {
-                    logger.Print(e.Message);
-                    //Write to error table
-                    return new Tuple<object, HttpStatusCode>(null, HttpStatusCode.NotFound);
+                    Error error = new Error(e, sessionData.GetLoggedInID());
+                    string errorStr = JsonConvert.SerializeObject(error);
+                    fileManager.WriteToFile(MainConfigs.ErrorsFile, errorStr);
+                    return new Tuple<object, HttpStatusCode>(null, HttpStatusCode.ExpectationFailed);
                 }
             }
         }

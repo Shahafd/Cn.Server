@@ -132,10 +132,13 @@
     <Compile Include="Contracts\IManagers\ILinesManager.cs" />
     <Compile Include="Contracts\IManagers\ISimulatorManager.cs" />
     <Compile Include="Contracts\IRepositories\INetworkRepository.cs" />
+    <Compile Include="Contracts\IServices\IDocGenerator.cs" />
+    <Compile Include="Contracts\IServices\IFileManager.cs" />
     <Compile Include="Contracts\IServices\IHttpClient.cs" />
     <Compile Include="Contracts\IServices\IInputsValidator.cs" />
     <Compile Include="Contracts\IServices\ILogger.cs" />
     <Compile Include="Contracts\IServices\ISerializer.cs" />
+    <Compile Include="Contracts\IServices\ISessionData.cs" />
     <Compile Include="Contracts\IViewModels\IAddEditClientViewModel.cs" />
     <Compile Include="Contracts\IViewModels\IAddEditLineViewModel.cs" />
     <Compile Include="Contracts\IViewModels\IBillDatePickerViewModel.cs" />
@@ -151,12 +154,14 @@
     <Compile Include="Enums\RequestStatusEnum.cs" />
     <Compile Include="Enums\UserTypeEnum.cs" />
     <Compile Include="Infrastructures\ActionCommand.cs" />
+    <Compile Include="Infrastructures\SelectableObject.cs" />
     <Compile Include="LoggersAndPoppers\DebugLogger.cs" />
     <Compile Include="LoggersAndPoppers\MessageBoxPopper.cs" />
     <Compile Include="Models\TempModels\BillRequestModel.cs" />
     <Compile Include="Models\TempModels\ClientBill.cs" />
     <Compile Include="Models\TempModels\ClientLogin.cs" />
     <Compile Include="Models\TempModels\ClientWebModel.cs" />
+    <Compile Include="Models\TempModels\Error.cs" />
     <Compile Include="Models\TempModels\LineDetails.cs" />
     <Compile Include="Models\TempModels\LinePackObject.cs" />
     <Compile Include="Models\TempModels\Receipt.cs" />
@@ -175,9 +180,11 @@
     <Compile Include="Models\SelectedNumbers.cs" />
     <Compile Include="Models\SMS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\FileManager.cs" />
     <Compile Include="Services\HttpClientSender.cs" />
     <Compile Include="Services\InputsValidator.cs" />
     <Compile Include="Services\JsonSerializer.cs" />
+    <Compile Include="Services\SessionData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

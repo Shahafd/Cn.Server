@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus, Version=4.5.2.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\..\CN.Server\packages\EPPlus.4.5.2.1\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="itextsharp, Version=5.5.13.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\..\CN.Server\packages\iTextSharp.5.5.13\lib\itextsharp.dll</HintPath>
     </Reference>
@@ -160,7 +163,9 @@
       <HintPath>..\packages\System.ComponentModel.Annotations.4.5.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Pipelines, Version=4.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.Pipelines.4.5.2\lib\netstandard2.0\System.IO.Pipelines.dll</HintPath>
     </Reference>
@@ -237,6 +242,8 @@
     <Compile Include="Convertors\BoolSwitchConvertor.cs" />
     <Compile Include="Convertors\SelectClientButtonConvertor.cs" />
     <Compile Include="Convertors\SelectLineButtonConvertor.cs" />
+    <Compile Include="Helpers\ExcelDocGenerator.cs" />
+    <Compile Include="Helpers\PdfDocGenerator.cs" />
     <Compile Include="Signalr\SignalrClient.cs" />
     <Compile Include="ViewModels\AddEditClientViewModel.cs" />
     <Compile Include="ViewModels\AddEditLineViewModel.cs" />

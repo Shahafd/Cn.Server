@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace CN.ServerAPI.Controllers
@@ -236,6 +237,34 @@ namespace CN.ServerAPI.Controllers
         {
             //returns the 10 employee who added the most lines
             return Ok(accountsManager.GetBestSellers());
+        }
+        [HttpPost]
+        [Route(ApiConfigs.SendExceptionRoute)]
+        public IHttpActionResult SendException([FromBody]Error error)
+        {
+            //sends the exception to save in the database
+            return Ok(accountsManager.SendException(error));
+        }
+        [HttpPost]
+        [Route(ApiConfigs.SendExceptionsListRoute)]
+        public IHttpActionResult SendExceptionsList([FromBody]List<Error> errors)
+        {
+            //sends the exception to save in the database
+            return Ok(accountsManager.SendExceptionsList(errors));
+        }
+        [HttpPost]
+        [Route(ApiConfigs.CheckIfLineExistedRoute)]
+        public IHttpActionResult CheckIfLinesExisted([FromBody]BillRequestModel billRequestModel)
+        {
+            //checks if 1 or more of this line didnt existed at that date
+            for (int i = 0; i < billRequestModel.Lines.Count; i++)
+            {
+                if (!linesManager.LineExistedAtDate(billRequestModel.Lines[i], billRequestModel.Date))
+                {
+                    return Ok(false);
+                }
+            }
+            return Ok(true);
         }
     }
 }

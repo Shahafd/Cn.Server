@@ -24,13 +24,13 @@ namespace CN.CRM.Windows
     {
         public IBillViewModel viewModel { get; set; }
 
-        public BillWindow(ClientBill clientBill)
+        public BillWindow(ClientBill clientBill,YearAndMonth date)
         {
             InitializeComponent();
             viewModel = CrmContianer.container.GetInstance<IBillViewModel>();
             DataContext = viewModel;
             viewModel.GetClientBill(clientBill);
             viewModel.GetGridFromWindow(DynamicGrid);
-        }
+              }
     }
 }

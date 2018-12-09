@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CN.ManagersApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="350" ResizeMode="NoResize">
+        Title="MainWindow" Height="450" Width="300" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1.2*"></RowDefinition>
@@ -16,7 +16,7 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Margin="0,10" TextAlignment="Center" Text="Welcome To Managers Panel" FontSize="24" FontWeight="Bold"></TextBlock>
+        <TextBlock Grid.Row="0" Margin="0,10" TextAlignment="Center" Text="Welcome To Managers Panel" FontSize="21" FontWeight="Bold"></TextBlock>
         <TextBlock Grid.Row="1" Text="User Name:" FontSize="30"></TextBlock>
         <TextBox Grid.Row="2" Text="{Binding Username}" FontSize="30" Background="#FFEAFFF2" ></TextBox>
         <TextBlock Grid.Row="3" Text="Password:" FontSize="30"></TextBlock>

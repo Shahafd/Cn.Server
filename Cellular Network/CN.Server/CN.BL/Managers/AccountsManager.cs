@@ -156,5 +156,17 @@ namespace CN.BL.Managers
             }
             return users;
         }
+
+        public RequestStatusEnum SendException(Error error)
+        {
+            //saves the exception to the database
+            return networkRepository.SaveException(error);
+        }
+
+        public RequestStatusEnum SendExceptionsList(List<Error> errors)
+        {
+            //saves the exceptions to the database
+            return networkRepository.SaveExceptionsList(errors);
+        }
     }
 }

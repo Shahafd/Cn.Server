@@ -1,11 +1,15 @@
-﻿using CN.Common.Contracts;
+﻿using CN.Common.Configs;
+using CN.Common.Contracts;
 using CN.Common.Contracts.IServices;
 using CN.Common.Contracts.IViewModels;
 using CN.Common.Infrastructures;
 using CN.Common.Models;
 using CN.Common.Models.TempModels;
+using CN.CRM.Helpers;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,126 +26,78 @@ namespace CN.CRM.ViewModels
     class BillViewModel : IBillViewModel
     {
         ILogger logger { get; set; }
-        //IInputsValidator inputsValidator { get; set; }
         IHttpClient httpClient { get; set; }
         public string ClientNameStr { get; set; }
         public string MonthStr { get; set; }
         public string PriceStr { get; set; }
         public ClientBill clientBill { get; set; }
         public ICommand ExportCommand { get; set; }
+        public IDocGenerator docGenerator { get; set; }
 
         Grid DynamicGrid { get; set; }
-     
+
         public BillViewModel(ILogger logger, IHttpClient httpClient)
         {
             this.logger = logger;
             this.httpClient = httpClient;
-            ExportCommand = new ActionCommand(exportToPdf);
+            ExportCommand = new ActionCommand(export);
+        }
 
-
+        private void export()
+        {
+            exportToPdf();
+            exportToExel();
         }
 
         private void exportToPdf()
         {
-            string fileName = "bill-" + clientBill.ClientName + clientBill.yearAndMonth.Month + "-" + clientBill.yearAndMonth.Year + ".pdf";
-          string filePath=  Path.Combine(Directory.GetCurrentDirectory(), fileName);
-           // string filePath = @"C:\Users\DELL\pdfsBill\" + fileName;
-            Document doc = new Document(PageSize.A4);
-            var output = new FileStream(filePath, FileMode.Create);
-            var writer = PdfWriter.GetInstance(doc, output);
-
-            doc.Open();
-            PdfPTable table1 = createBillConstTable(clientBill);
-            doc.Add(table1);
-            for (int i = 0; i < clientBill.Recepits.Count; i++)
+            string fileName = clientBill.ClientName + clientBill.yearAndMonth.Month + "-" + clientBill.yearAndMonth.Year + "-" + clientBill.Recepits.Count + ".pdf";
+            string folder = (clientBill.ClientName);
+            checkOrCreate(folder, "pdf");
+            
+            if (!System.IO.Directory.Exists(MainConfigs.BaseSaveAdrressForPdf + folder + @"\" + fileName))
             {
-                PdfPTable table2 = createLineTable(clientBill.Recepits[i]);
-                doc.Add(table2);
+                docGenerator = new PdfDocGenerator();
+                Document doc = (Document)docGenerator.Generate(clientBill);
+               
+                logger.Print("Pdf exported succesfully");
             }
-            doc.Close();
-
+            else
+            {
+                logger.Print("File alraedy exist! ");
+            }
         }
 
-        private PdfPTable createBillConstTable(ClientBill clientBill)
+        public void exportToExel()
         {
-            /////////////const data/////////////////////
-            PdfPTable table = new PdfPTable(2);
-            //table1.DefaultCell.Border = 0;
-            table.WidthPercentage = 100;
+            string folder = (clientBill.ClientName);
+            checkOrCreate(folder, "excel");
+            string fileName = clientBill.ClientName + clientBill.yearAndMonth.Month + "-" + clientBill.yearAndMonth.Year + "-" + clientBill.Recepits.Count + ".xlsx";
 
-            PdfPCell cell11 = new PdfPCell();
-            cell11.Colspan = 1;
-            cell11.AddElement(new Paragraph("Client Name: " + clientBill.ClientName, new Font()));
-            cell11.AddElement(new Paragraph("Date: " + clientBill.yearAndMonth.Month + "/" + clientBill.yearAndMonth.Year, new Font()));
-            cell11.VerticalAlignment = Element.ALIGN_LEFT;
-
-            PdfPCell cell12 = new PdfPCell();
-            cell12.AddElement(new Paragraph("Total Price: " + clientBill.TotalBill, new Font()));
-            cell12.VerticalAlignment = Element.ALIGN_CENTER;
-
-            table.AddCell(cell11);
-            table.AddCell(cell12);
-            return table;
+            if (!System.IO.Directory.Exists(MainConfigs.BaseSaveAdrressForExcel + folder + @"\" + fileName))
+            {
+                FileInfo excelFile = new FileInfo(MainConfigs.BaseSaveAdrressForExcel + folder + @"\" + fileName);
+                docGenerator = new ExcelDocGenerator();
+                ExcelPackage excel = (ExcelPackage)docGenerator.Generate(clientBill);
+                excel.SaveAs(excelFile);
+                logger.Print("Excel exported succesfully");
+            }
+            else
+            {
+                logger.Print("File alraedy exist! ");
+            }
         }
 
-        private PdfPTable createLineTable(Receipt receipt)
+        private void checkOrCreate(string folder, string type)
         {
-            ///////////////////dynamic data//////////////////////////
-            PdfPTable table = new PdfPTable(3);
-            table.WidthPercentage = 100;
-
-            PdfPCell cell = new PdfPCell(new Phrase("Line Number:" + receipt.LineNumber));
-            cell.Colspan = 3;
-            cell.HorizontalAlignment = Element.ALIGN_CENTER;
-            table.AddCell(cell);
-
-            table.AddCell("price: " + receipt.PackagePrice + "$");
-            cell = new PdfPCell(new Phrase("Package info:"));
-            cell.Colspan = 2;
-            table.AddCell(cell);
-
-            cell = new PdfPCell(new Phrase("Package"));
-            cell.Colspan = 3;
-            cell.HorizontalAlignment = Element.ALIGN_LEFT;
-            table.AddCell(cell);
-
-            table.AddCell("Minute: " + receipt.UsedMinutes);  // "Row 4, Col 1"
-            table.AddCell("Minute left: " + receipt.MinutesLeftInPackage);  // "Row 4, Col 2"
-            table.AddCell("Package used: " + receipt.MinutesUsagePrecentage + "%");  // "Row 4, Col 3"
-
-            table.AddCell("SMS: " + receipt.UsedSMS);  // "Row 5, Col 1"
-            table.AddCell("SMS left: " + receipt.SMSLeftInPackage);  // "Row 5, Col 2"
-            table.AddCell("Package used: " + receipt.SMSUsagePrecentage + "%");  // "Row 5, Col 3"
-
-            cell = new PdfPCell(new Phrase("Package price: " + receipt.PackagePrice + "$"));
-            cell.Colspan = 3;
-            cell.HorizontalAlignment = Element.ALIGN_CENTER;
-            table.AddCell(cell);
-
-            cell = new PdfPCell(new Phrase("Out of Package"));
-            cell.Colspan = 3;
-            cell.HorizontalAlignment = Element.ALIGN_LEFT;
-            table.AddCell(cell);
-
-            table.AddCell("Minute beyond package: " + receipt.MinutesBeyondPackage);  // "Row 8, Col 1"
-            table.AddCell("price per minunte: " + receipt.PricePerMinute + "$");  // "Row 8, Col 2"
-            table.AddCell("Total: " + receipt.TotalPaidMinutes);  // "Row 8, Col 3"
-
-            table.AddCell("SMS beyond package: " + receipt.SMSBeyondPackage);  // "Row 9, Col 1"
-            table.AddCell("price per SMS: " + receipt.PricePerSMS + "$");  // "Row 9, Col 2"
-            table.AddCell("Total: " + receipt.TotalPaidSMS);  // "Row 9, Col 3"
-
-            cell = new PdfPCell(new Phrase("Total:" + receipt.TotalPayment));
-            cell.Colspan = 3;
-            cell.HorizontalAlignment = Element.ALIGN_CENTER;
-            table.AddCell(cell);
-
-            cell = new PdfPCell(new Phrase("  "));
-            cell.Colspan = 3;
-            cell.HorizontalAlignment = Element.ALIGN_CENTER;
-            table.AddCell(cell);
-
-            return table;
+            if (type.Equals("pdf"))
+            {
+                System.IO.Directory.CreateDirectory(MainConfigs.BaseSaveAdrressForPdf + folder);
+            }
+            else
+            {
+                System.IO.Directory.CreateDirectory(MainConfigs.BaseSaveAdrressForExcel + folder);
+            }
         }
 
         public void GetGridFromWindow(Grid grid)
@@ -150,18 +106,22 @@ namespace CN.CRM.ViewModels
             DynamicGrid.Width = 800;
             DynamicGrid.HorizontalAlignment = HorizontalAlignment.Left;
             DynamicGrid.VerticalAlignment = VerticalAlignment.Top;
-            DynamicGrid.Background = new SolidColorBrush(Colors.Gray);
+            DynamicGrid.Background = new SolidColorBrush(Colors.LightGray);
             //DynamicGrid.ShowGridLines = true;
             for (int i = 0; i < clientBill.Recepits.Count; i++)
             {
 
                 RowDefinition gridRowD = new RowDefinition();
                 DynamicGrid.RowDefinitions.Add(gridRowD);
+                RowDefinition gridRowD1 = new RowDefinition();
+                DynamicGrid.RowDefinitions.Add(gridRowD1);
                 Grid LineGrid = CreateGridForLine(clientBill.Recepits[i]);
+                if (i % 2 == 0)
+                    LineGrid.Background = new SolidColorBrush(Colors.LightSlateGray);
+
                 DynamicGrid.Children.Add(LineGrid);
                 Grid.SetRow(LineGrid, i);
             }
-
 
         }
 
@@ -204,10 +164,12 @@ namespace CN.CRM.ViewModels
 
             //Line number: "21312312312"
             TextBlock LineNumTxt = new TextBlock();
-            LineNumTxt.Text = "Line Number:" + receipt.LineNumber;
-            LineNumTxt.FontSize = 16;
+            LineNumTxt.Text = "Line Number: " + receipt.LineNumber;
+            LineNumTxt.FontSize = 20;
             LineNumTxt.HorizontalAlignment = HorizontalAlignment.Center;
             LineNumTxt.VerticalAlignment = VerticalAlignment.Center;
+            LineNumTxt.FontWeight = FontWeights.ExtraBold;
+            LineNumTxt.TextDecorations.Add(TextDecorations.Underline);
             GridL.Children.Add(LineNumTxt);
             Grid.SetRow(LineNumTxt, 0);
             Grid.SetColumn(LineNumTxt, 1);
@@ -217,7 +179,8 @@ namespace CN.CRM.ViewModels
             TextBlock PackageInfoTxt = new TextBlock();
             PackageInfoTxt.Text = "Package Info: ";
             PackageInfoTxt.FontSize = 14;
-            PackageInfoTxt.HorizontalAlignment = HorizontalAlignment.Center;
+            PackageInfoTxt.FontWeight = FontWeights.Bold;
+            PackageInfoTxt.HorizontalAlignment = HorizontalAlignment.Left;
             PackageInfoTxt.VerticalAlignment = VerticalAlignment.Center;
             GridL.Children.Add(PackageInfoTxt);
             Grid.SetRow(PackageInfoTxt, 1);
@@ -226,8 +189,9 @@ namespace CN.CRM.ViewModels
 
             //packageName
             TextBlock PackageNameTxt = new TextBlock();
-            PackageNameTxt.Text = "Package : " + " to add pack name";
+            PackageNameTxt.Text = "Package ";
             PackageNameTxt.FontSize = 14;
+            PackageNameTxt.TextDecorations.Add(TextDecorations.Underline);
             PackageNameTxt.HorizontalAlignment = HorizontalAlignment.Left;
             PackageNameTxt.VerticalAlignment = VerticalAlignment.Center;
             GridL.Children.Add(PackageNameTxt);
@@ -256,7 +220,7 @@ namespace CN.CRM.ViewModels
 
             //package %
             TextBlock minutePrecentTxt = new TextBlock();
-            minutePrecentTxt.Text = "Minutes left in package: " + receipt.MinutesLeftInPackage;
+            minutePrecentTxt.Text = "Minutes Usage Precentage: " + receipt.MinutesUsagePrecentage + "%";
             minutePrecentTxt.FontSize = 12;
             minutePrecentTxt.HorizontalAlignment = HorizontalAlignment.Left;
             minutePrecentTxt.VerticalAlignment = VerticalAlignment.Center;
@@ -266,7 +230,7 @@ namespace CN.CRM.ViewModels
 
             //SMS
             TextBlock SmsTxt = new TextBlock();
-            SmsTxt.Text = "SMS Used: " + receipt.UsedSMS;
+            SmsTxt.Text = "SMS Usage Precentage: " + receipt.SMSUsagePrecentage + "%";
             SmsTxt.FontSize = 12;
             SmsTxt.HorizontalAlignment = HorizontalAlignment.Left;
             SmsTxt.VerticalAlignment = VerticalAlignment.Center;
@@ -306,8 +270,9 @@ namespace CN.CRM.ViewModels
 
             //out of package
             TextBlock OutOfPackTxt = new TextBlock();
-            OutOfPackTxt.Text = "Out of Package";
-            OutOfPackTxt.FontSize = 16;
+            OutOfPackTxt.Text = "Out of Package:";
+            OutOfPackTxt.FontSize = 14;
+            OutOfPackTxt.TextDecorations.Add(TextDecorations.Underline);
             OutOfPackTxt.HorizontalAlignment = HorizontalAlignment.Left;
             OutOfPackTxt.VerticalAlignment = VerticalAlignment.Center;
             GridL.Children.Add(OutOfPackTxt);
@@ -392,7 +357,7 @@ namespace CN.CRM.ViewModels
         {
             this.clientBill = clientBill;
             this.ClientNameStr = clientBill.ClientName;
-            this.MonthStr = "TODO MONTH";
+            this.MonthStr = clientBill.yearAndMonth.Month + "/" + clientBill.yearAndMonth.Year;
             this.PriceStr = clientBill.TotalBill.ToString();
         }
     }

@@ -8,11 +8,12 @@
         Title="ManagersWindow" Height="600" Width="800" ResizeMode="NoResize">
     <Window.Resources>
         <convs:BoolVisablitySwitchConvertor x:Key="boolVisablitySwitchConvertor" />
+        <convs:BoolSwitchConvertor x:Key="boolSwitchConvertor"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.25*"></RowDefinition>
-            <RowDefinition Height="0.15*" ></RowDefinition>
+            <RowDefinition Height="0.25*" ></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         
@@ -25,7 +26,7 @@
         <TextBlock  Grid.Row="0" Margin="0,-15,0,0" Grid.ColumnSpan="3" Text="Managers Panel Window" FontSize="32" TextAlignment="Center" VerticalAlignment="Center"></TextBlock>
 
 
-        <ListView Grid.Row="2"  Grid.ColumnSpan="3"  Visibility="{Binding MostValSwitch, Converter= {StaticResource boolVisablitySwitchConvertor},Mode=TwoWay}" ItemsSource="{Binding ValueClients}"  >
+        <ListView Grid.Row="2"  Grid.ColumnSpan="3" Visibility="{Binding MostValSwitch, Converter= {StaticResource boolVisablitySwitchConvertor},Mode=TwoWay}" ItemsSource="{Binding ValueClients}"  >
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="ID" Width="80" DisplayMemberBinding="{Binding ID}" />
@@ -34,7 +35,7 @@
                     <GridViewColumn Header="Client Type" Width="120" DisplayMemberBinding="{Binding ClientType}" />
                     <GridViewColumn Header="Address" Width="120" DisplayMemberBinding="{Binding Address}" />
                     <GridViewColumn Header="Contact Number" Width="80" DisplayMemberBinding="{Binding ContactNumber}" />
-                    <GridViewColumn Header="Client Value" Width="80" DisplayMemberBinding="{Binding Value}" />
+                    <GridViewColumn Header="Client Value" Width="120" DisplayMemberBinding="{Binding Value}" />
                 </GridView>
             </ListView.View>
         </ListView>
@@ -47,7 +48,7 @@
                     <GridViewColumn Header="Client Type" Width="120" DisplayMemberBinding="{Binding ClientType}" />
                     <GridViewColumn Header="Address" Width="120" DisplayMemberBinding="{Binding Address}" />
                     <GridViewColumn Header="Contact Number" Width="80" DisplayMemberBinding="{Binding ContactNumber}" />
-                    <GridViewColumn Header="Called To Center" Width="80" DisplayMemberBinding="{Binding CallsToCenter}" />
+                    <GridViewColumn Header="Called To Center" Width="140" DisplayMemberBinding="{Binding CallsToCenter}" />
 
                 </GridView>
             </ListView.View>
@@ -59,19 +60,20 @@
                     <GridViewColumn Header="ID" Width="80" DisplayMemberBinding="{Binding ID}" />
                     <GridViewColumn Header="User Name" Width="120" DisplayMemberBinding="{Binding Username}" />
                     <GridViewColumn Header="Type" Width="120" DisplayMemberBinding="{Binding Type}" />
-                    <GridViewColumn Header="Number Of Sales" Width="120" DisplayMemberBinding="{Binding NumOfSales}" />
+                    <GridViewColumn Header="Number Of Sales" Width="150" DisplayMemberBinding="{Binding NumOfSales}" />
 
                 </GridView>
             </ListView.View>
         </ListView>
 
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Margin="20,0,0,0" Grid.ColumnSpan="2" FontSize="22" Text="{Binding MyDetails}" FontWeight="Bold"></TextBlock>
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="20,20,0,0" Grid.ColumnSpan="2" FontSize="22" Text="{Binding MyDetails}" FontWeight="Bold"></TextBlock>
 
 
-        <Button  Grid.Row="1" Grid.Column="0" Content="Most Valueable Clients" FontSize="24"  Command="{Binding mostValcommand}"></Button>
-        <Button  Grid.Row="1" Grid.Column="1" Content="Most Called Clients" FontSize="24"  Command="{Binding mostCalledcommand}"></Button>
-        <Button  Grid.Row="1" Grid.Column="2" IsEnabled="" Content="Best Sellers Employees" FontSize="24"  Command="{Binding bestSellerscommand}"></Button>
+        <Button  Background="#FF7438FF"  Grid.Row="1" Grid.Column="0" IsEnabled="{Binding MostValSwitch,Converter={StaticResource boolSwitchConvertor },Mode=TwoWay}" Content="Most Valueable Clients" FontSize="24" VerticalAlignment="Top" Height="60"  Command="{Binding mostValcommand}" ></Button>
+        <Button Background="#FF3A8DB7" Grid.Row="1" VerticalAlignment="Top" Height="60" Grid.Column="1" Content="Most Called Clients" FontSize="24"  Command="{Binding mostCalledcommand}" IsEnabled="{Binding MostCalledSwitch,Converter={StaticResource boolSwitchConvertor },Mode=TwoWay}"></Button>
+        <Button  Background="#FF7438FF" Grid.Row="1" VerticalAlignment="Top" Height="60" Grid.Column="2"  Content="Best Sellers Employees" FontSize="24"  Command="{Binding bestSellerscommand}" IsEnabled="{Binding BestSellersSwitch,Converter={StaticResource boolSwitchConvertor },Mode=TwoWay}"> </Button>
+        <Button x:Name="logoutBtn" Grid.Row="0" VerticalAlignment="Top" Grid.Column="3" HorizontalAlignment="Right" Content="Logout" FontSize="24" Height="50"  Command="{Binding logoutcommand}" Background="#FFFFA3A3"></Button>
 
 
     </Grid>

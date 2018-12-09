@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CN.Simulator.Windows"
         mc:Ignorable="d"
-        Title="SimulatorWindow" Height="600" Width="800">
+        Title="SimulatorWindow" Height="600" Width="800" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1.2*"></RowDefinition>
@@ -16,18 +16,19 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
+           
 
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.6*"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="0.35*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBlock  TextAlignment="Center" Text="Simulator Window" Grid.ColumnSpan="2" FontSize="32" Grid.Row="0"/>
+        <TextBlock  TextAlignment="Center" Text="Simulator Window" Grid.ColumnSpan="3" FontSize="32" Grid.Row="0"/>
 
         <TextBlock Grid.Row="1" Text="Client ID:" FontSize="27" Grid.Column="0"></TextBlock>
         <TextBox Text="{Binding ClientId}" Grid.Row="1"  Grid.Column="1" FontSize="27" IsEnabled="{Binding lockIdBox}" />
-        <Button Grid.Column="1" Margin="331.667,83,0.333,69" Grid.RowSpan="3" Content="Search" Command="{Binding searchUserCommand}" FontSize="27" IsEnabled="{Binding lockIdBox}"/>
+        <Button Grid.Column="1" HorizontalAlignment="Right" Height="50" Grid.Row="1" Content="Search" Command="{Binding searchUserCommand}" FontSize="27" IsEnabled="{Binding lockIdBox}" Background="#FF2E85E0"/>
 
         <TextBlock Grid.Row="2" Text="Client Line:" FontSize="27" Grid.Column="0"></TextBlock>
         <ComboBox x:Name="LinesCombo" FontSize="27"   ItemsSource="{Binding Lines}"  AllowDrop="True" Grid.Column="1" Grid.Row="2" SelectedItem="{Binding selectedLine}"  />
@@ -47,7 +48,8 @@
         <TextBlock Grid.Row="7" Text="Type:" FontSize="27" Grid.Column="0"></TextBlock>
         <ComboBox x:Name="typeCombo" FontSize="27"  ItemsSource="{Binding Types}"  AllowDrop="True" Grid.Column="1" Grid.Row="7" SelectedItem="{Binding SelectedType}"  />
 
-        <Button  Grid.Row="8" Content="Simulate" FontSize="27" Command="{Binding simulateCommand}" Grid.ColumnSpan="2"></Button>
+        <Button  Grid.Row="6" Height="100" Grid.Column="2" Grid.RowSpan="2" Content="Simulate" FontSize="27" Command="{Binding simulateCommand}" ></Button>
+        <Button  Grid.Row="4" Height="50" Grid.Column="2" Grid.RowSpan="2" Content="Clear" FontSize="27" Background="#FF53D15E" Command="{Binding clearCommand}" ></Button>
 
 
     </Grid>

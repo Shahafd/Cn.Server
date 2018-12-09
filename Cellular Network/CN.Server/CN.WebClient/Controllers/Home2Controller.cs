@@ -30,7 +30,7 @@ namespace CN.WebClient.Controllers
                 JObject jobj = new JObject();
                 jobj = (JObject)returnTuple.Item1;
 
-            return PartialView("LineDetailsView",jobj.ToObject<LineDetails>());
+                return PartialView("LineDetailsView", jobj.ToObject<LineDetails>());
             }
             else
             {
@@ -46,7 +46,7 @@ namespace CN.WebClient.Controllers
                 JArray jarr = new JArray();
                 jarr = (JArray)returnTuple.Item1;
                 ClientWebModel clientWebModel = new ClientWebModel($"{client.LastName} {client.FirstName}", jarr.ToObject<List<string>>());
-            return View(clientWebModel);
+                return View(clientWebModel);
             }
             else
             {
@@ -92,7 +92,17 @@ namespace CN.WebClient.Controllers
                 {
                     JObject jobj = new JObject();
                     jobj = (JObject)returnTuple.Item1;
-                    return RedirectToAction("ClientView", jobj.ToObject<Client>());
+                    Client client = jobj.ToObject<Client>();
+                    WebClientContainer.container.GetInstance<ISessionData>().updateLoggedInID(Convert.ToInt32(client.ID));
+                    if (ClientHasLines(client))
+                    {
+                        return RedirectToAction("ClientView", client);
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "You dont own any lines yet";
+                        return View("Index");
+                    }
                 }
                 else
                 {
@@ -106,6 +116,23 @@ namespace CN.WebClient.Controllers
             }
 
         }
+
+        private bool ClientHasLines(Client client)
+        {
+            //checks if the client owns any lines
+            Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.GetClientLinesStrRoute, client.ID);
+            if (returnTuple.Item2 == HttpStatusCode.OK)
+            {
+                JArray jarr = new JArray();
+                jarr = (JArray)returnTuple.Item1;
+                return jarr.ToObject<List<string>>().Count != 0;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

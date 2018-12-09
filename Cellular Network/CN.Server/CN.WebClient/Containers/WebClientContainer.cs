@@ -24,6 +24,8 @@ namespace CN.WebClient.Containers
                 container.Register<IHttpClient, HttpClientSender>(Lifestyle.Singleton);
                 container.Register<IInputsValidator, InputsValidator>(Lifestyle.Singleton);
                 container.Register<ILogger, DebugLogger>(Lifestyle.Singleton);
+                container.Register<IFileManager, FileManager>(Lifestyle.Singleton);
+                container.Register<ISessionData, SessionData>(Lifestyle.Singleton);
                 container.Verify();
             }
         }

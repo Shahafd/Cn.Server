@@ -8,16 +8,19 @@
         Title="MainWindow" Height="450" Width="300" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.3*"></RowDefinition>
+            <RowDefinition Height="1.2*"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Margin="0,10" TextAlignment="Center" Text="Welcome To Simulator" FontSize="24"></TextBlock>
+        <TextBlock Grid.Row="0" Margin="0,10" TextAlignment="Center" Text="Welcome To Simulator" FontSize="24" FontWeight="Bold"></TextBlock>
         <TextBlock Grid.Row="1" Text="User Name:" FontSize="30"></TextBlock>
-        <TextBox Grid.Row="1" Text="{Binding Username}" Margin="0,40,0,0" FontSize="30" ></TextBox>
-        <TextBlock Grid.Row="1" Text="Password:" Margin="0,80,0,0" FontSize="30"></TextBlock>
-        <PasswordBox x:Name="PasswordTbx" Grid.Row="1" Password="123456" Margin="0,120,0,0"  FontSize="30"></PasswordBox>
-        <Button Grid.Row="1" Margin="0,110,0,0" Content="Sign In" FontSize="30" Height="75" Command="{Binding loginCommand}" CommandParameter="{Binding ElementName=PasswordTbx}" Background="#FF81FF81"></Button>
-
+        <TextBox Grid.Row="2" Text="{Binding Username}" FontSize="30" Background="#FFEAFFF2" ></TextBox>
+        <TextBlock Grid.Row="3" Text="Password:" FontSize="30"></TextBlock>
+        <PasswordBox x:Name="PasswordTbx" Grid.Row="4" Password="123456" FontSize="30" Background="#FFEAFFF2"></PasswordBox>
+        <Button Grid.Row="5"  Content="Sign In" FontSize="30" Height="75" Command="{Binding loginCommand}" CommandParameter="{Binding ElementName=PasswordTbx}" Background="#FF81FF81"></Button>
     </Grid>
 </Window>

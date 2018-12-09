@@ -99,6 +99,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Databases\CnContext.cs" />
+    <Compile Include="Databases\CnContextMock.cs" />
+    <Compile Include="Databases\CnContextMockSeedInitializer.cs" />
     <Compile Include="Databases\CnContextSeedInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\NetworkRepository.cs" />

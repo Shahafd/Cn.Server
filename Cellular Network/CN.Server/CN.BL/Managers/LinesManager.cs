@@ -114,13 +114,35 @@ namespace CN.BL.Managers
         {
             //gets a recepit for this month of the year
             Line line = networkRepository.GetLineById(lineNumber);
-            Package package = networkRepository.GetPackageByLineId(line.Number);
-            PackageDetails packDet = networkRepository.GetPackageDetailsByPackageId(package.ID);
-            SelectedNumbers selectedNums = networkRepository.GetSelectedNumbersById(packDet.SelectedNumbersID);
-            double MinutesToContacts = GetMinutesToContacts(lineNumber, Date);
-            double SMSToContacts = GetSMSToContacts(lineNumber, Date);
-            return new Receipt(line.Number, package, packDet, MinutesToContacts, SMSToContacts);
+            if (LineExistedAtDate(lineNumber, Date))
+            {
+                Package package = networkRepository.GetPackageByLineId(line.Number);
+                PackageDetails packDet = networkRepository.GetPackageDetailsByPackageId(package.ID);
+                SelectedNumbers selectedNums = networkRepository.GetSelectedNumbersById(packDet.SelectedNumbersID);
+                double MinutesToContacts = GetMinutesToContacts(lineNumber, Date);
+                double SMSToContacts = GetSMSToContacts(lineNumber, Date);
+                return new Receipt(line.Number, package, packDet, MinutesToContacts, SMSToContacts);
+            }
+            else
+            {
+                return EmptyRecepit(lineNumber);
+            }
         }
+
+        private Receipt EmptyRecepit(string lineNumber)
+        {
+            //returns an empty recepit
+            return new Receipt(lineNumber, new Package(), new PackageDetails(), 0, 0);
+        }
+
+        public bool LineExistedAtDate(string lineNumber, YearAndMonth date)
+        {
+            Line line = networkRepository.GetLineById(lineNumber);
+            DateTime dateToCheck = new DateTime(date.Year, date.Month, 28);
+            return line.DateAdded <= dateToCheck;
+
+        }
+
         public double GetPriceForPackageByLine(string lineNumber, Package package, YearAndMonth Date)
         {
             //gets the price for this line with this package
@@ -128,11 +150,31 @@ namespace CN.BL.Managers
             Package packageForLine = networkRepository.GetPackageByLineId(line.Number);
             PackageDetails packDetForLine = networkRepository.GetPackageDetailsByPackageId(package.ID);
             SelectedNumbers selectedNums = networkRepository.GetSelectedNumbersById(packDetForLine.SelectedNumbersID);
+            packDetForLine.UsedMinutes = GetMinutesThisMonth(lineNumber, Date);
+            packDetForLine.UsedSMS = GetSmsThisMonth(lineNumber, Date);
             double MinutesToContacts = GetMinutesToContacts(lineNumber, Date);
             double SMSToContacts = GetSMSToContacts(lineNumber, Date);
             Receipt recepitForPackage = new Receipt(line.Number, package, packDetForLine, MinutesToContacts, SMSToContacts);
             return recepitForPackage.TotalPayment;
         }
+
+        private double GetMinutesThisMonth(string lineNumber, YearAndMonth date)
+        {
+            //returns the minutes amount that this line called this month
+            double sumOfMinutes = 0;
+            List<Call> callsThisMonth = networkRepository.GetCallsThisMonth(lineNumber, date);
+            foreach (var item in callsThisMonth)
+            {
+                sumOfMinutes += item.Duration;
+            }
+            return sumOfMinutes;
+        }
+        private int GetSmsThisMonth(string lineNumber, YearAndMonth date)
+        {
+            //returns the sms amount that this line called this month
+            return networkRepository.GetSMSThisMonth(lineNumber, date).Count;
+        }
+
         private double GetSMSToContacts(string lineNumber, YearAndMonth date)
         {
             //returns the amount of mintues a client smsed his contacts
@@ -177,7 +219,7 @@ namespace CN.BL.Managers
             {
                 numOfLines = 4;
             }
-            double sumOfLast3Receppits= GetSumOfLast3Months(client)/1000;
+            double sumOfLast3Receppits = GetSumOfLast3Months(client) / 1000;
             if (sumOfLast3Receppits > 6)
             {
                 sumOfLast3Receppits = 6;
@@ -187,11 +229,19 @@ namespace CN.BL.Managers
             {
                 callsToCenterVal = -3;
             }
-           return numOfLines + sumOfLast3Receppits + callsToCenterVal;
-           
+            double clientval = numOfLines + sumOfLast3Receppits + callsToCenterVal;
+            if (clientval > 10)
+            {
+                clientval = 10;
+            }
+            else if (clientval < 0)
+            {
+                clientval = 0;
+            }
+            return clientval;
         }
 
-        private double GetSumOfLast3Months(Client client)
+        public double GetSumOfLast3Months(Client client)
         {
             //gets the sum the client paid for the last 3 month
             List<Receipt> allRecepits = new List<Receipt>();
@@ -204,7 +254,7 @@ namespace CN.BL.Managers
                     allRecepits.Add(GetRecipetByLineAndDate(item.Number, date));
                 }
             }
-            double sumOfRecepits=0;
+            double sumOfRecepits = 0;
             foreach (var item in allRecepits)
             {
                 sumOfRecepits += item.TotalPayment;

@@ -38,6 +38,7 @@ namespace CN.Common.Configs
         public const string SendLineStatusRoute = "Api/user/SendLineStatus";
         public const string GetLineDetailsRoute = "Api/user/GeLineDetails";
         public const string GetSpecficLinesBillRoute = "Api/user/GetSpecificLinesBill";
+        public const string CheckIfLineExistedRoute = "Api/user/checkiflinesexistedRoute";
 
 
 
@@ -46,6 +47,10 @@ namespace CN.Common.Configs
         public const string GetClientByIdRoute = "Api/simulator/getClientByID";
         public const string SimulateRoute = "Api/simulator/Simulate";
 
+        //EXCEPTIONS
+        public const string SendExceptionRoute = "Api/user/SendException";
+        public const string SendExceptionsListRoute = "Api/user/SendExceptionsList";
 
+      
     }
 }

@@ -41,5 +41,9 @@ namespace CN.Common.Contracts.IRepositories
         Client GetClientByNumber(string lineNumber);
         List<User> GetAllUsers();
         List<Line> GetAllLines();
+        RequestStatusEnum SaveException(Error error);
+        RequestStatusEnum SaveExceptionsList(List<Error> errors);
+        List<Call> GetCallsThisMonth(string lineNumber, YearAndMonth date);
+        List<SMS> GetSMSThisMonth(string lineNumber, YearAndMonth date);
     }
 }

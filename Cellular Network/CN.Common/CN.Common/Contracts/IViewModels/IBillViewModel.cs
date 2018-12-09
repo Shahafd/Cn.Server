@@ -12,5 +12,6 @@ namespace CN.Common.Contracts.IViewModels
     {
         void GetGridFromWindow(Grid grid);
         void GetClientBill(ClientBill clientBill);
+        
     }
 }

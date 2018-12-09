@@ -54,8 +54,9 @@
         <TextBlock Margin="15,0,0,0" Grid.Row="6" Grid.Column="0" FontSize="28" Text="Birth Date:" VerticalAlignment="Center" ></TextBlock>
         <DatePicker Grid.Row="6" Grid.Column="1" DisplayDate="{Binding BirthDate}" FontSize="28"  VerticalAlignment="Center" ></DatePicker>
         <TextBlock Margin="15,0,0,0" Grid.Row="7" Grid.Column="0" FontSize="28" Text="Contact Number:" VerticalAlignment="Center" ></TextBlock>
-        <TextBox Grid.Row="7" Grid.Column="1" FontSize="28" Text="{Binding ContactNumber}" VerticalAlignment="Center" ></TextBox>
+        <TextBox Grid.Row="7" Grid.Column="1" FontSize="28" Text="{Binding ContactsNumber}" VerticalAlignment="Center" ></TextBox>
         <Button x:Name="deleteBtn" Grid.Row="1" Grid.Column="2"  Content="Delete" FontSize="30" Height="50" Width="150" Command="{Binding deleteCommand}" BorderBrush="Black" Background="#FFFF9D9D" IsEnabled="{Binding ExisitngClient}"></Button>
+        <Button x:Name="clearBtn" Grid.Row="4" Grid.Column="2" Grid.RowSpan="2" Content="Clear" FontSize="30" Height="50" Width="150" Command="{Binding clearCommand}" Background="#FF53D15E"></Button>
         <Button x:Name="sendBtn" Grid.Row="6" Grid.Column="2" Grid.RowSpan="2" Content="Send" FontSize="30" Height="100" Width="150" Command="{Binding submitCommand}"></Button>
     </Grid>
 </Window>

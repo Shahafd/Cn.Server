@@ -77,12 +77,13 @@
         <TextBlock Margin="15,0,0,0" Grid.Row="12" Grid.Column="0" FontSize="20" Text="Package Total Price:" VerticalAlignment="Center" ></TextBlock>
         <TextBox Grid.Row="12" Grid.Column="1" FontSize="20" Text="{Binding TotalPrice}"  VerticalAlignment="Center" ></TextBox>
 
-        <Button x:Name="deleteBtn" Grid.Row="1" Grid.Column="2"  Content="Delete" FontSize="30" Height="50" Width="150" Command="{Binding deleteCommand}" BorderBrush="Black" Background="#FFFF9D9D" IsEnabled="{Binding ExistingLine}"></Button>
-        <Button x:Name="sendBtn" Grid.Row="10" Grid.Column="2" Grid.RowSpan="2" Content="Send" FontSize="30" Height="80" Width="150" Command="{Binding submitCommand}"></Button>
+        <Button x:Name="deleteBtn" Grid.Row="1" Grid.Column="2"  Grid.RowSpan="2" Content="Delete" FontSize="30" Height="50" Width="150" Command="{Binding deleteCommand}" BorderBrush="Black" Background="#FFFF9D9D" IsEnabled="{Binding ExistingLine}"></Button>
+        <Button x:Name="sendBtn" Grid.Row="11" Grid.Column="2" Grid.RowSpan="2" Content="Send" FontSize="30" Height="80" Width="150" Command="{Binding submitCommand}"></Button>
+        <Button x:Name="clearBtn" Grid.Row="9" Grid.Column="2" Grid.RowSpan="2" Content="Clear" FontSize="30" Background="#FF53D15E" Height="50" Width="150" Command="{Binding clearCommand}"></Button>
 
         <TextBlock Margin="15,0,0,0" Grid.Row="3" Grid.Column="2" FontSize="25" Text="Line Status:" VerticalAlignment="Center" ></TextBlock>
-        <ComboBox Grid.Row="4" Grid.Column="2" FontSize="28" IsEnabled="{Binding ExistingLine}" ItemsSource="{Binding Source={StaticResource dataFromEnum}}"
+        <ComboBox Grid.Row="4" Grid.Column="2" Grid.RowSpan="2" FontSize="28" IsEnabled="{Binding ExistingLine}" ItemsSource="{Binding Source={StaticResource dataFromEnum}}"
                   SelectedItem="{Binding Path=LineStatus}" />
-        <Button x:Name="sendStatusBtn" Grid.Row="5" Grid.Column="3"  Content="Update Status" FontSize="25"  Command="{Binding sendStatusCommand}"  IsEnabled="{Binding ExistingLine}"  ></Button>
+        <Button x:Name="sendStatusBtn" Grid.Row="6" Grid.Column="3" Grid.RowSpan="2"  Content="Update Status" FontSize="25" Height="40"  Command="{Binding sendStatusCommand}"  IsEnabled="{Binding ExistingLine}" Background="#FF3E42C5"  ></Button>
     </Grid>
 </Window>

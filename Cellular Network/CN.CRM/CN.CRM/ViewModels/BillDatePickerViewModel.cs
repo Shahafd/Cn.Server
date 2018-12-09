@@ -37,7 +37,7 @@ namespace CN.CRM.ViewModels
         {
             this.logger = logger;
             this.httpClient = httpClient;
-            cbObjects = new ObservableCollection<SelectableObject<Line>>();// { new SelectableObject<string>("111", false), new SelectableObject<string>("222", false), new SelectableObject<string>("333", false) };
+            cbObjects = new ObservableCollection<SelectableObject<Line>>();
             MonthList = new ObservableCollection<int>(MainConfigs.Months);
             YearList = new ObservableCollection<int>(MainConfigs.Years);
             CalculateCommand = new ActionCommand<object>(Calculate);
@@ -45,7 +45,6 @@ namespace CN.CRM.ViewModels
 
         private void Calculate(object obj)
         {
-            // logger.Print("Calculate"+SelectedMonth+"   "+SelectedYear +"  "+currentClient.ID);
             List<string> Checkedlines = new List<string>();
             foreach (var item in cbObjects)
             {
@@ -54,35 +53,34 @@ namespace CN.CRM.ViewModels
                     Checkedlines.Add(item.ObjectData.Number);
                 }
             }
-            BillRequestModel billRequestModel = new BillRequestModel(currentClient.ID, Checkedlines, new YearAndMonth(SelectedYear, SelectedMonth));
-            // logger.Print("checekd lines: "+Checkedlines[0]+"  "+Checkedlines[1]);
-            Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.GetSpecficLinesBillRoute, billRequestModel);
-            if (returnTuple.Item2 == HttpStatusCode.OK)
+            YearAndMonth selectedDate = new YearAndMonth(SelectedYear, SelectedMonth);
+            BillRequestModel billRequestModel = new BillRequestModel(currentClient.ID, Checkedlines, selectedDate);
+            Tuple<object, HttpStatusCode> returnTuple1 = httpClient.PostRequest(ApiConfigs.CheckIfLineExistedRoute, billRequestModel);
+            if (returnTuple1.Item2 == HttpStatusCode.OK)
             {
-                //ClientBill clientBill = new ClientBill() ;
-                // //Newtonsoft.Json.JsonSerializer d=new Newtonsoft.Json.JsonSerializer();
-                JObject jObject = new JObject();
-                JArray jArray = new JArray();
-                JObject jObjectP = new JObject();
-                JObject jObjectPD = new JObject();
-
-                jObject = (JObject)returnTuple.Item1;
-                jArray = (JArray)jObject["Recepits"];//need jarray
-                                                     // foreach (var item in jArray)
-                                                     // {
-                                                     ////    jObjectP =(JObject) item["Package"];
-                                                     //    // jObjectPD = (JObject)item["PackegeDetails"];
-                                                     //     //Receipt receipt = item.ToObject<Receipt>();
-                                                     //    // logger.Print(receipt.LineNumber);    
-                                                     // }
-
-                List<Receipt> receipts = jArray.ToObject<List<Receipt>>();//add jobjects: packdetails ,package
-                                                                          // // clientBill = (ClientBill)jObject.ToObject(clientBill.GetType(),d);
-                ClientBill clientBill = jObject.ToObject<ClientBill>();
-                BillWindow billWindow = new BillWindow(clientBill);
-                billWindow.Show();
-                CloseThisWindow();
+                if ((bool)returnTuple1.Item1)
+                {
+                    Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.GetSpecficLinesBillRoute, billRequestModel);
+                    if (returnTuple.Item2 == HttpStatusCode.OK)
+                    {
+                        JObject jObject = new JObject();
+                        jObject = (JObject)returnTuple.Item1;
+                        ClientBill clientBill = jObject.ToObject<ClientBill>();
+                        BillWindow billWindow = new BillWindow(clientBill, selectedDate);
+                        billWindow.Show();
+                        CloseThisWindow();
+                    }
+                }
+                else
+                {
+                    logger.Print("One or more of the selected lines didnt exist in the selected date");
+                }
             }
+            else
+            {
+                logger.Print(returnTuple1.Item2.ToString());
+            }
+           
 
         }
         private void CloseThisWindow()
@@ -96,19 +94,7 @@ namespace CN.CRM.ViewModels
                 }
             }
         }
-        /////////////////////////////////////////////////////////
-        public void OnCbObjectCheckBoxChecked(object sender, EventArgs e)
-        {
-            //logger.Print("in viewmodel-OnCbObjectCheckBoxChecked ");
-            //  SelectableObject<string> s = (SelectableObject<string>)sender;
 
-        }
-        public void OnCbObjectCheckBoxUnChecked(object sender, EventArgs e)
-        {
-            //logger.Print("in viewmodel-OnCbObjectCheckBoxChecked ");
-
-
-        }
 
         public void OnCbObjectsSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -118,7 +104,7 @@ namespace CN.CRM.ViewModels
 
         public void getClientFromWindow(Client client)
         {
-            this.currentClient = client;
+            currentClient = client;
             GetClientLines(client.ID);
         }
         public void GetClientLines(string clientId)
@@ -139,31 +125,7 @@ namespace CN.CRM.ViewModels
             }
         }
 
-        ////////////////////////////////////////////////////////
 
-
-
-
-
-
-        ////////////////////////////////////////////////
-        public class SelectableObject<T>
-        {
-            public bool IsSelected { get; set; }
-            public T ObjectData { get; set; }
-
-            public SelectableObject(T objectData)
-            {
-                ObjectData = objectData;
-            }
-
-            public SelectableObject(T objectData, bool isSelected)
-            {
-                IsSelected = isSelected;
-                ObjectData = objectData;
-            }
-        }
-        /////////////////////////////////////////////////////////
 
     }
 }

@@ -24,14 +24,41 @@ namespace CN.Simulator.ViewModels
         public ObservableCollection<string> Lines { get; private set; }
         public ICommand searchUserCommand { get; set; }
         public ICommand simulateCommand { get; set; }
-        public string ClientId { get; set; }
-        public int minDuration { get; set; }
-        public int maxDuration { get; set; }
-        public int numOfCalls { get; set; }
-        public string destCall { get; set; }
+        public ICommand clearCommand { get; set; }
+        private string _ClientId;
+        public string ClientId
+        {
+            get { return _ClientId; }
+            set { _ClientId = value; Notify(nameof(ClientId)); }
+        }
+        private int _minDuration;
+        public int minDuration
+        {
+            get { return _minDuration; }
+            set { _minDuration = value; Notify(nameof(minDuration)); }
+        }
+        private int _maxDuration;
+        public int maxDuration
+        {
+            get { return _maxDuration; }
+            set { _maxDuration = value; Notify(nameof(maxDuration)); }
+        }
+        private int _numOfCalls;
+
+        public int numOfCalls
+        {
+            get { return _numOfCalls; }
+            set { _numOfCalls = value; Notify(nameof(numOfCalls)); }
+        }
+        private string _destCall;
+
+        public string destCall
+        {
+            get { return _destCall; }
+            set { _destCall = value; Notify(nameof(destCall)); }
+        }
 
         private string _selectedLine;
-
         public string selectedLine
         {
             get { return _selectedLine; }
@@ -69,6 +96,7 @@ namespace CN.Simulator.ViewModels
             this.lockIdBox = true;
             searchUserCommand = new ActionCommand(searchUser);
             simulateCommand = new ActionCommand<object>(simulate);
+            clearCommand = new ActionCommand(ClearFields);
 
             Lines = new ObservableCollection<string> { "Please select a client first." };
             selectedLine = Lines[0];
@@ -78,6 +106,20 @@ namespace CN.Simulator.ViewModels
             };
             SelectedType = Types[0];
 
+        }
+
+        private void ClearFields()
+        {
+            //clears the fields
+            ClientId = "";
+            minDuration = 0;
+            maxDuration = 0;
+            numOfCalls = 0;
+            destCall = "";
+            Lines.Clear();
+            Lines.Add("Please select a client first.");
+            SelectedType = Types[0];
+            lockIdBox = true;
         }
 
         private void simulate(object obj)

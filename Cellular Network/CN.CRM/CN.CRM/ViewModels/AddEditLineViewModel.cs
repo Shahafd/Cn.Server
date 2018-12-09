@@ -136,14 +136,13 @@ namespace CN.CRM.ViewModels
             set { _LineStatus = value; Notify(nameof(LineStatus)); }
         }
 
-
-
         public IHttpClient httpClient { get; set; }
         public IInputsValidator inputsValidator { get; set; }
         public ILogger logger { get; set; }
         public ICommand submitCommand { get; set; }
         public ICommand deleteCommand { get; set; }
         public ICommand sendStatusCommand { get; set; }
+        public ICommand clearCommand { get; set; }
         public AddEditLineViewModel(IHttpClient httpClient, IInputsValidator inputsValidator, ILogger logger)
         {
             this.httpClient = httpClient;
@@ -160,6 +159,24 @@ namespace CN.CRM.ViewModels
             submitCommand = new ActionCommand(SendLine);
             deleteCommand = new ActionCommand(DeleteLine);
             sendStatusCommand = new ActionCommand(SendStatus);
+            clearCommand = new ActionCommand(ClearFields);
+        }
+
+        private void ClearFields()
+        {
+            //clears the fields
+            SelectedPackage = null;
+            SelectedPackageDetails = null;
+            Minutes = 0;
+            MinutePrice = 0;
+            SMS = 0;
+            SMSPrice = 0;
+            Discount = 0;
+            SelectedNum1 = "";
+            SelectedNum2 = "";
+            SelectedNum3 = "";
+            MostCalledNum = "";
+            TotalPrice = 0;
         }
 
         private void SendStatus()
@@ -342,44 +359,49 @@ namespace CN.CRM.ViewModels
         private void SelectedPackageChanged()
         {
             //updates the packages field with the selected package's details
-            Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.GetPackageDetails, SelectedPackage.ID);
-            if (returnTuple.Item2 == HttpStatusCode.OK)
+            if (SelectedPackage != null)
             {
-                JObject jobj = new JObject();
-                jobj = (JObject)returnTuple.Item1;
-                SelectedPackageDetails = jobj.ToObject<PackageDetails>();
-                if (!SelectedPackage.DefaultPackage)
+                Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.GetPackageDetails, SelectedPackage.ID);
+                if (returnTuple.Item2 == HttpStatusCode.OK)
                 {
-                    GetSelectedNumbers();
-                    UpdateFields(false);
+                    JObject jobj = new JObject();
+                    jobj = (JObject)returnTuple.Item1;
+                    SelectedPackageDetails = jobj.ToObject<PackageDetails>();
+                    if (!SelectedPackage.DefaultPackage)
+                    {
+                        GetSelectedNumbers();
+                        UpdateFields(false);
+                    }
+                    else
+                    {
+                        UpdateFields(true);
+                    }
                 }
                 else
                 {
-                    UpdateFields(true);
+                    logger.Print($"{returnTuple.Item2.ToString()} Error.");
                 }
-
             }
-            else
-            {
-                logger.Print($"{returnTuple.Item2.ToString()} Error.");
-            }
-
         }
 
         private void GetSelectedNumbers()
         {
             //gets the selected numbers from the selected package's details
-            Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.GetSelectedNumbersRoute, SelectedPackageDetails.SelectedNumbersID);
-            if (returnTuple.Item2 == HttpStatusCode.OK)
+            if (SelectedNumbers != null)
             {
-                JObject jobj = new JObject();
-                jobj = (JObject)returnTuple.Item1;
-                SelectedNumbers = jobj.ToObject<SelectedNumbers>();
+                Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.GetSelectedNumbersRoute, SelectedPackageDetails.SelectedNumbersID);
+                if (returnTuple.Item2 == HttpStatusCode.OK)
+                {
+                    JObject jobj = new JObject();
+                    jobj = (JObject)returnTuple.Item1;
+                    SelectedNumbers = jobj.ToObject<SelectedNumbers>();
+                }
+                else
+                {
+                    logger.Print(returnTuple.Item2.ToString());
+                }
             }
-            else
-            {
-                logger.Print(returnTuple.Item2.ToString());
-            }
+
         }
 
         private void UpdateFields(bool defaultPackage)
@@ -547,29 +569,6 @@ namespace CN.CRM.ViewModels
             EmployeeID = loggedInUser.ID;
         }
 
-        public bool HasNoLines(Client selectedClient)
-        {
-            //checks if the client has no lines
-            Tuple<object, HttpStatusCode> returnTuple = httpClient.PostRequest(ApiConfigs.GetClientLinesStrRoute, selectedClient.ID);
-            if (returnTuple.Item2 == HttpStatusCode.OK)
-            {
-                JArray jarr = new JArray();
-                jarr = (JArray)returnTuple.Item1;
-                List<string> clientLines = jarr.ToObject<List<string>>();
-                if (clientLines.Count == 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                logger.Print(returnTuple.Item2.ToString());
-                return false;
-            }
-        }
+
     }
 }
